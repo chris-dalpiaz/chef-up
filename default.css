@@ -1,0 +1,27 @@
+body{
+    font-family: 'DM Sans';
+}
+
+button{
+    background-color: #F58700;
+    border: none;
+    padding: 2vh 15vh;
+    border-radius: 2vh;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+input{
+    width: 90%;
+    padding: 10px;
+    border-radius: 1vh;
+    margin: 10px;
+    border: 1px solid #ccc;
+}
+
+.botao {
+    display: flex;
+    justify-content: center; /* Alinha horizontalmente */
+    align-items: center;    /* Alinha verticalmente */
+    flex-direction: column;
+  }

@@ -1,0 +1,10 @@
+.container {
+    display: flex;
+    justify-content: center; /* Alinha horizontalmente */
+    align-items: center;    /* Alinha verticalmente */
+    height: 80vh;          /* Exemplo: altura total da viewport */
+  }
+  
+  #logo {
+    max-width: 100%; /* Ajusta o tamanho da imagem, se necessário */
+  }
