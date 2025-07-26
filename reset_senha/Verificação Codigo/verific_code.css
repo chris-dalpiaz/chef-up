@@ -1,0 +1,53 @@
+input{
+    max-width:20px ;
+    max-height: 20px;
+    font-size: 50px;
+}
+
+.tittles{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+    padding-left: 1%;
+}
+
+.tittle{
+    display: flex;
+    margin-bottom: -35px;  
+}
+
+.subtittle{
+    display: flex;
+    color: #666666;
+}
+.code-input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.aviso{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1%;
+}
+
+.aviso{
+    gap:3.5px
+}
+
+.text{
+color: #666666;
+}
+
+.botao{
+    display: flex;
+    margin-top: 130%;
+}
+
+input {
+    max-width: 70px;
+    max-height: 70px;
+}
