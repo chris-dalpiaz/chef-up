@@ -1,0 +1,25 @@
+meta {
+  name: criar_receita
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/receitas
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "Receita Facil",
+    "descricao": "essa é uma receita facil",
+    "tempoPreparoSegundos": 360,
+    "dificuldade": "facil",
+    "xpGanho": 300,
+    "categoria": {
+      "id": 2
+    }
+    
+  }
+}

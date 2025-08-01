@@ -1,0 +1,18 @@
+meta {
+  name: editar_titulo
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/titulos/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "chocolate amargo",
+    "condicaoDesbloqueio": "doadoasdoasdoasdassda"
+  }
+}
