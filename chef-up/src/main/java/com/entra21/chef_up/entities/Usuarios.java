@@ -2,6 +2,8 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -13,7 +15,7 @@ public class Usuarios {
     private String nome;
     private String email;
     private String senhaHash;
-    private Date dataCadastro;
+    private LocalDateTime dataCadastro;
 
     @ManyToOne()
     @JoinColumn(name = "pronomes_id")
@@ -51,11 +53,11 @@ public class Usuarios {
         this.senhaHash = senhaHash;
     }
 
-    public Date getDataCadastro() {
+    public LocalDateTime getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Date dataCadastro) {
+    public void setDataCadastro(LocalDateTime dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 

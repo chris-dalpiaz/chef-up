@@ -10,7 +10,7 @@ public class ProgressoUsuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne()
+    @OneToOne()
     @JoinColumn(name = "usuarios_id")
     private Usuarios usuario;
 

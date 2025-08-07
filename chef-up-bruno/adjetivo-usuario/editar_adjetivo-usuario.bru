@@ -1,0 +1,22 @@
+meta {
+  name: editar_adjetivo-usuario
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/usuarios/4/adjetivos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "adjetivo": {
+      "id": 2
+    },
+    "usuario": {
+      "id": 4
+    }
+  }
+}

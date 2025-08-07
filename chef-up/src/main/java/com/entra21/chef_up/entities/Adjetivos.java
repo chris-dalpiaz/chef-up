@@ -5,11 +5,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.List;
+
 @Entity
 public class Adjetivos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private List<AdjetivoUsuario> adjetivos =
+
 
     private String nome;
 
@@ -28,4 +32,5 @@ public class Adjetivos {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 }

@@ -1,0 +1,19 @@
+meta {
+  name: criar_adjetivo-usuario
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/usuarios/4/adjetivos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "adjetivo": {
+      "id": 2
+    }
+  }
+}

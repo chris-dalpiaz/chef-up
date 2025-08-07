@@ -21,7 +21,7 @@ public class AdjetivosController {
     }
 
     @GetMapping("/{idAdjetivo}")
-    public Adjetivos buscarCarro(@PathVariable Integer idAdjetivo){
+    public Adjetivos buscarAdjetivo(@PathVariable Integer idAdjetivo){
         return this.adjetivosRepository.findById(idAdjetivo).get();
     }
 
