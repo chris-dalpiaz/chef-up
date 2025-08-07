@@ -35,7 +35,12 @@ color: #666666;
 
 .botao{
     display: flex;
-    margin-top: 90%;
+    
+    align-items: center;     
+    position: absolute;
+    top: 93%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 label{
