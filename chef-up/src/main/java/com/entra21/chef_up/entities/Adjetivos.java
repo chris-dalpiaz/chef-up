@@ -12,8 +12,6 @@ public class Adjetivos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private List<AdjetivoUsuario> adjetivos =
-
 
     private String nome;
 
