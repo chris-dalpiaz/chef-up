@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar</title>
+    <script src="receita.js"></script>
+    <link rel="stylesheet" href="receita.css">
+    <!-- CSS PADRÃO E FONTE -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../default.css">
+</head>
+
+<body>
+    <h1 class="titulo">Receitas</h1>
+
+
+    <!-- BARRA DE PESQUISA -->
+  <div class="container">
+    <div class="search-bar">
+      <span class="icon">&#128269;</span>
+      <input type="text" placeholder="Buscar receitas" />
+      <button class="filter-btn" aria-label="Filtrar">
+
+
+        <!-- Ícone SVG de filtros -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <line x1="6" y1="3" x2="6" y2="21" stroke="#1D1D1D" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="6" cy="8" r="2.5" fill="#1D1D1D"/>
+          <line x1="12" y1="3" x2="12" y2="21" stroke="#1D1D1D" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="12" cy="16" r="2.5" fill="#1D1D1D"/>
+          <line x1="18" y1="3" x2="18" y2="21" stroke="#1D1D1D" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="18" cy="6" r="2.5" fill="#1D1D1D"/>
+        </svg>
+      </button>
+    </div>
+
+    
+    
+    <div class="categories">
+      <div class="category selected" data-icon="🔥" data-nome="Popular">
+       
+        <span>Popular</span>
+      </div>
+      <div class="category" data-icon="🍣" data-nome="Oriental">
+        
+        <span>Oriental</span>
+      </div>
+      <div class="category" data-icon="🍹" data-nome="Bebidas">
+        
+        <span>Bebidas</span>
+      </div>
+      <div class="category" data-icon="🥪" data-nome="Lanches">
+        
+        <span>Lanches</span>
+      </div>
+      <div class="category" data-icon="🍰" data-nome="Sobremesas">
+        
+        <span>Sobremesas</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="receita.js"></script>
+</body>
+</html>
