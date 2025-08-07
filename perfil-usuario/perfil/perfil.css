@@ -1,0 +1,86 @@
+.perfil {
+    display: flex;
+    flex-direction: row;
+    gap: 2vh;
+}
+
+.personagem {
+    width: 22vh;
+    /* Largura do quadrado */
+    height: 22vh;
+    /* Altura do quadrado */
+    background-color: #ff0000;
+    /* Cor de fundo */
+    border-radius: 6vh;
+}
+
+.dados_usuario {
+    flex: 1;
+    margin-top: 2vh;
+}
+
+.botao_pequeno {
+    background-color: #F58700;
+    border: none;
+    padding: 1vh 3vh 1vh 3vh;
+    border-radius: 2vh;
+    cursor: pointer;
+    text-align: center;
+    align-items: center;
+    font-size: 18px;
+    margin-top: 1vh;
+}
+
+.barra_progresso {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 3vh;
+}
+
+.nivel {
+    width: 40px;
+    height: 40px;
+    background-color: #2bb3a3;
+    /* verde-água */
+    color: black;
+    font-weight: bold;
+    transform: rotate(45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nivel span {
+    transform: rotate(-45deg);
+}
+
+.barra_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.barra_bg {
+    width: 350px;
+    height: 20px;
+    background-color: #a7ddd7;
+    /* azul-claro */
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.barra_xp {
+    position: absolute;
+    height: 100%;
+    background-color: #fcb347;
+    /* laranja */
+    border-radius: 20px;
+    /* tamanho da barra laranja */
+}
+
+.pontos_xp {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
