@@ -1,101 +1,179 @@
+/* Estiliza o corpo da página */
 body {
-    margin: 0;
-    font-family: 'DM Sans', sans-serif;
-    background: #ffffff;
-    padding: 0 20px;
-  }
-  
-  .titulo {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 700;
-    margin: 40px 0 20px 0;
-    color: #1D1D1D;
-  }
-  
-  .container {
-    max-width: 500px;
-    margin: 0 auto;
-  }
-  
-  .search-bar {
-    display: flex;
-    align-items: center;
-    background: rgba(59, 59, 59, 0.151);
-    backdrop-filter: blur(8px);
-    border-radius: 30px;
-    padding: 1px 15px;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.05);
-  }
-  
-  .search-bar .icon {
-    font-size: 18px;
-    margin-right: 5px;
-    color: #5E5E5E;
-  }
-  
-  .search-bar input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    font-size: 16px;
-    color: #575555;
-    outline: none;
-  }
-  
-  .filter-btn {
-    background: #faf5f4;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    padding: 8px;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
-  
-  .categories {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    overflow-x: auto;
-    gap: 1px;
-  }
-  
-  .category {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 10px;
-    color: #444;
-    width: 60px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  
-  .category:hover {
-    transform: scale(1.05);
-  }
-  
-  .category span {
-    margin-top: 0px;
-  }
-  
-  .category::before {
-    content: attr(data-icon);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    font-size: 20px;
-    margin-bottom: 6px;
-    background: rgba(255, 255, 255, 0.6);
-  }
-  
-  .category.selected::before {
-    background: #FFD02C;
-  }
-  
+  margin: 0; /* Remove margens padrão */
+  font-family: 'DM Sans', sans-serif; /* Define a fonte principal */
+  background: #ffffff; /* Fundo branco */
+  padding: 0 20px; /* Espaçamento horizontal nas bordas */
+}
+
+/* Estilo do título principal */
+.titulo {
+  text-align: center; /* Centraliza o texto */
+  font-size: 24px; /* Tamanho da fonte */
+  font-weight: 700; /* Negrito */
+  margin: 40px 0 20px 0; /* Espaçamento acima e abaixo */
+  color: #1D1D1D; /* Cor do texto em cinza escuro */
+}
+
+/* Container centralizado com largura máxima */
+.container {
+  max-width: 500px; /* Limita a largura */
+  margin: 0 auto; /* Centraliza horizontalmente */
+}
+
+/* Barra de busca com estilo moderno */
+.search-bar {
+  display: flex; /* Layout em linha */
+  align-items: center; /* Alinha verticalmente */
+  background: rgba(59, 59, 59, 0.151); /* Fundo semitransparente */
+  backdrop-filter: blur(8px); /* Desfoque do fundo */
+  border-radius: 30px; /* Bordas arredondadas */
+  padding: 1px 15px; /* Espaçamento interno */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave */
+}
+
+/* Ícone dentro da barra de busca */
+.search-bar .icon {
+  font-size: 18px; /* Tamanho do ícone */
+  margin-right: 5px; /* Espaço à direita */
+  color: #5E5E5E; /* Cor do ícone */
+}
+
+/* Campo de entrada da busca */
+.search-bar input {
+  flex: 1; /* Ocupa o espaço restante */
+  border: none; /* Sem borda */
+  background: transparent; /* Fundo invisível */
+  font-size: 16px; /* Tamanho do texto */
+  color: #575555; /* Cor do texto */
+  outline: none; /* Remove contorno ao focar */
+}
+
+/* Botão de filtro ao lado da barra de busca */
+.filter-btn {
+  background: #faf5f4; /* Fundo claro */
+  border: none; /* Sem borda */
+  border-radius: 50%; /* Formato circular */
+  width: 40px; /* Largura fixa */
+  height: 40px; /* Altura fixa */
+  padding: 8px; /* Espaçamento interno */
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+  cursor: pointer; /* Cursor de clique */
+}
+
+/* Container horizontal de categorias */
+.categories {
+  display: flex; /* Layout em linha */
+  justify-content: space-between; /* Espaço entre os itens */
+  margin-top: 10px; /* Espaço acima */
+  overflow-x: auto; /* Permite rolagem horizontal */
+  gap: 1px; /* Espaço entre categorias */
+}
+
+/* Estilo de cada categoria */
+.category {
+  display: flex; /* Layout flexível */
+  flex-direction: column; /* Ícone acima do texto */
+  align-items: center; /* Centraliza conteúdo */
+  font-size: 10px; /* Tamanho do texto */
+  color: #444; /* Cor do texto */
+  width: 60px; /* Largura fixa */
+  text-align: center; /* Centraliza texto */
+  cursor: pointer; /* Cursor de clique */
+  transition: transform 0.2s ease; /* Animação suave ao interagir */
+}
+
+/* Efeito ao passar o mouse sobre a categoria */
+.category:hover {
+  transform: scale(1.05); /* Aumenta levemente o tamanho */
+}
+
+/* Texto abaixo do ícone */
+.category span {
+  margin-top: 0px; /* Sem espaçamento superior */
+}
+
+/* Ícone da categoria usando pseudo-elemento */
+.category::before {
+  content: attr(data-icon); /* Usa o atributo data-icon como conteúdo */
+  display: flex; /* Layout flexível */
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+  width: 48px; /* Largura do ícone */
+  height: 48px; /* Altura do ícone */
+  border-radius: 50%; /* Formato circular */
+  font-size: 20px; /* Tamanho do ícone */
+  margin-bottom: 6px; /* Espaço abaixo do ícone */
+  background: rgba(255, 255, 255, 0.6); /* Fundo semitransparente */
+}
+
+/* Estilo especial para categoria selecionada */
+.category.selected::before {
+  background: #FFD02C; /* Fundo amarelo para destacar */
+}
+
+  /* Container da barra de progresso */
+.barra_progresso {
+  display: flex; /* Organiza os elementos em linha */
+  align-items: center; /* Alinha verticalmente ao centro */
+  gap: 10px; /* Espaço entre os elementos */
+  margin-top: 3vh; /* Espaço acima proporcional à altura da tela */
+  justify-content: center; /* Centraliza tudo na horizontal */
+}
+
+/* Quadrado rotacionado representando o nível */
+.nivel {
+  width: 40px; /* Largura do quadrado */
+  height: 40px; /* Altura do quadrado */
+  background-color: #2bb3a3; /* Cor verde-água de fundo */
+  color: black; /* Cor do texto */
+  font-weight: bold; /* Texto em negrito */
+  transform: rotate(45deg); /* Rotaciona o quadrado em 45 graus */
+  display: flex; /* Layout flexível para centralizar conteúdo */
+  align-items: center; /* Alinha verticalmente o conteúdo */
+  justify-content: center; /* Alinha horizontalmente o conteúdo */
+}
+
+/* Texto dentro do quadrado rotacionado */
+.nivel span {
+  transform: rotate(-45deg) translateY(1px); /* Rotaciona o texto para compensar o quadrado */
+  display: inline-block;
+  font-size: 20px; /* Ajuste do tamanho do número */
+  line-height: 1;  /* Remove espaçamento vertical extra */
+}
+
+/* Container da barra de XP e texto */
+.barra_container {
+  display: flex; /* Layout flexível */
+  flex-direction: column; /* Organiza elementos verticalmente */
+}
+
+/* Fundo da barra de XP */
+.barra_bg {
+  width: 350px; /* Largura da barra */
+  height: 20px; /* Altura da barra */
+  background-color: #a7ddd7; /* Cor azul-claro de fundo */
+  border-radius: 20px; /* Bordas arredondadas */
+  overflow: hidden; /* Esconde conteúdo que ultrapassa os limites */
+  position: relative; /* Permite posicionar elementos filhos de forma absoluta */
+}
+
+/* Barra de XP preenchida */
+.barra_xp {
+  position: absolute; /* Posiciona em relação ao .barra_bg */
+  height: 100%; /* Ocupa toda a altura da barra */
+  background-color: #fcb347; /* Cor laranja de preenchimento */
+  border-radius: 20px; /* Bordas arredondadas para combinar com o fundo */
+  /* A largura será definida dinamicamente via JavaScript ou inline */
+}
+
+/* Texto com os pontos de XP */
+.pontos_xp {
+  margin-top: 5px; /* Espaço acima do texto */
+  font-size: 14px; /* Tamanho da fonte */
+  color: #333; /* Cor do texto em cinza escuro */
+}
+
+
+/* rodapé */
+
