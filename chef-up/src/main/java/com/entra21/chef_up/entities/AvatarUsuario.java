@@ -2,6 +2,7 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ public class AvatarUsuario {
     @JoinColumn(name = "avatares_id")
     private Avatares avatar;
 
-    private Date desbloqueadoEm;
+    private LocalDateTime desbloqueadoEm;
 
     public Integer getId() {
         return id;
@@ -44,11 +45,11 @@ public class AvatarUsuario {
         this.avatar = avatar;
     }
 
-    public Date getDesbloqueadoEm() {
+    public LocalDateTime getDesbloqueadoEm() {
         return desbloqueadoEm;
     }
 
-    public void setDesbloqueadoEm(Date desbloqueadoEm) {
+    public void setDesbloqueadoEm(LocalDateTime desbloqueadoEm) {
         this.desbloqueadoEm = desbloqueadoEm;
     }
 }
