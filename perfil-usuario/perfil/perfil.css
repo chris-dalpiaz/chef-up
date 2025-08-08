@@ -34,11 +34,14 @@
 .barra_progresso {
     display: flex;
     align-items: center;
-    gap: 10px;
     margin-top: 3vh;
 }
 
-.nivel {
+#exibidorNivel {
+    z-index: 1;
+}
+
+.fundoNivel {
     width: 40px;
     height: 40px;
     background-color: #2bb3a3;
@@ -49,6 +52,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
+}
+
+.nivel {
+    transform: rotate(-45deg);
 }
 
 .nivel span {
@@ -58,6 +66,8 @@
 .barra_container {
     display: flex;
     flex-direction: column;
+    z-index: 0;
+    padding-top: 5%;
 }
 
 .barra_bg {
