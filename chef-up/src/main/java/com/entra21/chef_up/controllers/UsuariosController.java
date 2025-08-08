@@ -156,7 +156,7 @@ public class UsuariosController {
         return avatarUsuarioRepository.findByUsuarioId(idUsuario);
     }
 
-    // Busca um adjetivo específico de um usuário
+    // Busca um avatar específico de um usuário
     @GetMapping("/{idUsuario}/avatares/{idAvatar}")
     public AvatarUsuario buscarAvatar(@PathVariable Integer idUsuario,
                                           @PathVariable Integer idAvatar) {
@@ -170,7 +170,7 @@ public class UsuariosController {
         return avatar;
     }
 
-    // Cria um novo adjetivo associado a um usuário
+    // Cria um novo avatar associado a um usuário
     @PostMapping("/{idUsuario}/avatares")
     public AvatarUsuario criarAvatarUsuario(@PathVariable Integer idUsuario,
                                                 @RequestBody AvatarUsuario avatarUsuario) {
@@ -183,5 +183,37 @@ public class UsuariosController {
         avatarUsuario.setUsuario(usuario);
 
         return avatarUsuarioRepository.save(avatarUsuario);
+    }
+
+    // Edita um avatar associado a um usuário
+    @PutMapping("/{idUsuario}/avatares/{idAvatar}")
+    public AvatarUsuario editarAvatarUsuario(@PathVariable Integer idUsuario,
+                                                 @PathVariable Integer idAvatar,
+                                                 @RequestBody AvatarUsuario avatarUsuario) {
+
+        AvatarUsuario alterar = avatarUsuarioRepository.findById(idAvatar)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
+
+        if (!alterar.getUsuario().getId().equals(idUsuario)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
+        }
+
+        alterar.setAvatar(avatarUsuario.getAvatar());
+        return avatarUsuarioRepository.save(alterar);
+    }
+
+    // Remove um avatar associado a um usuário
+    @DeleteMapping("/{idUsuario}/avatares/{idAvatar}")
+    public AvatarUsuario removerAvatarUsuario(@PathVariable Integer idUsuario,
+                                                  @PathVariable Integer idAvatar) {
+        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatar)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
+
+        if (!avatar.getUsuario().getId().equals(idUsuario)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
+        }
+
+        avatarUsuarioRepository.delete(avatar);
+        return avatar;
     }
 }

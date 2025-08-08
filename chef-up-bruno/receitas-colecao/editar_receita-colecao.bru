@@ -1,19 +1,19 @@
 meta {
-  name: editar__avatar-usuario
+  name: editar_receita-colecao
   type: http
   seq: 4
 }
 
 put {
-  url: http://localhost:8080/usuarios/1/avatares/1
+  url: http://localhost:8080/colecoes/1/receitas/4
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "avatar": {
-      "id": 2
+    "receita":{
+      "id": 3
     }
   }
 }

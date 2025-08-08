@@ -3,7 +3,7 @@ package com.entra21.chef_up.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class ColecaoReceita {
+public class ReceitaColecao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
