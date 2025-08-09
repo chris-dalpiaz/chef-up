@@ -1,0 +1,18 @@
+meta {
+  name: criar_avatar
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/avatares
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome":"paozinho",
+    "imagemUrl": "www.wwww.www"
+  }
+}

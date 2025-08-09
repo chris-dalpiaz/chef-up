@@ -1,0 +1,23 @@
+meta {
+  name: editar__avatar-usuario
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/usuarios/1/avatares/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "avatar": {
+      "id": 2
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+}

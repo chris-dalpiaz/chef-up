@@ -1,0 +1,23 @@
+meta {
+  name: editar_usuario
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/usuarios/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "Arnaldo",
+    "email": "arnaldolindo@gmail.com",
+    "senhaHash": "senhasegura",
+    "dataCadastro": "2253-12-11",
+    "pronome": {
+        "id":2
+      }
+  }
+}
