@@ -1,68 +1,78 @@
-body{
-    font-family: 'DM Sans';
-    background-color: #fffaf5;
-    margin-left: 2vh;
-    margin-right: 2vh;
+body {
+  font-family: 'DM Sans';
+  background-color: #fffaf5;
+  margin-left: 2vh;
+  margin-right: 2vh;
 }
 
-h1{
-  font-size:  32px;
+h1 {
+  font-size: 32px;
 }
 
-h3{
+h3 {
   font-size: 23px;
   text-align: center;
 }
 
-label, p{
+label,
+p {
   font-size: 18px;
 }
 
-button{
-    background-color: #F58700;
-    border: none;
-    padding: 2vh 40% 2vh 40%;
-    border-radius: 2vh;
-    cursor: pointer;
-    text-align: center;
-    align-items: center;
-    font-size: 18px;
+button {
+  font-family: 'DM Sans';
+  background-color: #F58700;
+  border: none;
+  
+  padding: 1em 2em;
+  border-radius: 2vh;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  font-size: 18px;
+   max-width: 414px;
+  width: 93.76%;
+  font-weight:650;
+ 
 }
 
 .botao {
   display: flex;
-  justify-content: center; /* Alinha horizontalmente */
-  align-items: center;    /* Alinha verticalmente */
+  justify-content: center;
+  /* Alinha horizontalmente */
+  align-items: center;
+  /* Alinha verticalmente */
+  flex-direction: column;
+  
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  border-radius: 1vh;
+  margin: 10px;
+  border: 1px solid #ccc;
+}
+
+#botaocriar {
+  margin-top: 5vh;
+}
+
+.formulario {
+  display: flex;
   flex-direction: column;
 }
 
-input{
-    width: 90%;
-    padding: 10px;
-    border-radius: 1vh;
-    margin: 10px;
-    border: 1px solid #ccc;
-}
-
-  #botaocriar{
-    margin-top: 5vh;
-  }
-
-  .formulario{
-    display: flex;
-    flex-direction: column;
-  }
-
-.nome_usuario{
+.nome_usuario {
   font-weight: bolder;
   font-size: 20px;
 }
-  
-.titulo_usuario{
+
+.titulo_usuario {
   font-size: 14px;
 }
 
-.adjetivos_usuario{
+.adjetivos_usuario {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5vh;
@@ -73,13 +83,12 @@ input{
 }
 
 .adjetivo {
-  background-color: #FFE4C2; /* cor bege clara */
+  background-color: #FFE4C2;
+  /* cor bege clara */
   border: 2px solid #F58700;
   border-radius: 15px;
   padding: 6px 12px;
   font-size: 14px;
 }
 
-.barra_xp{
-
-}
+.barra_xp {}
