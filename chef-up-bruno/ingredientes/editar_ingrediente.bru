@@ -1,0 +1,20 @@
+meta {
+  name: editar_ingrediente
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/ingredientes/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "abacate",
+    "categoria": "verdura",
+    "estimativaValidade": 7,
+    "dicaConservacao": "manter refrigerado"
+  }
+}
