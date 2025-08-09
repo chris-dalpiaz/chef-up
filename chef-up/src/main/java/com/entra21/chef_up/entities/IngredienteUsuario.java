@@ -2,10 +2,11 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-public class EstoqueVirtual {
+public class IngredienteUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,7 +19,7 @@ public class EstoqueVirtual {
     @JoinColumn(name = "ingredientes_id")
     private Ingrediente ingrediente;
 
-    private Date dataAdicionada;
+    private LocalDateTime dataAdicionada;
 
     public Integer getId() {
         return id;
@@ -44,11 +45,11 @@ public class EstoqueVirtual {
         this.ingrediente = ingrediente;
     }
 
-    public Date getDataAdicionada() {
+    public LocalDateTime getDataAdicionada() {
         return dataAdicionada;
     }
 
-    public void setDataAdicionada(Date dataAdicionada) {
+    public void setDataAdicionada(LocalDateTime dataAdicionada) {
         this.dataAdicionada = dataAdicionada;
     }
 }

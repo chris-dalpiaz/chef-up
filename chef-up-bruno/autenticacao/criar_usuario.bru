@@ -5,16 +5,16 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/usuarios
+  url: http://localhost:8080/auth/register
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "nome": "Marcelo",
-    "email": "marcelinho@gmail.com",
-    "senhaHash": "minhasenha",
+    "nome": "Sarinhazinha",
+    "email": "sarinhazinha@gmail.com",
+    "senhaHash": "123",
     "pronome": {
         "id": 1
       }

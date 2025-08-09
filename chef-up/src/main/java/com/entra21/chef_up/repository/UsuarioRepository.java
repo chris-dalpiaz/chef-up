@@ -3,8 +3,8 @@ package com.entra21.chef_up.repository;
 import com.entra21.chef_up.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.lang.ScopedValue;
+import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-    <T> ScopedValue<T> findByEmail(String email);
+    Optional<Usuario> findByEmail(String email);
 }

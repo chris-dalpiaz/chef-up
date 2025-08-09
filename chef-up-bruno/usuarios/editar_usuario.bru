@@ -1,13 +1,17 @@
 meta {
   name: editar_usuario
   type: http
-  seq: 4
+  seq: 3
 }
 
 put {
   url: http://localhost:8080/usuarios/1
   body: json
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3Njk4MTksImV4cCI6MTc1NDc3MzQxOX0.0uhQ9lZ5pduebEZloZuGzBj1x_o06Zhn9gx_Q8KLdmQ
 }
 
 body:json {

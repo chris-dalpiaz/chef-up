@@ -1,10 +1,9 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.AdjetivoUsuario;
-import com.entra21.chef_up.entities.AvatarUsuario;
-import com.entra21.chef_up.entities.Usuario;
+import com.entra21.chef_up.entities.*;
 import com.entra21.chef_up.repository.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,18 +23,24 @@ public class UsuarioController {
     private final AdjetivoUsuarioRepository adjetivoUsuarioRepository;
     private final AvatarRepository avatarRepository;
     private final AvatarUsuarioRepository avatarUsuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final IngredienteUsuarioRepository ingredienteUsuarioRepository;
+    private final ProgressoUsuarioRepository progressoUsuarioRepository;
 
     // Construtor com injeção de dependência
     public UsuarioController(UsuarioRepository usuarioRepository,
                              AdjetivoRepository adjetivoRepository,
                              AdjetivoUsuarioRepository adjetivoUsuarioRepository,
                              AvatarRepository avatarRepository,
-                             AvatarUsuarioRepository avatarUsuarioRepository) {
+                             AvatarUsuarioRepository avatarUsuarioRepository, PasswordEncoder passwordEncoder, IngredienteUsuarioRepository ingredienteUsuarioRepository, ProgressoUsuarioRepository progressoUsuarioRepository) {
         this.usuarioRepository = usuarioRepository;
         this.adjetivoRepository = adjetivoRepository;
         this.avatarRepository = avatarRepository;
         this.adjetivoUsuarioRepository = adjetivoUsuarioRepository;
         this.avatarUsuarioRepository = avatarUsuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.ingredienteUsuarioRepository = ingredienteUsuarioRepository;
+        this.progressoUsuarioRepository = progressoUsuarioRepository;
     }
 
     // Lista todos os usuários cadastrados
@@ -51,14 +56,6 @@ public class UsuarioController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
     }
 
-    // Cria um novo usuário
-    @PostMapping
-    public Usuario criarUsuario(@RequestBody Usuario usuario) {
-        usuario.setDataCadastro(LocalDateTime.now());
-        //usuario.setSenhaHash(passwordEncoder.encode(usuario.getSenhaHash()));
-        return usuarioRepository.save(usuario);
-    }
-
     // Atualiza os dados de um usuário existente
     @PutMapping("/{idUsuario}")
     public Usuario alterarUsuario(@PathVariable Integer idUsuario,
@@ -68,6 +65,11 @@ public class UsuarioController {
 
         alterar.setNome(usuario.getNome());
         alterar.setEmail(usuario.getEmail());
+
+        if (usuario.getSenhaHash() != null && !usuario.getSenhaHash().isEmpty()) {
+            alterar.setSenhaHash(passwordEncoder.encode(usuario.getSenhaHash())); // re-hash
+        }
+
         alterar.setSenhaHash(usuario.getSenhaHash());
         alterar.setPronome(usuario.getPronome());
 
@@ -159,7 +161,7 @@ public class UsuarioController {
     // Busca um avatar específico de um usuário
     @GetMapping("/{idUsuario}/avatares/{idAvatar}")
     public AvatarUsuario buscarAvatar(@PathVariable Integer idUsuario,
-                                          @PathVariable Integer idAvatar) {
+                                      @PathVariable Integer idAvatar) {
         AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatar)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
@@ -173,7 +175,7 @@ public class UsuarioController {
     // Cria um novo avatar associado a um usuário
     @PostMapping("/{idUsuario}/avatares")
     public AvatarUsuario criarAvatarUsuario(@PathVariable Integer idUsuario,
-                                                @RequestBody AvatarUsuario avatarUsuario) {
+                                            @RequestBody AvatarUsuario avatarUsuario) {
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
@@ -188,8 +190,8 @@ public class UsuarioController {
     // Edita um avatar associado a um usuário
     @PutMapping("/{idUsuario}/avatares/{idAvatar}")
     public AvatarUsuario editarAvatarUsuario(@PathVariable Integer idUsuario,
-                                                 @PathVariable Integer idAvatar,
-                                                 @RequestBody AvatarUsuario avatarUsuario) {
+                                             @PathVariable Integer idAvatar,
+                                             @RequestBody AvatarUsuario avatarUsuario) {
 
         AvatarUsuario alterar = avatarUsuarioRepository.findById(idAvatar)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
@@ -205,7 +207,7 @@ public class UsuarioController {
     // Remove um avatar associado a um usuário
     @DeleteMapping("/{idUsuario}/avatares/{idAvatar}")
     public AvatarUsuario removerAvatarUsuario(@PathVariable Integer idUsuario,
-                                                  @PathVariable Integer idAvatar) {
+                                              @PathVariable Integer idAvatar) {
         AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatar)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
@@ -215,5 +217,103 @@ public class UsuarioController {
 
         avatarUsuarioRepository.delete(avatar);
         return avatar;
+    }
+
+    // Ingredientes do Usuário (estoque virtual)
+
+    // Lista todos os ingredientes associados a um usuário
+    @GetMapping("/{idUsuario}/estoquevirtual")
+    public List<IngredienteUsuario> listarIngredienteUsuario(@PathVariable Integer idUsuario) {
+        return ingredienteUsuarioRepository.findByUsuarioId(idUsuario);
+    }
+
+    // Busca um ingrediente específico de um usuário
+    @GetMapping("/{idUsuario}/estoquevirtual/{idIngrediente}")
+    public IngredienteUsuario buscarIngredienteUsuario(@PathVariable Integer idUsuario,
+                                                       @PathVariable Integer idIngrediente) {
+        IngredienteUsuario estoqueVirtual = ingredienteUsuarioRepository.findById(idIngrediente)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+
+        if (!estoqueVirtual.getUsuario().getId().equals(idUsuario)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
+        }
+
+        return estoqueVirtual;
+    }
+
+    // Cria um novo ingrediente associado a um usuário
+    @PostMapping("/{idUsuario}/estoquevirtual")
+    public IngredienteUsuario criarIngredienteUsuario(@PathVariable Integer idUsuario,
+                                                      @RequestBody IngredienteUsuario ingredienteUsuario) {
+
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        ingredienteUsuario.setDataAdicionada(LocalDateTime.now());
+        ingredienteUsuario.setUsuario(usuario);
+
+        return ingredienteUsuarioRepository.save(ingredienteUsuario);
+    }
+
+    // Edita um ingrediente associado a um usuário
+    @PutMapping("/{idUsuario}/estoquevirtual/{idIngrediente}")
+    public IngredienteUsuario editarIngredienteUsuario(@PathVariable Integer idUsuario,
+                                                       @PathVariable Integer idIngrediente,
+                                                       @RequestBody IngredienteUsuario ingredienteUsuario) {
+
+        IngredienteUsuario alterar = ingredienteUsuarioRepository.findById(idIngrediente)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+
+        if (!alterar.getUsuario().getId().equals(idUsuario)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
+        }
+
+        alterar.setIngrediente(ingredienteUsuario.getIngrediente());
+        return ingredienteUsuarioRepository.save(alterar);
+    }
+
+    // Remove um ingrediente associado a um usuário
+    @DeleteMapping("/{idUsuario}/estoquevirtual/{idIngrediente}")
+    public IngredienteUsuario removerIngredienteUsuario(@PathVariable Integer idUsuario,
+                                                        @PathVariable Integer idIngrediente) {
+        IngredienteUsuario ingrediente = ingredienteUsuarioRepository.findById(idIngrediente)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+
+        if (!ingrediente.getUsuario().getId().equals(idUsuario)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
+        }
+
+        ingredienteUsuarioRepository.delete(ingrediente);
+        return ingrediente;
+    }
+
+    // Progresso do Usuario
+
+    // Busca o progresso de um usuário
+    @GetMapping("/{idUsuario}/progresso")
+    public ProgressoUsuario buscarProgressoUsuario(@PathVariable Integer idUsuario) {
+
+        return progressoUsuarioRepository.findByUsuarioId(idUsuario)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso não encontrado"));
+    }
+
+    // Edita o progresso associado a um usuário
+    @PutMapping("/{idUsuario}/progresso")
+    public ProgressoUsuario editarProgressoUsuario(@PathVariable Integer idUsuario,
+                                                   @RequestBody ProgressoUsuario progressoUsuario) {
+
+        ProgressoUsuario alterar = progressoUsuarioRepository.findByUsuarioId(idUsuario)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso do usuário não encontrado"));
+
+        if (!alterar.getUsuario().getId().equals(idUsuario)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Progresso não pertence ao usuário");
+        }
+
+        alterar.setXp(progressoUsuario.getXp());
+        alterar.setNivel(progressoUsuario.getNivel());
+        alterar.setAtualizadoEm(LocalDateTime.now());
+
+        progressoUsuarioRepository.save(alterar);
+        return progressoUsuario;
     }
 }

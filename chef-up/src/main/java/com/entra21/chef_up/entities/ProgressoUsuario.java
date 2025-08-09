@@ -2,6 +2,7 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -16,7 +17,7 @@ public class ProgressoUsuario {
 
     private Integer nivel;
     private Integer xp;
-    private Date atualizadoEm;
+    private LocalDateTime atualizadoEm;
 
     public Integer getId() {
         return id;
@@ -50,11 +51,11 @@ public class ProgressoUsuario {
         this.xp = xp;
     }
 
-    public Date getAtualizadoEm() {
+    public LocalDateTime getAtualizadoEm() {
         return atualizadoEm;
     }
 
-    public void setAtualizadoEm(Date atualizadoEm) {
+    public void setAtualizadoEm(LocalDateTime atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
     }
 }

@@ -1,0 +1,19 @@
+meta {
+  name: buscar_progresso-usuario
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/usuarios/5/progresso
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3NzM0ODMsImV4cCI6MTc1NDc3NzA4M30.khnSm4i5K7qdBj53G_rTWCVSL_p-NaS1DA7jij4Hn38
+}
+
+settings {
+  encodeUrl: true
+}

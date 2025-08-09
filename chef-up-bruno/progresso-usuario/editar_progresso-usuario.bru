@@ -1,0 +1,26 @@
+meta {
+  name: editar_progresso-usuario
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:8080/usuarios/5/progresso
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3NzM0ODMsImV4cCI6MTc1NDc3NzA4M30.khnSm4i5K7qdBj53G_rTWCVSL_p-NaS1DA7jij4Hn38
+}
+
+body:json {
+  {
+    "nivel": 1,
+    "xp": 100
+  }
+}
+
+settings {
+  encodeUrl: true
+}

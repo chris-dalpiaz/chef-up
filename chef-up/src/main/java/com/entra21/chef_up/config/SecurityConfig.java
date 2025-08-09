@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/login", "/auth/register").permitAll()  // LIBERA login e register
+                .requestMatchers("/auth/*").permitAll()  // LIBERA login e register
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

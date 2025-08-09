@@ -66,8 +66,4 @@ public class Usuario {
     public void setPronome(Pronome pronome) {
         this.pronome = pronome;
     }
-
-    public String getPassword() {
-        return null;
-    }
 }
