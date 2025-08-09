@@ -41,6 +41,8 @@ color: #666666;
     top: 93%;
     left: 50%;
     transform: translate(-50%, -50%);
+    max-width: 414px;
+    width: 90%;
 }
 
 label{
