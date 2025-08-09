@@ -10,12 +10,12 @@ public class IngredienteReceita {
 
     @ManyToOne()
     @JoinColumn(name = "ingredientes_id")
-    private Ingredientes ingrediente;
+    private Ingrediente ingrediente;
 
 
     @ManyToOne()
     @JoinColumn(name = "receitas_id")
-    private Receitas receita;
+    private Receita receita;
 
     private String unidadeMedida;
     private Double quantidade;
@@ -28,19 +28,19 @@ public class IngredienteReceita {
         this.id = id;
     }
 
-    public Ingredientes getIngrediente() {
+    public Ingrediente getIngrediente() {
         return ingrediente;
     }
 
-    public void setIngrediente(Ingredientes ingrediente) {
+    public void setIngrediente(Ingrediente ingrediente) {
         this.ingrediente = ingrediente;
     }
 
-    public Receitas getReceita() {
+    public Receita getReceita() {
         return receita;
     }
 
-    public void setReceita(Receitas receita) {
+    public void setReceita(Receita receita) {
         this.receita = receita;
     }
 

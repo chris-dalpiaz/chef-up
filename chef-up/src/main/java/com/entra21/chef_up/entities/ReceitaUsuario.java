@@ -12,11 +12,11 @@ public class ReceitaUsuario {
 
     @ManyToOne()
     @JoinColumn(name = "usuarios_id")
-    private Usuarios usuario;
+    private Usuario usuario;
 
     @ManyToOne()
     @JoinColumn(name = "receitas_id")
-    private Receitas receita;
+    private Receita receita;
 
     private Date dataCricacao;
     private String fotoPrato;
@@ -30,19 +30,19 @@ public class ReceitaUsuario {
         this.id = id;
     }
 
-    public Usuarios getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuarios usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    public Receitas getReceita() {
+    public Receita getReceita() {
         return receita;
     }
 
-    public void setReceita(Receitas receita) {
+    public void setReceita(Receita receita) {
         this.receita = receita;
     }
 

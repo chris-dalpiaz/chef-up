@@ -3,13 +3,14 @@ package com.entra21.chef_up.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class ReceitaPasso {
+public class UtensilioReceita {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer ordem;
-    private String conteudo;
+    @ManyToOne()
+    @JoinColumn(name = "utensilios_id")
+    private Utensilio utensilio;
 
     @ManyToOne()
     @JoinColumn(name = "receitas_id")
@@ -23,20 +24,12 @@ public class ReceitaPasso {
         this.id = id;
     }
 
-    public Integer getOrdem() {
-        return ordem;
+    public Utensilio getUtensilio() {
+        return utensilio;
     }
 
-    public void setOrdem(Integer ordem) {
-        this.ordem = ordem;
-    }
-
-    public String getConteudo() {
-        return conteudo;
-    }
-
-    public void setConteudo(String conteudo) {
-        this.conteudo = conteudo;
+    public void setUtensilio(Utensilio utensilio) {
+        this.utensilio = utensilio;
     }
 
     public Receita getReceita() {

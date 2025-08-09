@@ -12,7 +12,7 @@ public class ProgressoUsuario {
 
     @OneToOne()
     @JoinColumn(name = "usuarios_id")
-    private Usuarios usuario;
+    private Usuario usuario;
 
     private Integer nivel;
     private Integer xp;
@@ -26,11 +26,11 @@ public class ProgressoUsuario {
         this.id = id;
     }
 
-    public Usuarios getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuarios usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 

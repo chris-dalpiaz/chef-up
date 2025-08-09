@@ -3,7 +3,6 @@ package com.entra21.chef_up.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class AvatarUsuario {
@@ -13,11 +12,11 @@ public class AvatarUsuario {
 
     @ManyToOne()
     @JoinColumn(name = "usuarios_id")
-    private Usuarios usuario;
+    private Usuario usuario;
 
     @ManyToOne()
     @JoinColumn(name = "avatares_id")
-    private Avatares avatar;
+    private Avatar avatar;
 
     private LocalDateTime desbloqueadoEm;
 
@@ -29,19 +28,19 @@ public class AvatarUsuario {
         this.id = id;
     }
 
-    public Usuarios getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuarios usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    public Avatares getAvatar() {
+    public Avatar getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Avatares avatar) {
+    public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
     }
 

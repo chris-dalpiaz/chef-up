@@ -10,11 +10,11 @@ public class ReceitaColecao {
 
     @ManyToOne()
     @JoinColumn(name = "receitas_id")
-    private Receitas receita;
+    private Receita receita;
 
     @ManyToOne()
     @JoinColumn(name = "colecoes_id")
-    private Colecoes colecao;
+    private Colecao colecao;
 
     public Integer getId() {
         return id;
@@ -24,19 +24,19 @@ public class ReceitaColecao {
         this.id = id;
     }
 
-    public Receitas getReceita() {
+    public Receita getReceita() {
         return receita;
     }
 
-    public void setReceita(Receitas receita) {
+    public void setReceita(Receita receita) {
         this.receita = receita;
     }
 
-    public Colecoes getColecao() {
+    public Colecao getColecao() {
         return colecao;
     }
 
-    public void setColecao(Colecoes colecao) {
+    public void setColecao(Colecao colecao) {
         this.colecao = colecao;
     }
 }

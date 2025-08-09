@@ -12,11 +12,11 @@ public class TituloUsuario {
 
     @ManyToOne()
     @JoinColumn(name = "titulos_id")
-    private Titulos titulo;
+    private Titulo titulo;
 
     @ManyToOne()
     @JoinColumn(name = "usuarios_id")
-    private Usuarios usuario;
+    private Usuario usuario;
 
     private Date desbloqueadoEm;
 
@@ -28,19 +28,19 @@ public class TituloUsuario {
         this.id = id;
     }
 
-    public Titulos getTitulo() {
+    public Titulo getTitulo() {
         return titulo;
     }
 
-    public void setTitulo(Titulos titulo) {
+    public void setTitulo(Titulo titulo) {
         this.titulo = titulo;
     }
 
-    public Usuarios getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuarios usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 

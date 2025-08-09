@@ -12,11 +12,11 @@ public class EstoqueVirtual {
 
     @ManyToOne()
     @JoinColumn(name = "usuarios_id")
-    private Usuarios usuario;
+    private Usuario usuario;
 
     @ManyToOne()
     @JoinColumn(name = "ingredientes_id")
-    private Ingredientes ingrediente;
+    private Ingrediente ingrediente;
 
     private Date dataAdicionada;
 
@@ -28,19 +28,19 @@ public class EstoqueVirtual {
         this.id = id;
     }
 
-    public Usuarios getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuarios usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    public Ingredientes getIngrediente() {
+    public Ingrediente getIngrediente() {
         return ingrediente;
     }
 
-    public void setIngrediente(Ingredientes ingrediente) {
+    public void setIngrediente(Ingrediente ingrediente) {
         this.ingrediente = ingrediente;
     }
 

@@ -3,14 +3,12 @@ package com.entra21.chef_up.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class AdjetivoUsuario {
+public class Colecao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne()
-    @JoinColumn(name = "adjetivos_id")
-    private Adjetivo adjetivo;
+    private String nome;
 
     @ManyToOne()
     @JoinColumn(name = "usuarios_id")
@@ -24,12 +22,12 @@ public class AdjetivoUsuario {
         this.id = id;
     }
 
-    public Adjetivo getAdjetivo() {
-        return adjetivo;
+    public String getNome() {
+        return nome;
     }
 
-    public void setAdjetivo(Adjetivo adjetivo) {
-        this.adjetivo = adjetivo;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Usuario getUsuario() {
