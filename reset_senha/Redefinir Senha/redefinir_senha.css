@@ -1,0 +1,43 @@
+
+.tittles{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+    padding-left: 1%;
+    margin-bottom: 15%;
+}
+
+.tittle{
+    display: flex;
+    margin-bottom: -35px;  
+}
+
+.subtittle{
+    display: flex;
+    color: #666666;
+}
+
+label{
+    font-weight:700;
+    justify-content: left;
+}
+
+button{
+    font-weight:700;
+}
+
+.botao{
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  position: absolute;
+  top: 93%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.inputs{
+    display: flex;
+    flex-direction: column;
+}

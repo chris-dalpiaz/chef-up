@@ -1,0 +1,55 @@
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Centraliza verticalmente */
+  }
+  
+  .alerta {
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    border-radius: 2vh;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 4vh 5vh;
+    text-align: center;
+    max-width: 400px;
+    width: 70%;
+  }
+  
+  .image img {
+    margin-bottom: 2vh;
+  }
+  
+  .tittle h1 {
+    font-size: 24px;
+    margin: 0;
+    color: #000;
+  }
+  
+  .info p {
+    font-size: 16px;
+    color: #666;
+    margin: 1vh 0 3vh 0;
+  }
+  
+  .botao {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .botao button {
+    background-color: #F58700;
+    border: none;
+    padding: 2vh 8vh;
+    border-radius: 2vh;
+    cursor: pointer;
+    font-size: 18px;
+    color: #000;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
