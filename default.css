@@ -30,7 +30,7 @@ button {
   text-align: center;
   align-items: center;
   font-size: 18px;
-   max-width: 414px;
+  max-width: 414px;
   width: 93.76%;
   font-weight:650;
  
@@ -48,10 +48,14 @@ button {
 
 input {
   width: 90%;
-  padding: 10px;
+  padding: 15px 15px;
   border-radius: 1vh;
   margin: 10px;
   border: 1px solid #ccc;
+}
+
+input:focus{
+  border: 1px solid #F58700;
 }
 
 #botaocriar {
