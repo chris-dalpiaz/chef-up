@@ -1,0 +1,15 @@
+meta {
+  name: buscar_receita-colecao
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/colecoes/1/receitas/2
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

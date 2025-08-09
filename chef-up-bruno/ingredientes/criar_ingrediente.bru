@@ -1,0 +1,20 @@
+meta {
+  name: criar_ingrediente
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/ingredientes
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "cenoura",
+    "categoria": "verdura",
+    "estimativaValidade": 7,
+    "dicaConservacao": "manter refrigerado"
+  }
+}
