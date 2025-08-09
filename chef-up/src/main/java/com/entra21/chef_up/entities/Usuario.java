@@ -68,5 +68,6 @@ public class Usuario {
     }
 
     public String getPassword() {
+        return null;
     }
 }

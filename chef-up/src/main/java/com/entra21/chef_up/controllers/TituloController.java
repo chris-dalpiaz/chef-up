@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/titulos")
 public class TituloController {
 
-    private final TituloRepository titulosRepository;
+    private final TituloRepository tituloRepository;
 
     // Construtor com injeção de dependência
-    public TituloController(TituloRepository titulosRepository) {
-        this.titulosRepository = titulosRepository;
+    public TituloController(TituloRepository tituloRepository) {
+        this.tituloRepository = tituloRepository;
     }
 
     /**
@@ -24,7 +24,7 @@ public class TituloController {
      */
     @GetMapping
     public List<Titulo> listar() {
-        return titulosRepository.findAll();
+        return tituloRepository.findAll();
     }
 
     /**
@@ -33,7 +33,7 @@ public class TituloController {
      */
     @GetMapping("/{idTitulo}")
     public Titulo buscarTitulo(@PathVariable Integer idTitulo) {
-        return titulosRepository.findById(idTitulo)
+        return tituloRepository.findById(idTitulo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
     }
 
@@ -42,7 +42,7 @@ public class TituloController {
      */
     @PostMapping
     public Titulo criarTitulo(@RequestBody Titulo titulo) {
-        return titulosRepository.save(titulo);
+        return tituloRepository.save(titulo);
     }
 
     /**
@@ -54,13 +54,13 @@ public class TituloController {
             @PathVariable Integer idTitulo,
             @RequestBody Titulo titulo
     ) {
-        Titulo alterar = titulosRepository.findById(idTitulo)
+        Titulo alterar = tituloRepository.findById(idTitulo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
         alterar.setNome(titulo.getNome());
         alterar.setCondicaoDesbloqueio(titulo.getCondicaoDesbloqueio());
 
-        return titulosRepository.save(alterar);
+        return tituloRepository.save(alterar);
     }
 
     /**
@@ -69,10 +69,10 @@ public class TituloController {
      */
     @DeleteMapping("/{idTitulo}")
     public Titulo removerTitulo(@PathVariable Integer idTitulo) {
-        Titulo titulo = titulosRepository.findById(idTitulo)
+        Titulo titulo = tituloRepository.findById(idTitulo)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
-        titulosRepository.deleteById(idTitulo);
+        tituloRepository.deleteById(idTitulo);
 
         return titulo;
     }

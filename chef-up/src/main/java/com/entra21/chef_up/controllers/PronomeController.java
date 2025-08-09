@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/pronomes")
 public class PronomeController {
 
-    private final PronomeRepository pronomesRepository;
+    private final PronomeRepository pronomeRepository;
 
     // Construtor com injeção de dependência
-    public PronomeController(PronomeRepository pronomesRepository) {
-        this.pronomesRepository = pronomesRepository;
+    public PronomeController(PronomeRepository pronomeRepository) {
+        this.pronomeRepository = pronomeRepository;
     }
 
     /**
@@ -24,7 +24,7 @@ public class PronomeController {
      */
     @GetMapping
     public List<Pronome> listar() {
-        return pronomesRepository.findAll();
+        return pronomeRepository.findAll();
     }
 
     /**
@@ -33,7 +33,7 @@ public class PronomeController {
      */
     @GetMapping("/{idPronome}")
     public Pronome buscarPronome(@PathVariable Integer idPronome) {
-        return pronomesRepository.findById(idPronome)
+        return pronomeRepository.findById(idPronome)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pronome não encontrado"));
     }
 
@@ -42,7 +42,7 @@ public class PronomeController {
      */
     @PostMapping
     public Pronome criarPronome(@RequestBody Pronome pronome) {
-        return pronomesRepository.save(pronome);
+        return pronomeRepository.save(pronome);
     }
 
     /**
@@ -54,12 +54,12 @@ public class PronomeController {
             @PathVariable Integer idPronome,
             @RequestBody Pronome pronome
     ) {
-        Pronome alterar = pronomesRepository.findById(idPronome)
+        Pronome alterar = pronomeRepository.findById(idPronome)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pronome não encontrado"));
 
         alterar.setNome(pronome.getNome());
 
-        return pronomesRepository.save(alterar);
+        return pronomeRepository.save(alterar);
     }
 
     /**
@@ -68,10 +68,10 @@ public class PronomeController {
      */
     @DeleteMapping("/{idPronome}")
     public Pronome removerPronome(@PathVariable Integer idPronome) {
-        Pronome pronome = pronomesRepository.findById(idPronome)
+        Pronome pronome = pronomeRepository.findById(idPronome)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pronome não encontrado"));
 
-        pronomesRepository.deleteById(idPronome);
+        pronomeRepository.deleteById(idPronome);
 
         return pronome;
     }

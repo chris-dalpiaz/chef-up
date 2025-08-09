@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/ingredientes")
 public class IngredienteController {
 
-    private final IngredienteRepository ingredientesRepository;
+    private final IngredienteRepository ingredienteRepository;
 
     // Construtor com injeção de dependência
-    public IngredienteController(IngredienteRepository ingredientesRepository) {
-        this.ingredientesRepository = ingredientesRepository;
+    public IngredienteController(IngredienteRepository ingredienteRepository) {
+        this.ingredienteRepository = ingredienteRepository;
     }
 
     /**
@@ -24,7 +24,7 @@ public class IngredienteController {
      */
     @GetMapping
     public List<Ingrediente> listar() {
-        return ingredientesRepository.findAll();
+        return ingredienteRepository.findAll();
     }
 
     /**
@@ -33,7 +33,7 @@ public class IngredienteController {
      */
     @GetMapping("/{idIngrediente}")
     public Ingrediente buscarIngrediente(@PathVariable Integer idIngrediente) {
-        return ingredientesRepository.findById(idIngrediente)
+        return ingredienteRepository.findById(idIngrediente)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
     }
 
@@ -42,7 +42,7 @@ public class IngredienteController {
      */
     @PostMapping
     public Ingrediente criarIngrediente(@RequestBody Ingrediente ingrediente) {
-        return ingredientesRepository.save(ingrediente);
+        return ingredienteRepository.save(ingrediente);
     }
 
     /**
@@ -54,7 +54,7 @@ public class IngredienteController {
             @PathVariable Integer idIngrediente,
             @RequestBody Ingrediente ingrediente
     ) {
-        Ingrediente alterar = ingredientesRepository.findById(idIngrediente)
+        Ingrediente alterar = ingredienteRepository.findById(idIngrediente)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
 
         alterar.setNome(ingrediente.getNome());
@@ -62,7 +62,7 @@ public class IngredienteController {
         alterar.setDicaConservacao(ingrediente.getDicaConservacao());
         alterar.setEstimativaValidade(ingrediente.getEstimativaValidade());
 
-        return ingredientesRepository.save(alterar);
+        return ingredienteRepository.save(alterar);
     }
 
     /**
@@ -71,10 +71,10 @@ public class IngredienteController {
      */
     @DeleteMapping("/{idIngrediente}")
     public Ingrediente removerIngrediente(@PathVariable Integer idIngrediente) {
-        Ingrediente ingrediente = ingredientesRepository.findById(idIngrediente)
+        Ingrediente ingrediente = ingredienteRepository.findById(idIngrediente)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
 
-        ingredientesRepository.deleteById(idIngrediente);
+        ingredienteRepository.deleteById(idIngrediente);
 
         return ingrediente;
     }

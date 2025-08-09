@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/colecoes")
 public class ColecaoController {
-    private final ColecaoRepository colecoesRepository;
+    private final ColecaoRepository colecaoRepository;
     private final ReceitaColecaoRepository receitaColecaoRepository;
 
-    public ColecaoController(ColecaoRepository colecoesRepository, ReceitaColecaoRepository receitaColecaoRepository) {
-        this.colecoesRepository = colecoesRepository;
+    public ColecaoController(ColecaoRepository colecaoRepository, ReceitaColecaoRepository receitaColecaoRepository) {
+        this.colecaoRepository = colecaoRepository;
         this.receitaColecaoRepository = receitaColecaoRepository;
     }
 
@@ -26,7 +26,7 @@ public class ColecaoController {
      */
     @GetMapping
     public List<Colecao> listar() {
-        return colecoesRepository.findAll();
+        return colecaoRepository.findAll();
     }
 
     /**
@@ -35,7 +35,7 @@ public class ColecaoController {
      */
     @GetMapping("/{idColecao}")
     public Colecao buscarColecao(@PathVariable Integer idColecao) {
-        return colecoesRepository.findById(idColecao)
+        return colecaoRepository.findById(idColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
     }
 
@@ -44,7 +44,7 @@ public class ColecaoController {
      */
     @PostMapping
     public Colecao criarColecao(@RequestBody Colecao colecao) {
-        return colecoesRepository.save(colecao);
+        return colecaoRepository.save(colecao);
     }
 
     /**
@@ -56,13 +56,13 @@ public class ColecaoController {
             @PathVariable Integer idColecao,
             @RequestBody Colecao colecao
     ) {
-        Colecao alterar = colecoesRepository.findById(idColecao)
+        Colecao alterar = colecaoRepository.findById(idColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
 
         alterar.setNome(colecao.getNome());
         alterar.setUsuario(colecao.getUsuario());
 
-        return colecoesRepository.save(alterar);
+        return colecaoRepository.save(alterar);
     }
 
     /**
@@ -71,10 +71,10 @@ public class ColecaoController {
      */
     @DeleteMapping("/{idColecao}")
     public Colecao removerColecao(@PathVariable Integer idColecao) {
-        Colecao colecao = colecoesRepository.findById(idColecao)
+        Colecao colecao = colecaoRepository.findById(idColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
 
-        colecoesRepository.deleteById(idColecao);
+        colecaoRepository.deleteById(idColecao);
 
         return colecao;
     }
@@ -108,7 +108,7 @@ public class ColecaoController {
     public ReceitaColecao criarReceitaColecao(@PathVariable Integer idColecao,
                                               @RequestBody ReceitaColecao receitaColecao) {
 
-        Colecao colecao = colecoesRepository.findById(idColecao)
+        Colecao colecao = colecaoRepository.findById(idColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
 
         receitaColecao.setColecao(colecao);

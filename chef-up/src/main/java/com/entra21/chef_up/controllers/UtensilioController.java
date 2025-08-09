@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/utensilios")
 public class UtensilioController {
 
-    private final UtensilioRepository utensiliosRepository;
+    private final UtensilioRepository utensilioRepository;
 
     // Construtor com injeção de dependência
-    public UtensilioController(UtensilioRepository utensiliosRepository) {
-        this.utensiliosRepository = utensiliosRepository;
+    public UtensilioController(UtensilioRepository utensilioRepository) {
+        this.utensilioRepository = utensilioRepository;
     }
 
     /**
@@ -24,7 +24,7 @@ public class UtensilioController {
      */
     @GetMapping
     public List<Utensilio> listar() {
-        return utensiliosRepository.findAll();
+        return utensilioRepository.findAll();
     }
 
     /**
@@ -33,7 +33,7 @@ public class UtensilioController {
      */
     @GetMapping("/{idUtensilio}")
     public Utensilio buscarUtensilio(@PathVariable Integer idUtensilio) {
-        return utensiliosRepository.findById(idUtensilio)
+        return utensilioRepository.findById(idUtensilio)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
     }
 
@@ -42,7 +42,7 @@ public class UtensilioController {
      */
     @PostMapping
     public Utensilio criarUtensilio(@RequestBody Utensilio utensilio) {
-        return utensiliosRepository.save(utensilio);
+        return utensilioRepository.save(utensilio);
     }
 
     /**
@@ -54,12 +54,12 @@ public class UtensilioController {
             @PathVariable Integer idUtensilio,
             @RequestBody Utensilio utensilio
     ) {
-        Utensilio alterar = utensiliosRepository.findById(idUtensilio)
+        Utensilio alterar = utensilioRepository.findById(idUtensilio)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
 
         alterar.setNome(utensilio.getNome());
 
-        return utensiliosRepository.save(alterar);
+        return utensilioRepository.save(alterar);
     }
 
     /**
@@ -68,10 +68,10 @@ public class UtensilioController {
      */
     @DeleteMapping("/{idUtensilio}")
     public Utensilio removerUtensilio(@PathVariable Integer idUtensilio) {
-        Utensilio utensilio = utensiliosRepository.findById(idUtensilio)
+        Utensilio utensilio = utensilioRepository.findById(idUtensilio)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
 
-        utensiliosRepository.deleteById(idUtensilio);
+        utensilioRepository.deleteById(idUtensilio);
 
         return utensilio;
     }

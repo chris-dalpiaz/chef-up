@@ -19,35 +19,35 @@ import java.util.List;
 public class UsuarioController {
 
     // Repositórios para acesso ao banco de dados
-    private final UsuarioRepository usuariosRepository;
-    private final AdjetivoRepository adjetivosRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final AdjetivoRepository adjetivoRepository;
     private final AdjetivoUsuarioRepository adjetivoUsuarioRepository;
-    private final AvatarRepository avataresRepository;
+    private final AvatarRepository avatarRepository;
     private final AvatarUsuarioRepository avatarUsuarioRepository;
 
     // Construtor com injeção de dependência
-    public UsuarioController(UsuarioRepository usuariosRepository,
-                             AdjetivoRepository adjetivosRepository,
+    public UsuarioController(UsuarioRepository usuarioRepository,
+                             AdjetivoRepository adjetivoRepository,
                              AdjetivoUsuarioRepository adjetivoUsuarioRepository,
-                             AvatarRepository avataresRepository,
+                             AvatarRepository avatarRepository,
                              AvatarUsuarioRepository avatarUsuarioRepository) {
-        this.usuariosRepository = usuariosRepository;
-        this.adjetivosRepository = adjetivosRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.adjetivoRepository = adjetivoRepository;
+        this.avatarRepository = avatarRepository;
         this.adjetivoUsuarioRepository = adjetivoUsuarioRepository;
-        this.avataresRepository = avataresRepository;
         this.avatarUsuarioRepository = avatarUsuarioRepository;
     }
 
     // Lista todos os usuários cadastrados
     @GetMapping
     public List<Usuario> listar() {
-        return usuariosRepository.findAll();
+        return usuarioRepository.findAll();
     }
 
     // Busca um usuário pelo ID
     @GetMapping("/{idUsuario}")
     public Usuario buscarUsuario(@PathVariable Integer idUsuario) {
-        return usuariosRepository.findById(idUsuario)
+        return usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
     }
 
@@ -56,14 +56,14 @@ public class UsuarioController {
     public Usuario criarUsuario(@RequestBody Usuario usuario) {
         usuario.setDataCadastro(LocalDateTime.now());
         //usuario.setSenhaHash(passwordEncoder.encode(usuario.getSenhaHash()));
-        return usuariosRepository.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     // Atualiza os dados de um usuário existente
     @PutMapping("/{idUsuario}")
     public Usuario alterarUsuario(@PathVariable Integer idUsuario,
                                   @RequestBody Usuario usuario) {
-        Usuario alterar = usuariosRepository.findById(idUsuario)
+        Usuario alterar = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         alterar.setNome(usuario.getNome());
@@ -71,16 +71,16 @@ public class UsuarioController {
         alterar.setSenhaHash(usuario.getSenhaHash());
         alterar.setPronome(usuario.getPronome());
 
-        return usuariosRepository.save(alterar);
+        return usuarioRepository.save(alterar);
     }
 
     // Remove um usuário pelo ID
     @DeleteMapping("/{idUsuario}")
     public Usuario removerUsuario(@PathVariable Integer idUsuario) {
-        Usuario usuario = usuariosRepository.findById(idUsuario)
+        Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
-        usuariosRepository.delete(usuario);
+        usuarioRepository.delete(usuario);
         return usuario;
     }
 
@@ -110,7 +110,7 @@ public class UsuarioController {
     @PostMapping("/{idUsuario}/adjetivos")
     public AdjetivoUsuario criarAdjetivoUsuario(@PathVariable Integer idUsuario,
                                                 @RequestBody AdjetivoUsuario adjetivoUsuario) {
-        Usuario usuario = usuariosRepository.findById(idUsuario)
+        Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         adjetivoUsuario.setUsuario(usuario);
@@ -175,7 +175,7 @@ public class UsuarioController {
     public AvatarUsuario criarAvatarUsuario(@PathVariable Integer idUsuario,
                                                 @RequestBody AvatarUsuario avatarUsuario) {
 
-        Usuario usuario = usuariosRepository.findById(idUsuario)
+        Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         avatarUsuario.setDesbloqueadoEm(LocalDateTime.now());

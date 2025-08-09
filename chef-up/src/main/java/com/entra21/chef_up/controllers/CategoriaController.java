@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    private final CategoriaRepository categoriasRepository;
+    private final CategoriaRepository categoriaRepository;
 
     // Construtor com injeção de dependência
-    public CategoriaController(CategoriaRepository categoriasRepository) {
-        this.categoriasRepository = categoriasRepository;
+    public CategoriaController(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
     }
 
     /**
@@ -24,7 +24,7 @@ public class CategoriaController {
      */
     @GetMapping
     public List<Categoria> listar() {
-        return categoriasRepository.findAll();
+        return categoriaRepository.findAll();
     }
 
     /**
@@ -33,7 +33,7 @@ public class CategoriaController {
      */
     @GetMapping("/{idCategoria}")
     public Categoria buscarCategoria(@PathVariable Integer idCategoria) {
-        return categoriasRepository.findById(idCategoria)
+        return categoriaRepository.findById(idCategoria)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
     }
 
@@ -42,7 +42,7 @@ public class CategoriaController {
      */
     @PostMapping
     public Categoria criarCategoria(@RequestBody Categoria categoria) {
-        return categoriasRepository.save(categoria);
+        return categoriaRepository.save(categoria);
     }
 
     /**
@@ -54,25 +54,26 @@ public class CategoriaController {
             @PathVariable Integer idCategoria,
             @RequestBody Categoria categoria
     ) {
-        Categoria alterar = categoriasRepository.findById(idCategoria)
+        Categoria alterar = categoriaRepository.findById(idCategoria)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
 
         alterar.setNome(categoria.getNome());
         alterar.setIconeUrl(categoria.getIconeUrl());
 
-        return categoriasRepository.save(alterar);
+        return categoriaRepository.save(alterar);
     }
 
     /**
      * Remove uma categoria pelo ID.
      * Retorna a categoria removida ou 404 se não existir.
      */
+
     @DeleteMapping("/{idCategoria}")
     public Categoria removerCategoria(@PathVariable Integer idCategoria) {
-        Categoria categoria = categoriasRepository.findById(idCategoria)
+        Categoria categoria = categoriaRepository.findById(idCategoria)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
 
-        categoriasRepository.deleteById(idCategoria);
+        categoriaRepository.deleteById(idCategoria);
 
         return categoria;
     }

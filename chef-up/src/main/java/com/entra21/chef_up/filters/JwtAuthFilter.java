@@ -1,6 +1,6 @@
 package com.entra21.chef_up.filters;
 
-import com.senac.spring_auth.services.JWTService;
+import com.entra21.chef_up.services.JWTService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

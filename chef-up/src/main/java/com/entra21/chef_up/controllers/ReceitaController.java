@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/receitas")
 public class ReceitaController {
 
-    private final ReceitaRepository receitasRepository;
+    private final ReceitaRepository receitaRepository;
 
     // Construtor com injeção de dependência
-    public ReceitaController(ReceitaRepository receitasRepository) {
-        this.receitasRepository = receitasRepository;
+    public ReceitaController(ReceitaRepository receitaRepository) {
+        this.receitaRepository = receitaRepository;
     }
 
     /**
@@ -24,7 +24,7 @@ public class ReceitaController {
      */
     @GetMapping
     public List<Receita> listar() {
-        return receitasRepository.findAll();
+        return receitaRepository.findAll();
     }
 
     /**
@@ -33,7 +33,7 @@ public class ReceitaController {
      */
     @GetMapping("/{idReceita}")
     public Receita buscarReceita(@PathVariable Integer idReceita) {
-        return receitasRepository.findById(idReceita)
+        return receitaRepository.findById(idReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
     }
 
@@ -42,7 +42,7 @@ public class ReceitaController {
      */
     @PostMapping
     public Receita criarReceita(@RequestBody Receita receita) {
-        return receitasRepository.save(receita);
+        return receitaRepository.save(receita);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ReceitaController {
             @PathVariable Integer idReceita,
             @RequestBody Receita receita
     ) {
-        Receita alterar = receitasRepository.findById(idReceita)
+        Receita alterar = receitaRepository.findById(idReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
 
         alterar.setCategoria(receita.getCategoria());
@@ -64,7 +64,7 @@ public class ReceitaController {
         alterar.setXpGanho(receita.getXpGanho());
         alterar.setTempoPreparoSegundos(receita.getTempoPreparoSegundos());
 
-        return receitasRepository.save(alterar);
+        return receitaRepository.save(alterar);
     }
 
     /**
@@ -73,10 +73,10 @@ public class ReceitaController {
      */
     @DeleteMapping("/{idReceita}")
     public Receita removerReceita(@PathVariable Integer idReceita) {
-        Receita receita = receitasRepository.findById(idReceita)
+        Receita receita = receitaRepository.findById(idReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
 
-        receitasRepository.deleteById(idReceita);
+        receitaRepository.deleteById(idReceita);
 
         return receita;
     }
