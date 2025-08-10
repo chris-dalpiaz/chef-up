@@ -1,0 +1,28 @@
+meta {
+  name: editar_receita
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/receitas/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3Njk4MTksImV4cCI6MTc1NDc3MzQxOX0.0uhQ9lZ5pduebEZloZuGzBj1x_o06Zhn9gx_Q8KLdmQ
+}
+
+body:json {
+  {
+    "nome": "Receita Média",
+    "descricao": "essa é uma receita mediana",
+    "tempoPreparoSegundos": 360,
+    "dificuldade": "mediana",
+    "xpGanho": 300,
+    "categoria": {
+      "id": 2
+    }  
+  }
+}

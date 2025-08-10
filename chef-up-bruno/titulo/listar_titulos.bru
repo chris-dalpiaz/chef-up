@@ -1,0 +1,15 @@
+meta {
+  name: listar_titulos
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/titulos
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ4MDMzNzMsImV4cCI6MTc1NDgwNjk3M30.fkYVo_U5bGzg1mUxwQl-236N2hfRFfXNRWwEXmyQNOo
+}

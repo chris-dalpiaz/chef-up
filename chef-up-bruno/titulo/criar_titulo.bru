@@ -1,0 +1,22 @@
+meta {
+  name: criar_titulo
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/titulos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3Njk4MTksImV4cCI6MTc1NDc3MzQxOX0.0uhQ9lZ5pduebEZloZuGzBj1x_o06Zhn9gx_Q8KLdmQ
+}
+
+body:json {
+  {
+    "nome": "rei da cocada",
+    "condicaoDesbloqueio": "doadoasdoasdoasdassda"
+  }
+}

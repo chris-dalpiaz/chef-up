@@ -1,0 +1,19 @@
+meta {
+  name: listar_etapa-receita
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/receitas/4/etapas
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3ODU5NDcsImV4cCI6MTc1NDc4OTU0N30.AfoS-rR-Ms9n9kdCAeokdoRNK30ucd8sRks85PL_Kgc
+}
+
+settings {
+  encodeUrl: true
+}
