@@ -1,86 +1,220 @@
-.perfil {
-    display: flex;
-    flex-direction: row;
-    gap: 2vh;
+body {
+    margin: 0;
+    padding: 2vh 4vw;
+    color: #000;
+    
 }
 
-.personagem {
-    width: 22vh;
-    /* Largura do quadrado */
-    height: 22vh;
-    /* Altura do quadrado */
-    background-color: #ff0000;
-    /* Cor de fundo */
-    border-radius: 6vh;
-}
 
-.dados_usuario {
-    flex: 1;
-    margin-top: 2vh;
-}
-
-.botao_pequeno {
-    background-color: #F58700;
-    border: none;
-    padding: 1vh 3vh 1vh 3vh;
-    border-radius: 2vh;
-    cursor: pointer;
-    text-align: center;
-    align-items: center;
-    font-size: 18px;
-    margin-top: 1vh;
-}
-
-.barra_progresso {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 3vh;
-}
-
-.nivel {
-    width: 40px;
-    height: 40px;
-    background-color: #2bb3a3;
-    /* verde-água */
-    color: black;
-    font-weight: bold;
-    transform: rotate(45deg);
+h1, h2 {
+    margin: 0 0 2vh 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.nivel span {
-    transform: rotate(-45deg);
+header{ 
+    display: flex;
+    flex-direction: row;
+    margin: 1.5vh 0 1vh 0; 
+    align-items: center;
+    justify-content: center;
 }
 
-.barra_container {
+/* ===== Perfil ===== */
+.perfil {
+    display: flex;
+    gap: 2vh;
+    align-items: center;
+}
+
+.foto_usuario img,
+.personagem {
+    width: 33.5vw;   /* proporcional à largura da tela */
+    height: 33.5vw;
+    border-radius: 8vw;
+    object-fit: cover;
+    background-color: #ccc;
+}
+
+.dados_usuario {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    gap: 0px;
 }
 
+.nome_usuario {
+    font-size: 4.5vw;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1
+}
+
+.titulo_usuario {
+    font-size: 3.5vw;
+    font-style: italic;
+    color: #555;
+    margin-bottom: 0.3vh;
+    margin-top: 0.2vh;
+}
+
+.adjetivos_usuario {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 1.5vw;
+    flex-wrap: wrap;
+    margin-bottom: 1vh;
+}
+
+.adjetivo {
+    background-color: #FFE4C2;
+    border: 1px solid #F58700;
+    border-radius: 15px;
+    padding: 0.5vh 1vw;
+    font-size: 3vw;
+
+}
+
+/* Botão editar perfil */
+.botao_pequeno {
+    margin-top: 1vh;
+    background-color: #F58700;
+    justify-content: center;
+    border: none;
+    padding: 0.8vh 3vw;
+    border-radius: 2vh;
+    cursor: pointer;
+    font-size: 3.5vw;
+    font-weight: bold;
+    color: #000000;
+}
+
+/* ===== Barra de progresso ===== */
+/* ===== Barra de progresso ===== */
+:root{
+  --bar-height: 14px;   /* altura da barra (ajuste se quiser) */
+  --bar-space: 8px;     /* espaço entre barra e texto */
+}
+
+/* container principal */
+.barra_progresso {
+    display: flex;
+    align-items: center; /* vai centrar o losango em relação à altura da .barra_container */
+    gap: 1rem;
+    margin: 3vh 0;
+}
+
+/* losango (nível) */
+.nivel {
+    flex-shrink: 0;
+    width: 28px;              /* ajuste o tamanho do losango se quiser menor/grande */
+    height: 28px;
+    background-color: #2bb3a3;
+    color: #000000;
+    font-weight: bold;
+    transform: rotate(45deg); /* forma de losango */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* número dentro do losango fica na posição correta */
+.nivel span {
+    transform: rotate(-45deg);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* aqui o container da barra tem SÓ a altura da barra */
+.barra_container {
+    flex: 1;
+    position: relative;
+    height: var(--bar-height); /* muito importante: limita a altura para alinhar corretamente */
+}
+
+/* fundo da barra e overflow para a barra de xp */
 .barra_bg {
-    width: 350px;
-    height: 20px;
-    background-color: #a7ddd7;
-    /* azul-claro */
+    position: relative;
+    width: 100%;
+    height: 100%; /* usa a altura definida no .barra_container */
+    background-color: #E6E6E6;
     border-radius: 20px;
     overflow: hidden;
-    position: relative;
 }
 
+/* barra preenchida (XP) */
 .barra_xp {
     position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
+    width: 97%; /* seu valor dinâmico */
     background-color: #fcb347;
-    /* laranja */
     border-radius: 20px;
-    /* tamanho da barra laranja */
 }
 
+/* pontos embaixo da barra — removidos do fluxo para não aumentar a altura do container */
 .pontos_xp {
-    margin-top: 5px;
+    position: absolute;
+    left: 0;
+    top: calc(100% + var(--bar-space)); /* posiciona abaixo da barra */
+    margin: 0;
     font-size: 14px;
     color: #333;
+}
+/* ===== Grid de pratos ===== */
+.pratos_feitos h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2vh;
+    font-size: 4vw;
+}
+
+.grid_pratos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1vw;
+}
+
+.grid_pratos img {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* mantém proporção quadrada */
+    object-fit: cover;
+    border-radius: 8px;
+}
+/* ===== Rodapé ===== */
+.footer {
+  position: fixed; /* fixa o rodapé na tela, mesmo quando rolar a página */
+  bottom: 0;       /* posiciona o rodapé colado na parte inferior da janela */
+  left: 0;         /* posiciona o rodapé a partir da borda esquerda da janela */
+  width: 100%;     /* o rodapé ocupa toda a largura da tela */
+  background: #fff; /* fundo branco para o rodapé */
+  display: flex;   /* usa flexbox para organizar os itens dentro do rodapé */
+  justify-content: space-around; /* distribui os itens igualmente espaçados horizontalmente */
+  align-items: center; /* alinha os itens verticalmente no centro */
+  padding: 8px 0;  /* espaço interno acima e abaixo (8px), sem espaçamento nas laterais */
+  border-top: 1px solid #ddd; /* uma linha fina e cinza clara no topo do rodapé */
+}
+
+.footer-item {
+  display: flex;              /* cada item do rodapé também é flex container */
+  flex-direction: column;    /* organiza os elementos dentro do item em coluna (vertical) */
+  align-items: center;       /* centraliza os elementos dentro do item horizontalmente */
+  font-size: 14px;           /* tamanho da fonte do texto */
+  color: #888;               /* cor cinza para o texto padrão */
+  cursor: pointer;           /* cursor muda para mãozinha ao passar o mouse, indicando que é clicável */
+  transition: color 0.2s ease; /* transição suave de 0.2 segundos na mudança da cor */
+}
+
+.footer-item::before {
+  content: attr(data-icon); /* insere antes do conteúdo do item o valor do atributo data-icon (emoji) */
+  font-size: 22px;          /* tamanho maior para o emoji */
+  margin-bottom: 4px;       /* espaço abaixo do emoji para separar do texto */
+}
+
+.footer-item.selected {
+  color: #FFA336; /* muda a cor do texto para laranja quando o item está selecionado */
 }
