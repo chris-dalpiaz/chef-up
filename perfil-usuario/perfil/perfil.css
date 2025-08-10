@@ -41,14 +41,15 @@ header{
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 0px;
+    gap: 0.3vh;
 }
 
 .nome_usuario {
     font-size: 4.5vw;
     font-weight: 600;
     margin: 0;
-    line-height: 1
+    line-height: 1;
+    margin-left: 0.5vh;
 }
 
 .titulo_usuario {
@@ -57,6 +58,7 @@ header{
     color: #555;
     margin-bottom: 0.3vh;
     margin-top: 0.2vh;
+    margin-left: 0.5vh;
 }
 
 .adjetivos_usuario {
@@ -94,7 +96,7 @@ header{
 /* ===== Barra de progresso ===== */
 /* ===== Barra de progresso ===== */
 :root{
-  --bar-height: 14px;   /* altura da barra (ajuste se quiser) */
+  --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
   --bar-space: 8px;     /* espaço entre barra e texto */
 }
 
@@ -150,7 +152,7 @@ header{
     top: 0;
     left: 0;
     height: 100%;
-    width: 97%; /* seu valor dinâmico */
+    width: var(--xp, 0%);
     background-color: #fcb347;
     border-radius: 20px;
 }
