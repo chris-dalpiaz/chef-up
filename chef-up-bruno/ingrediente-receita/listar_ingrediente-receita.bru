@@ -1,0 +1,19 @@
+meta {
+  name: listar_ingrediente-receita
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/receitas/4/ingredientes
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ4MDYxNDUsImV4cCI6MTc1NDgwOTc0NX0.iIL0-QvaxrV3WHxAPlklskM-Er_EsU9g4TCQ_84wjps
+}
+
+settings {
+  encodeUrl: true
+}

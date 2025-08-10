@@ -1,0 +1,25 @@
+meta {
+  name: criar_etapa-receita
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/receitas/4/etapas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3ODYyMzIsImV4cCI6MTc1NDc4OTgzMn0.4NQnV_178M9gbx0Gag-nNsTQih1YLNIn6kMx-jj5LHM
+}
+
+body:json {
+  {
+    "conteudo": "essa é a quarta etapa pra minha receita"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

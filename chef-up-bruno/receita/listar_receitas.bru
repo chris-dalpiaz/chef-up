@@ -1,0 +1,15 @@
+meta {
+  name: listar_receitas
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/receitas
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3ODYyMzIsImV4cCI6MTc1NDc4OTgzMn0.4NQnV_178M9gbx0Gag-nNsTQih1YLNIn6kMx-jj5LHM
+}

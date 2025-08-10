@@ -1,0 +1,15 @@
+meta {
+  name: listar_adjetivos
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/adjetivos
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ4MDE3MDEsImV4cCI6MTc1NDgwNTMwMX0.Ln_GBVB9JJXclMWTwKfxJSnSZQEQrldxSjHac96KDCA
+}

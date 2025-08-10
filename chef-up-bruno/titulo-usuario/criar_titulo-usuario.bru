@@ -1,0 +1,27 @@
+meta {
+  name: criar_titulo-usuario
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/usuarios/5/titulos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ4MDMzNzMsImV4cCI6MTc1NDgwNjk3M30.fkYVo_U5bGzg1mUxwQl-236N2hfRFfXNRWwEXmyQNOo
+}
+
+body:json {
+  {
+    "titulo":{
+      "id": 1
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+}

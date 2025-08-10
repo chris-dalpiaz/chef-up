@@ -1,7 +1,7 @@
 package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.entities.Ingrediente;
-import com.entra21.chef_up.repository.IngredienteRepository;
+import com.entra21.chef_up.repositories.IngredienteRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,24 +12,33 @@ import java.util.List;
 @RequestMapping("/ingredientes")
 public class IngredienteController {
 
+    /** Repositório para acesso aos dados dos ingredientes */
     private final IngredienteRepository ingredienteRepository;
 
-    // Construtor com injeção de dependência
+    /**
+     * Construtor com injeção de dependência.
+     * Recebe o repositório para manipular ingredientes.
+     */
     public IngredienteController(IngredienteRepository ingredienteRepository) {
         this.ingredienteRepository = ingredienteRepository;
     }
 
     /**
      * Lista todos os ingredientes cadastrados.
+     *
+     * @return lista com todos ingredientes no banco
      */
     @GetMapping
-    public List<Ingrediente> listar() {
+    public List<Ingrediente> listarIngredientes() {
         return ingredienteRepository.findAll();
     }
 
     /**
-     * Busca um ingrediente específico pelo ID.
-     * Retorna 404 se não for encontrado.
+     * Busca um ingrediente pelo ID.
+     * Retorna erro 404 se não encontrado.
+     *
+     * @param idIngrediente ID do ingrediente na URL
+     * @return ingrediente encontrado
      */
     @GetMapping("/{idIngrediente}")
     public Ingrediente buscarIngrediente(@PathVariable Integer idIngrediente) {
@@ -39,6 +48,9 @@ public class IngredienteController {
 
     /**
      * Cria um novo ingrediente.
+     *
+     * @param ingrediente dados do ingrediente enviados no corpo JSON
+     * @return ingrediente criado com ID gerado
      */
     @PostMapping
     public Ingrediente criarIngrediente(@RequestBody Ingrediente ingrediente) {
@@ -47,7 +59,11 @@ public class IngredienteController {
 
     /**
      * Atualiza os dados de um ingrediente existente.
-     * Retorna 404 se o ingrediente não existir.
+     * Retorna erro 404 se não existir.
+     *
+     * @param idIngrediente ID do ingrediente a ser atualizado
+     * @param ingrediente novos dados do ingrediente no corpo da requisição
+     * @return ingrediente atualizado
      */
     @PutMapping("/{idIngrediente}")
     public Ingrediente alterarIngrediente(
@@ -67,7 +83,10 @@ public class IngredienteController {
 
     /**
      * Remove um ingrediente pelo ID.
-     * Retorna o ingrediente removido ou 404 se não existir.
+     * Retorna o ingrediente removido ou erro 404 se não existir.
+     *
+     * @param idIngrediente ID do ingrediente a ser removido
+     * @return ingrediente removido
      */
     @DeleteMapping("/{idIngrediente}")
     public Ingrediente removerIngrediente(@PathVariable Integer idIngrediente) {
