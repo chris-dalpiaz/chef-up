@@ -1,10 +1,9 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.Categoria;
-import com.entra21.chef_up.repositories.CategoriaRepository;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.Categoria.CategoriaRequest;
+import com.entra21.chef_up.dtos.Categoria.CategoriaResponse;
+import com.entra21.chef_up.services.CategoriaService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -12,15 +11,10 @@ import java.util.List;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    /** Repositório para acesso ao banco de dados das categorias */
-    private final CategoriaRepository categoriaRepository;
+    private final CategoriaService categoriaService;
 
-    /**
-     * Construtor com injeção de dependência do repositório
-     * Permite a classe usar o categoriaRepository para operações CRUD
-     */
-    public CategoriaController(CategoriaRepository categoriaRepository) {
-        this.categoriaRepository = categoriaRepository;
+    public CategoriaController(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
     }
 
     /**
@@ -29,8 +23,8 @@ public class CategoriaController {
      * @return lista de objetos Categoria
      */
     @GetMapping
-    public List<Categoria> listarCategorias() {
-        return categoriaRepository.findAll();
+    public List<CategoriaResponse> listarCategorias() {
+        return categoriaService.listarTodos();
     }
 
     /**
@@ -41,9 +35,8 @@ public class CategoriaController {
      * @return objeto Categoria encontrado
      */
     @GetMapping("/{idCategoria}")
-    public Categoria buscarCategoria(@PathVariable Integer idCategoria) {
-        return categoriaRepository.findById(idCategoria)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+    public CategoriaResponse buscarCategoria(@PathVariable Integer idCategoria) {
+        return categoriaService.buscar(idCategoria);
     }
 
     /**
@@ -54,8 +47,8 @@ public class CategoriaController {
      * @return categoria criada com ID gerado pelo banco
      */
     @PostMapping
-    public Categoria criarCategoria(@RequestBody Categoria categoria) {
-        return categoriaRepository.save(categoria);
+    public CategoriaResponse criarCategoria(@RequestBody CategoriaRequest request) {
+        return categoriaService.criar(request);
     }
 
     /**
@@ -67,20 +60,11 @@ public class CategoriaController {
      * @return categoria atualizada
      */
     @PutMapping("/{idCategoria}")
-    public Categoria alterarCategoria(
+    public CategoriaResponse alterarCategoria(
             @PathVariable Integer idCategoria,
-            @RequestBody Categoria categoria
+            @RequestBody CategoriaRequest request
     ) {
-        /// Busca a categoria para atualização
-        Categoria alterar = categoriaRepository.findById(idCategoria)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-
-        /// Atualiza os campos permitidos
-        alterar.setNome(categoria.getNome());
-        alterar.setIconeUrl(categoria.getIconeUrl());
-
-        /// Salva as alterações no banco
-        return categoriaRepository.save(alterar);
+        return categoriaService.alterar(idCategoria, request);
     }
 
     /**
@@ -92,14 +76,7 @@ public class CategoriaController {
      * @return categoria removida
      */
     @DeleteMapping("/{idCategoria}")
-    public Categoria removerCategoria(@PathVariable Integer idCategoria) {
-        Categoria categoria = categoriaRepository.findById(idCategoria)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-
-        /// Deleta a categoria do banco
-        categoriaRepository.deleteById(idCategoria);
-
-        /// Retorna a categoria excluída
-        return categoria;
+    public CategoriaResponse removerCategoria(@PathVariable Integer idCategoria) {
+        return categoriaService.remover(idCategoria);
     }
 }

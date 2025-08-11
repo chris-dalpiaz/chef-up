@@ -1,7 +1,10 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.Avatar.AvatarRequest;
+import com.entra21.chef_up.dtos.Avatar.AvatarResponse;
 import com.entra21.chef_up.entities.Avatar;
 import com.entra21.chef_up.repositories.AvatarRepository;
+import com.entra21.chef_up.services.AvatarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,14 +16,14 @@ import java.util.List;
 public class AvatarController {
 
     /** Repositório para acesso ao banco de dados dos avatares */
-    private final AvatarRepository avatarRepository;
+    private final AvatarService avatarService;
 
     /**
      * Construtor com injeção de dependência do repositório
      * Permite a classe usar o avatarRepository para CRUD no banco
      */
-    public AvatarController(AvatarRepository avatarRepository) {
-        this.avatarRepository = avatarRepository;
+    public AvatarController(AvatarService avatarService) {
+        this.avatarService = avatarService;
     }
 
     /**
@@ -29,8 +32,8 @@ public class AvatarController {
      * @return lista de objetos Avatar
      */
     @GetMapping
-    public List<Avatar> listarAvatares() {
-        return avatarRepository.findAll();
+    public List<AvatarResponse> listarAvatares() {
+        return avatarService.listarTodos();
     }
 
     /**
@@ -41,21 +44,19 @@ public class AvatarController {
      * @return objeto Avatar encontrado
      */
     @GetMapping("/{idAvatar}")
-    public Avatar buscarAvatar(@PathVariable Integer idAvatar) {
-        return avatarRepository.findById(idAvatar)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
+    public AvatarResponse buscarAvatar(@PathVariable Integer idAvatar) {
+        return avatarService.buscar(idAvatar);
     }
 
     /**
      * Cria um novo avatar.
      * Recebe os dados no corpo da requisição no formato JSON.
      *
-     * @param avatar objeto Avatar a ser criado
      * @return avatar criado com ID gerado pelo banco
      */
     @PostMapping
-    public Avatar criarAvatar(@RequestBody Avatar avatar) {
-        return avatarRepository.save(avatar);
+    public AvatarResponse criarAvatar(@RequestBody AvatarRequest request) {
+        return avatarService.criar(request);
     }
 
     /**
@@ -63,24 +64,14 @@ public class AvatarController {
      * Se não encontrar o avatar pelo ID, retorna erro 404.
      *
      * @param idAvatar ID do avatar que será atualizado (URL)
-     * @param avatar novo conteúdo para o avatar (JSON no corpo)
      * @return avatar atualizado
      */
     @PutMapping("/{idAvatar}")
-    public Avatar alterarAvatar(
+    public AvatarResponse alterarAvatar(
             @PathVariable Integer idAvatar,
-            @RequestBody Avatar avatar
+            @RequestBody AvatarRequest request
     ) {
-        /// Busca o avatar atual para atualização
-        Avatar alterar = avatarRepository.findById(idAvatar)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        /// Atualiza os campos permitidos
-        alterar.setNome(avatar.getNome());
-        alterar.setImagemUrl(avatar.getImagemUrl());
-
-        /// Salva as alterações no banco
-        return avatarRepository.save(alterar);
+        return avatarService.alterar(idAvatar, request);
     }
 
     /**
@@ -92,14 +83,7 @@ public class AvatarController {
      * @return avatar removido
      */
     @DeleteMapping("/{idAvatar}")
-    public Avatar removerAvatar(@PathVariable Integer idAvatar) {
-        Avatar avatar = avatarRepository.findById(idAvatar)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        /// Deleta o avatar do banco
-        avatarRepository.deleteById(idAvatar);
-
-        /// Retorna o avatar excluído
-        return avatar;
+    public AvatarResponse removerAvatar(@PathVariable Integer idAvatar) {
+        return avatarService.remover(idAvatar);
     }
 }
