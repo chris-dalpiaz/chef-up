@@ -1,4 +1,4 @@
-package com.entra21.chef_up.dtos.login;
+package com.entra21.chef_up.dtos.Login;
 
 /** DTO para receber dados de login */
 public class LoginRequest {

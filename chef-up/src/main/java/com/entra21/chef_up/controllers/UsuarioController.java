@@ -1,7 +1,10 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
+import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.*;
 import com.entra21.chef_up.repositories.*;
+import com.entra21.chef_up.services.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,7 @@ public class UsuarioController {
     private final ReceitaUsuarioRepository receitaUsuarioRepository;
     private final ReceitaRepository receitaRepository;
     private final TituloUsuarioRepository tituloUsuarioRepository;
+    private final UsuarioService usuarioService;
     /**
      * Construtor que recebe todas as dependências necessárias para o funcionamento do controller.
      * O Spring Boot injeta automaticamente as instâncias dos repositórios e serviços aqui.
@@ -48,7 +52,7 @@ public class UsuarioController {
             IngredienteUsuarioRepository ingredienteUsuarioRepository,
             ProgressoUsuarioRepository progressoUsuarioRepository,
             ReceitaUsuarioRepository receitaUsuarioRepository,
-            ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository
+            ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository, UsuarioService usuarioService
     ) {
         /// Associação dos parâmetros recebidos com os atributos da classe.
         /// Isso permite que os métodos do controller acessem os repositórios e serviços
@@ -63,14 +67,15 @@ public class UsuarioController {
         this.receitaUsuarioRepository = receitaUsuarioRepository;
         this.receitaRepository = receitaRepository;
         this.tituloUsuarioRepository = tituloUsuarioRepository;
+        this.usuarioService = usuarioService;
     }
 
     /**
      * Lista todos os usuários cadastrados
      */
     @GetMapping
-    public List<Usuario> listarUsuarios() {
-        return usuarioRepository.findAll();
+    public List<UsuarioResponse> listarUsuarios() {
+        return usuarioService.listarTodos();
     }
 
     /**
@@ -78,9 +83,8 @@ public class UsuarioController {
      * Caso não encontre, lança um erro 404 (NOT_FOUND).
      */
     @GetMapping("/{idUsuario}")
-    public Usuario buscarUsuario(@PathVariable Integer idUsuario) {
-        return usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    public UsuarioResponse buscarUsuario(@PathVariable Integer idUsuario) {
+        return usuarioService.buscar(idUsuario);
     }
 
     /**
@@ -91,24 +95,9 @@ public class UsuarioController {
      * - Atualiza a senha apenas se um novo valor for enviado (fazendo o hash)
      */
     @PutMapping("/{idUsuario}")
-    public Usuario alterarUsuario(@PathVariable Integer idUsuario,
-                                  @RequestBody Usuario usuario) {
-        /// Busca o usuário existente no banco
-        Usuario alterar = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        /// Atualiza os dados básicos
-        alterar.setNome(usuario.getNome());
-        alterar.setEmail(usuario.getEmail());
-        alterar.setPronome(usuario.getPronome());
-
-        /// Atualiza a senha apenas se o campo for enviado e não estiver vazio
-        if (usuario.getSenhaHash() != null && !usuario.getSenhaHash().isEmpty()) {
-            alterar.setSenhaHash(passwordEncoder.encode(usuario.getSenhaHash())); // Armazena o hash da nova senha
-        }
-
-        /// Salva as alterações no banco e retorna o usuário atualizado
-        return usuarioRepository.save(alterar);
+    public UsuarioResponse alterarUsuario(@PathVariable Integer idUsuario,
+                                  @RequestBody UsuarioRequest request) {
+        return usuarioService.alterar(idUsuario, request);
     }
 
     /**
@@ -116,17 +105,9 @@ public class UsuarioController {
      * Caso não encontre, retorna 404.
      */
     @DeleteMapping("/{idUsuario}")
-    public Usuario removerUsuario(@PathVariable Integer idUsuario) {
-        /// Busca o usuário
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        /// Remove do banco
-        usuarioRepository.delete(usuario);
-
-        return usuario; // Retorna o usuário removido
+    public UsuarioResponse removerUsuario(@PathVariable Integer idUsuario) {
+        return usuarioService.remover(idUsuario);
     }
-
 
     ///* ---------- Adjetivos do Usuário ---------- */
 

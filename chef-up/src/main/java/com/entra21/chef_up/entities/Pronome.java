@@ -1,5 +1,6 @@
 package com.entra21.chef_up.entities;
 
+import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,9 @@ public class Pronome {
         this.id = id;
     }
 
-    /** Retorna o nome do pronome */
+    /**
+     * Retorna o nome do pronome
+     */
     public String getNome() {
         return nome;
     }

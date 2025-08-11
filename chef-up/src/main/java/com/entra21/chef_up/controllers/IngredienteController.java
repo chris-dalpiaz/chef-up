@@ -1,7 +1,10 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.Ingrediente.IngredienteRequest;
+import com.entra21.chef_up.dtos.Ingrediente.IngredienteResponse;
 import com.entra21.chef_up.entities.Ingrediente;
 import com.entra21.chef_up.repositories.IngredienteRepository;
+import com.entra21.chef_up.services.IngredienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,15 +15,10 @@ import java.util.List;
 @RequestMapping("/ingredientes")
 public class IngredienteController {
 
-    /** Repositório para acesso aos dados dos ingredientes */
-    private final IngredienteRepository ingredienteRepository;
+    private final IngredienteService ingredienteService;
 
-    /**
-     * Construtor com injeção de dependência.
-     * Recebe o repositório para manipular ingredientes.
-     */
-    public IngredienteController(IngredienteRepository ingredienteRepository) {
-        this.ingredienteRepository = ingredienteRepository;
+    public IngredienteController(IngredienteService ingredienteService) {
+        this.ingredienteService = ingredienteService;
     }
 
     /**
@@ -29,8 +27,8 @@ public class IngredienteController {
      * @return lista com todos ingredientes no banco
      */
     @GetMapping
-    public List<Ingrediente> listarIngredientes() {
-        return ingredienteRepository.findAll();
+    public List<IngredienteResponse> listarIngredientes() {
+        return ingredienteService.listarTodos();
     }
 
     /**
@@ -41,20 +39,18 @@ public class IngredienteController {
      * @return ingrediente encontrado
      */
     @GetMapping("/{idIngrediente}")
-    public Ingrediente buscarIngrediente(@PathVariable Integer idIngrediente) {
-        return ingredienteRepository.findById(idIngrediente)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+    public IngredienteResponse buscarIngrediente(@PathVariable Integer idIngrediente) {
+        return ingredienteService.buscar(idIngrediente);
     }
 
     /**
      * Cria um novo ingrediente.
      *
-     * @param ingrediente dados do ingrediente enviados no corpo JSON
      * @return ingrediente criado com ID gerado
      */
     @PostMapping
-    public Ingrediente criarIngrediente(@RequestBody Ingrediente ingrediente) {
-        return ingredienteRepository.save(ingrediente);
+    public IngredienteResponse criarIngrediente(@RequestBody IngredienteRequest request) {
+        return ingredienteService.criar(request);
     }
 
     /**
@@ -62,23 +58,14 @@ public class IngredienteController {
      * Retorna erro 404 se não existir.
      *
      * @param idIngrediente ID do ingrediente a ser atualizado
-     * @param ingrediente novos dados do ingrediente no corpo da requisição
      * @return ingrediente atualizado
      */
     @PutMapping("/{idIngrediente}")
-    public Ingrediente alterarIngrediente(
+    public IngredienteResponse alterarIngrediente(
             @PathVariable Integer idIngrediente,
-            @RequestBody Ingrediente ingrediente
+            @RequestBody IngredienteRequest request
     ) {
-        Ingrediente alterar = ingredienteRepository.findById(idIngrediente)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        alterar.setNome(ingrediente.getNome());
-        alterar.setCategoria(ingrediente.getCategoria());
-        alterar.setDicaConservacao(ingrediente.getDicaConservacao());
-        alterar.setEstimativaValidade(ingrediente.getEstimativaValidade());
-
-        return ingredienteRepository.save(alterar);
+        return ingredienteService.alterar(idIngrediente, request);
     }
 
     /**
@@ -89,12 +76,7 @@ public class IngredienteController {
      * @return ingrediente removido
      */
     @DeleteMapping("/{idIngrediente}")
-    public Ingrediente removerIngrediente(@PathVariable Integer idIngrediente) {
-        Ingrediente ingrediente = ingredienteRepository.findById(idIngrediente)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        ingredienteRepository.deleteById(idIngrediente);
-
-        return ingrediente;
+    public IngredienteResponse removerIngrediente(@PathVariable Integer idIngrediente) {
+        return ingredienteService.remover(idIngrediente);
     }
 }
