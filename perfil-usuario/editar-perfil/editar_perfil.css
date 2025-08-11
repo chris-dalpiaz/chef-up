@@ -1,14 +1,49 @@
 body {
     margin: 0;
     padding: 2vh 4vw;
-    color: #000;
     background-color: #fffaf5;
 }
 
-.pronomes_usuario {
-    background-color: #FFE4C2;
-    border: 1px solid #F58700;
+h1{
+    display: flex;
+    justify-content: center;
+}
+
+input{
+    margin-left: 0;
+}
+
+.adjetivo {
+    background-color: #E6E6E6;
+    border: none;
+    font-weight: 400;
     border-radius: 15px;
     padding: 0.5vh 1vw;
-    font-size: 3vw;
+    font-size: 3.5vw;
+    max-width: fit-content;
+    width: auto; /* ajusta ao conteúdo */
+}
+.adjetivo:hover{
+    background-color: #FFE4C2;
+    border: 1px solid #F58700;
+}
+
+.adjetivos_usuario {
+    display: flex;
+    flex-direction: row;  /* já é padrão, mas deixei explícito */
+    flex-wrap: wrap;      /* quebra linha se não couber */
+    gap: 0.5vh;           /* espaçamento entre botões */
+    align-items: center;
+}
+
+.botao_comum{
+    margin: 0;
+    justify-content: center;
+    margin-top: 110px;
+}
+
+.botao-bloqueado{
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }
