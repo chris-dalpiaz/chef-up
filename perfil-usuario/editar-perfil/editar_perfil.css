@@ -1,0 +1,14 @@
+body {
+    margin: 0;
+    padding: 2vh 4vw;
+    color: #000;
+    background-color: #fffaf5;
+}
+
+.pronomes_usuario {
+    background-color: #FFE4C2;
+    border: 1px solid #F58700;
+    border-radius: 15px;
+    padding: 0.5vh 1vw;
+    font-size: 3vw;
+}
