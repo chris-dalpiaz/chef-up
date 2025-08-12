@@ -1,0 +1,69 @@
+#despensavirtual {
+    font-size: 26px;
+    text-align: center;
+}
+
+:root{
+    --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
+    --bar-space: 8px;     /* espaço entre barra e texto */
+}
+
+.barra_progresso {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3vh 0;
+}
+
+.nivel {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    background-color: #2bb3a3;
+    color: #000000;
+    font-weight: bold;
+    transform: rotate(45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nivel span {
+    transform: rotate(-45deg);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.barra_container {
+    flex: 1;
+    position: relative;
+    height: var(--bar-height);
+}
+
+.barra_bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #a7ddd7;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.barra_xp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--xp, 0%);
+    background-color: #fcb347;
+    border-radius: 20px;
+}
+
+.pontos_xp {
+    position: absolute;
+    left: 0;
+    top: calc(100% + var(--bar-space));
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
