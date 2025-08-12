@@ -1,10 +1,15 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.Adjetivo.AdjetivoResponse;
+import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
+import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.*;
 import com.entra21.chef_up.repositories.*;
+import com.entra21.chef_up.services.ProgressoUsuarioService;
 import com.entra21.chef_up.services.UsuarioService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +30,7 @@ public class UsuarioController {
      * Cada repositório é responsável por gerenciar uma entidade específica no banco de dados.
      * Isso permite que possamos fazer consultas, salvamentos e exclusões de forma simples.
      */
+    private final ProgressoUsuarioService progressoUsuarioService;
     private final UsuarioRepository usuarioRepository;
     private final AdjetivoRepository adjetivoRepository;
     private final AdjetivoUsuarioRepository adjetivoUsuarioRepository;
@@ -37,13 +43,14 @@ public class UsuarioController {
     private final ReceitaRepository receitaRepository;
     private final TituloUsuarioRepository tituloUsuarioRepository;
     private final UsuarioService usuarioService;
+    private final ModelMapper modelMapper;
     /**
      * Construtor que recebe todas as dependências necessárias para o funcionamento do controller.
      * O Spring Boot injeta automaticamente as instâncias dos repositórios e serviços aqui.
      * Ao usar `final` nas variáveis, garantimos que não poderão ser alteradas depois de inicializadas.
      */
     public UsuarioController(
-            UsuarioRepository usuarioRepository,
+            ProgressoUsuarioService progressoUsuarioService, UsuarioRepository usuarioRepository,
             AdjetivoRepository adjetivoRepository,
             AdjetivoUsuarioRepository adjetivoUsuarioRepository,
             AvatarRepository avatarRepository,
@@ -52,8 +59,12 @@ public class UsuarioController {
             IngredienteUsuarioRepository ingredienteUsuarioRepository,
             ProgressoUsuarioRepository progressoUsuarioRepository,
             ReceitaUsuarioRepository receitaUsuarioRepository,
-            ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository, UsuarioService usuarioService
+            ReceitaRepository receitaRepository,
+            TituloUsuarioRepository tituloUsuarioRepository,
+            UsuarioService usuarioService,
+            ModelMapper modelMapper
     ) {
+        this.progressoUsuarioService = progressoUsuarioService;
         /// Associação dos parâmetros recebidos com os atributos da classe.
         /// Isso permite que os métodos do controller acessem os repositórios e serviços
         this.usuarioRepository = usuarioRepository;
@@ -68,6 +79,7 @@ public class UsuarioController {
         this.receitaRepository = receitaRepository;
         this.tituloUsuarioRepository = tituloUsuarioRepository;
         this.usuarioService = usuarioService;
+        this.modelMapper = modelMapper;
     }
 
     /**
@@ -396,46 +408,23 @@ public class UsuarioController {
 
 
     ///* ---------- Progresso do Usuário ---------- */
-
     /**
      * Busca o progresso do usuário pelo ID.
      */
     @GetMapping("/{idUsuario}/progresso")
-    public ProgressoUsuario buscarProgressoUsuario(@PathVariable Integer idUsuario) {
-        // Busca progresso pelo idUsuario ou lança erro 404 se não encontrado
-        return progressoUsuarioRepository.findByUsuarioId(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso não encontrado"));
+    public ProgressoUsuarioResponse buscarProgressoUsuario(@PathVariable Integer idUsuario) {
+        return progressoUsuarioService.buscar(idUsuario);
     }
-
     /**
      * Edita o progresso do usuário.
      */
     @PutMapping("/{idUsuario}/progresso")
-    public ProgressoUsuario editarProgressoUsuario(@PathVariable Integer idUsuario,
-                                                   @RequestBody ProgressoUsuario progressoUsuario) {
-        /// Busca o progresso existente ou lança erro 404
-        ProgressoUsuario alterar = progressoUsuarioRepository.findByUsuarioId(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso do usuário não encontrado"));
-
-        /// Verifica se o progresso pertence ao usuário solicitado
-        if (!alterar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Progresso não pertence ao usuário");
-        }
-
-        /// Atualiza XP, nível e data de atualização
-        alterar.setXp(progressoUsuario.getXp());
-        alterar.setNivel(progressoUsuario.getNivel());
-        alterar.setAtualizadoEm(LocalDateTime.now());
-
-        /// Salva as alterações no banco
-        progressoUsuarioRepository.save(alterar);
-
-        /// Retorna o progresso atualizado (usar o objeto salvo para garantir dados corretos)
-        return alterar;
+    public ProgressoUsuarioResponse editarProgressoUsuario(@PathVariable Integer idUsuario,
+                                                   @RequestBody ProgressoUsuarioRequest request) {
+        return progressoUsuarioService.alterar(idUsuario, request);
     }
 
     ///* ---------- Receitas Concluídas pelo Usuário ---------- */
-
     /**
      * Lista todas as receitas concluídas de um usuário.
      */
