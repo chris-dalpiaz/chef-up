@@ -16,22 +16,17 @@ public class TituloService {
     private final TituloRepository tituloRepository;
     private final ModelMapper modelMapper;
 
-    public TituloService(TituloRepository tituloRepository,
-                         ModelMapper modelMapper) {
+    public TituloService(TituloRepository tituloRepository, ModelMapper modelMapper) {
         this.tituloRepository = tituloRepository;
         this.modelMapper = modelMapper;
     }
 
     public List<TituloResponse> listarTodos() {
-        return tituloRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, TituloResponse.class))
-                .toList();
+        return tituloRepository.findAll().stream().map(u -> modelMapper.map(u, TituloResponse.class)).toList();
     }
 
     public TituloResponse buscar(Integer id) {
-        Titulo titulo = tituloRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Título não encontrado"));
+        Titulo titulo = tituloRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
         return modelMapper.map(titulo, TituloResponse.class);
     }
@@ -49,9 +44,7 @@ public class TituloService {
 
     public TituloResponse alterar(Integer id, TituloRequest request) {
         /// Busca o título pelo ID ou lança erro 404
-        Titulo alterar = tituloRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Título não encontrado"));
+        Titulo alterar = tituloRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
         /// Atualiza o nome com os dados do request
         alterar.setNome(request.getNome());
@@ -66,9 +59,7 @@ public class TituloService {
 
     public TituloResponse remover(Integer id) {
         /// Busca o título pelo ID ou lança 404
-        Titulo titulo = tituloRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Título não encontrado"));
+        Titulo titulo = tituloRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
         /// Deleta o título pelo ID
         tituloRepository.deleteById(id);

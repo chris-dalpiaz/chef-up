@@ -17,6 +17,7 @@ public class Adjetivo {
 
     /**
      * Retorna o ID do adjetivo.
+     *
      * @return id do adjetivo
      */
     public Integer getId() {
@@ -25,6 +26,7 @@ public class Adjetivo {
 
     /**
      * Define o ID do adjetivo.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -33,6 +35,7 @@ public class Adjetivo {
 
     /**
      * Retorna o nome do adjetivo.
+     *
      * @return nome do adjetivo
      */
     public String getNome() {
@@ -41,6 +44,7 @@ public class Adjetivo {
 
     /**
      * Define o nome do adjetivo.
+     *
      * @param nome novo nome para o adjetivo
      */
     public void setNome(String nome) {

@@ -17,22 +17,17 @@ public class AdjetivoService {
     private final AdjetivoRepository adjetivoRepository;
     private final ModelMapper modelMapper;
 
-    public AdjetivoService(AdjetivoRepository adjetivoRepository,
-                           ModelMapper modelMapper) {
+    public AdjetivoService(AdjetivoRepository adjetivoRepository, ModelMapper modelMapper) {
         this.adjetivoRepository = adjetivoRepository;
         this.modelMapper = modelMapper;
     }
 
     public List<AdjetivoResponse> listarTodos() {
-        return adjetivoRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, AdjetivoResponse.class))
-                .toList();
+        return adjetivoRepository.findAll().stream().map(u -> modelMapper.map(u, AdjetivoResponse.class)).toList();
     }
 
     public AdjetivoResponse buscar(Integer id) {
-        Adjetivo adjetivo = adjetivoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Adjetivo não encontrado"));
+        Adjetivo adjetivo = adjetivoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
 
         return modelMapper.map(adjetivo, AdjetivoResponse.class);
     }
@@ -50,9 +45,7 @@ public class AdjetivoService {
 
     public AdjetivoResponse alterar(Integer id, AdjetivoRequest request) {
         /// Busca o adjetivo pelo ID ou lança erro 404
-        Adjetivo alterar = adjetivoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Adjetivo não encontrado"));
+        Adjetivo alterar = adjetivoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
 
         /// Atualiza o nome com os dados do request
         alterar.setNome(request.getNome());
@@ -66,9 +59,7 @@ public class AdjetivoService {
 
     public AdjetivoResponse remover(Integer id) {
         /// Busca o adjetivo pelo ID ou lança 404
-        Adjetivo adjetivo = adjetivoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Adjetivo não encontrado"));
+        Adjetivo adjetivo = adjetivoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
 
         /// Deleta o adjetivo pelo ID
         adjetivoRepository.deleteById(id);

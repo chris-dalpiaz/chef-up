@@ -20,6 +20,7 @@ public class Categoria {
 
     /**
      * Retorna o ID da categoria.
+     *
      * @return id da categoria
      */
     public Integer getId() {
@@ -28,6 +29,7 @@ public class Categoria {
 
     /**
      * Define o ID da categoria.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -36,6 +38,7 @@ public class Categoria {
 
     /**
      * Retorna o nome da categoria.
+     *
      * @return nome da categoria
      */
     public String getNome() {
@@ -44,6 +47,7 @@ public class Categoria {
 
     /**
      * Define o nome da categoria.
+     *
      * @param nome novo nome da categoria
      */
     public void setNome(String nome) {
@@ -52,6 +56,7 @@ public class Categoria {
 
     /**
      * Retorna a URL do ícone da categoria.
+     *
      * @return URL do ícone
      */
     public String getIconeUrl() {
@@ -60,6 +65,7 @@ public class Categoria {
 
     /**
      * Define a URL do ícone da categoria.
+     *
      * @param iconeUrl URL do ícone
      */
     public void setIconeUrl(String iconeUrl) {

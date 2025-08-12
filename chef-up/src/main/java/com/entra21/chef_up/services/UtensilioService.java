@@ -22,15 +22,11 @@ public class UtensilioService {
     }
 
     public List<UtensilioResponse> listarTodos() {
-        return utensilioRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, UtensilioResponse.class))
-                .toList();
+        return utensilioRepository.findAll().stream().map(u -> modelMapper.map(u, UtensilioResponse.class)).toList();
     }
 
     public UtensilioResponse buscar(Integer id) {
-        Utensilio utensilio = utensilioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Utensílio não encontrado"));
+        Utensilio utensilio = utensilioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
 
         return modelMapper.map(utensilio, UtensilioResponse.class);
     }
@@ -48,9 +44,7 @@ public class UtensilioService {
 
     public UtensilioResponse alterar(Integer id, UtensilioRequest request) {
         /// Busca pelo ID ou lança erro 404
-        Utensilio alterar = utensilioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Utensílio não encontrado"));
+        Utensilio alterar = utensilioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
 
         /// Atualiza o nome com os dados do request
         alterar.setNome(request.getNome());
@@ -64,9 +58,7 @@ public class UtensilioService {
 
     public UtensilioResponse remover(Integer id) {
         /// Busca pelo ID ou lança 404
-        Utensilio utensilio = utensilioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Utensílio não encontrado"));
+        Utensilio utensilio = utensilioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
 
         /// Deleta pelo ID
         utensilioRepository.deleteById(id);

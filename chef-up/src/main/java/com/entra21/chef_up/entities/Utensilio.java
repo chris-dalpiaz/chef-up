@@ -15,22 +15,30 @@ public class Utensilio {
     /// Nome do utensílio
     private String nome;
 
-    /** Retorna o ID do utensílio */
+    /**
+     * Retorna o ID do utensílio
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID do utensílio */
+    /**
+     * Define o ID do utensílio
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna o nome do utensílio */
+    /**
+     * Retorna o nome do utensílio
+     */
     public String getNome() {
         return nome;
     }
 
-    /** Define o nome do utensílio */
+    /**
+     * Define o nome do utensílio
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }

@@ -17,9 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * Define regras de acesso, filtros e codificação de senhas.
  */
 @Configuration
-@EnableWebSecurity  /// Ativa a configuração de segurança web do Spring Security
+@EnableWebSecurity
+/// Ativa a configuração de segurança web do Spring Security
 public class SecurityConfig {
-
     /**
      * Filtro customizado que valida e autentica requisições usando JWT (JSON Web Token).
      * Esse filtro intercepta as requisições e verifica o token para autenticação.
@@ -49,24 +49,18 @@ public class SecurityConfig {
                 /// Desativa proteção contra CSRF (Cross-Site Request Forgery),
                 /// pois a aplicação usa tokens JWT e não sessão/cookies.
                 .csrf().disable()
-
                 /// Configura autorização das requisições:
                 .authorizeHttpRequests()
-
                 /// Permite acesso livre (sem autenticação) para todos endpoints que
                 /// começam com "/auth/", ou seja, rotas de login e registro.
                 .requestMatchers("/auth/*").permitAll()
-
                 /// Para todas as outras rotas, exige autenticação.
                 .anyRequest().authenticated()
-
                 .and()
-
                 /// Adiciona o filtro jwtAuthFilter antes do filtro padrão de autenticação
                 /// (UsernamePasswordAuthenticationFilter), para interceptar as requisições
                 /// e validar o token JWT antes do Spring tentar autenticar.
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         /// Retorna a configuração finalizada
         return http.build();
     }

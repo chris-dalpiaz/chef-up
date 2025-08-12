@@ -20,6 +20,7 @@ public class Avatar {
 
     /**
      * Retorna o ID do avatar.
+     *
      * @return id do avatar
      */
     public Integer getId() {
@@ -28,6 +29,7 @@ public class Avatar {
 
     /**
      * Define o ID do avatar.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -36,6 +38,7 @@ public class Avatar {
 
     /**
      * Retorna o nome do avatar.
+     *
      * @return nome do avatar
      */
     public String getNome() {
@@ -44,6 +47,7 @@ public class Avatar {
 
     /**
      * Define o nome do avatar.
+     *
      * @param nome novo nome do avatar
      */
     public void setNome(String nome) {
@@ -52,6 +56,7 @@ public class Avatar {
 
     /**
      * Retorna a URL da imagem do avatar.
+     *
      * @return URL da imagem
      */
     public String getImagemUrl() {
@@ -60,6 +65,7 @@ public class Avatar {
 
     /**
      * Define a URL da imagem do avatar.
+     *
      * @param imagemUrl nova URL da imagem
      */
     public void setImagemUrl(String imagemUrl) {

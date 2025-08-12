@@ -39,62 +39,86 @@ public class Usuario {
         this.progressoUsuario = progressoUsuario;
     }
 
-    /** Retorna o ID do usuário */
+    /**
+     * Retorna o ID do usuário
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID do usuário */
+    /**
+     * Define o ID do usuário
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna o nome do usuário */
+    /**
+     * Retorna o nome do usuário
+     */
     public String getNome() {
         return nome;
     }
 
-    /** Define o nome do usuário */
+    /**
+     * Define o nome do usuário
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /** Retorna o email do usuário */
+    /**
+     * Retorna o email do usuário
+     */
     public String getEmail() {
         return email;
     }
 
-    /** Define o email do usuário */
+    /**
+     * Define o email do usuário
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /** Retorna o hash da senha do usuário */
+    /**
+     * Retorna o hash da senha do usuário
+     */
     public String getSenhaHash() {
         return senhaHash;
     }
 
-    /** Define o hash da senha do usuário */
+    /**
+     * Define o hash da senha do usuário
+     */
     public void setSenhaHash(String senhaHash) {
         this.senhaHash = senhaHash;
     }
 
-    /** Retorna a data de cadastro do usuário */
+    /**
+     * Retorna a data de cadastro do usuário
+     */
     public LocalDateTime getDataCadastro() {
         return dataCadastro;
     }
 
-    /** Define a data de cadastro do usuário */
+    /**
+     * Define a data de cadastro do usuário
+     */
     public void setDataCadastro(LocalDateTime dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
-    /** Retorna o pronome preferido do usuário */
+    /**
+     * Retorna o pronome preferido do usuário
+     */
     public Pronome getPronome() {
         return pronome;
     }
 
-    /** Define o pronome preferido do usuário */
+    /**
+     * Define o pronome preferido do usuário
+     */
     public void setPronome(Pronome pronome) {
         this.pronome = pronome;
     }

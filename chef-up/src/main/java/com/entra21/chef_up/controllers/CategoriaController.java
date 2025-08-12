@@ -10,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
-
     private final CategoriaService categoriaService;
 
     public CategoriaController(CategoriaService categoriaService) {
@@ -56,7 +55,7 @@ public class CategoriaController {
      * Se não encontrar pelo ID, retorna erro 404.
      *
      * @param idCategoria ID da categoria que será atualizada (URL)
-     * @param categoria novo conteúdo para atualizar a categoria (JSON no corpo)
+     * @param categoria   novo conteúdo para atualizar a categoria (JSON no corpo)
      * @return categoria atualizada
      */
     @PutMapping("/{idCategoria}")

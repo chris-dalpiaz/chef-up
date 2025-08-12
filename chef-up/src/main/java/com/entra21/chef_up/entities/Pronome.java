@@ -16,12 +16,16 @@ public class Pronome {
     /// Nome do pronome (ex: ele, ela, elu)
     private String nome;
 
-    /** Retorna o ID do pronome */
+    /**
+     * Retorna o ID do pronome
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID do pronome */
+    /**
+     * Define o ID do pronome
+     */
     public void setId(Integer id) {
         this.id = id;
     }
@@ -33,7 +37,9 @@ public class Pronome {
         return nome;
     }
 
-    /** Define o nome do pronome */
+    /**
+     * Define o nome do pronome
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }

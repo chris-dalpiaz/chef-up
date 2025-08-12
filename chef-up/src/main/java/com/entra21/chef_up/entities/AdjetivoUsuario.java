@@ -21,6 +21,7 @@ public class AdjetivoUsuario {
 
     /**
      * Retorna o ID da associação AdjetivoUsuario.
+     *
      * @return id da associação
      */
     public Integer getId() {
@@ -29,6 +30,7 @@ public class AdjetivoUsuario {
 
     /**
      * Define o ID da associação AdjetivoUsuario.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -37,6 +39,7 @@ public class AdjetivoUsuario {
 
     /**
      * Retorna o adjetivo associado ao usuário.
+     *
      * @return objeto Adjetivo
      */
     public Adjetivo getAdjetivo() {
@@ -45,6 +48,7 @@ public class AdjetivoUsuario {
 
     /**
      * Define o adjetivo associado ao usuário.
+     *
      * @param adjetivo objeto Adjetivo para associar
      */
     public void setAdjetivo(Adjetivo adjetivo) {
@@ -53,6 +57,7 @@ public class AdjetivoUsuario {
 
     /**
      * Retorna o usuário associado ao adjetivo.
+     *
      * @return objeto Usuario
      */
     public Usuario getUsuario() {
@@ -61,6 +66,7 @@ public class AdjetivoUsuario {
 
     /**
      * Define o usuário associado ao adjetivo.
+     *
      * @param usuario objeto Usuario para associar
      */
     public void setUsuario(Usuario usuario) {

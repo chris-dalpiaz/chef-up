@@ -22,6 +22,7 @@ public class EtapaReceita {
 
     /**
      * Retorna o ID da etapa.
+     *
      * @return id da etapa
      */
     public Integer getId() {
@@ -30,6 +31,7 @@ public class EtapaReceita {
 
     /**
      * Define o ID da etapa.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -38,6 +40,7 @@ public class EtapaReceita {
 
     /**
      * Retorna a ordem da etapa na receita.
+     *
      * @return ordem da etapa
      */
     public Integer getOrdem() {
@@ -46,6 +49,7 @@ public class EtapaReceita {
 
     /**
      * Define a ordem da etapa na receita.
+     *
      * @param ordem nova ordem da etapa
      */
     public void setOrdem(Integer ordem) {
@@ -54,6 +58,7 @@ public class EtapaReceita {
 
     /**
      * Retorna o conteúdo/instruções da etapa.
+     *
      * @return conteúdo da etapa
      */
     public String getConteudo() {
@@ -62,6 +67,7 @@ public class EtapaReceita {
 
     /**
      * Define o conteúdo/instruções da etapa.
+     *
      * @param conteudo novo conteúdo da etapa
      */
     public void setConteudo(String conteudo) {
@@ -70,6 +76,7 @@ public class EtapaReceita {
 
     /**
      * Retorna a receita à qual esta etapa pertence.
+     *
      * @return receita da etapa
      */
     public Receita getReceita() {
@@ -78,6 +85,7 @@ public class EtapaReceita {
 
     /**
      * Define a receita à qual esta etapa pertence.
+     *
      * @param receita receita associada à etapa
      */
     public void setReceita(Receita receita) {

@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/adjetivos")
 public class AdjetivoController {
-
     /**
      * Repositório para operações CRUD com a entidade Adjetivo no banco de dados
      */

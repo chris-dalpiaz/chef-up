@@ -126,13 +126,13 @@ public class ReceitaController {
      * Busca uma etapa específica de uma receita pelo ID.
      * Retorna 404 se não encontrada ou 400 se etapa não pertence à receita.
      *
-     * @param idReceita ID da receita
-     * @param idEtapaReceita   ID da etapa
+     * @param idReceita      ID da receita
+     * @param idEtapaReceita ID da etapa
      * @return etapa encontrada
      */
     @GetMapping("/{idReceita}/etapas/{idEtapaReceita}")
     public EtapaReceita buscarEtapaReceita(@PathVariable Integer idReceita,
-                                       @PathVariable Integer idEtapaReceita) {
+                                           @PathVariable Integer idEtapaReceita) {
         EtapaReceita etapa = etapaReceitaRepository.findById(idEtapaReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa da receita não encontrada"));
 
@@ -169,9 +169,9 @@ public class ReceitaController {
      * Edita uma etapa associada a uma receita.
      * Verifica se etapa pertence à receita.
      *
-     * @param idReceita    ID da receita
-     * @param idEtapaReceita      ID da etapa
-     * @param etapaReceita novos dados da etapa
+     * @param idReceita      ID da receita
+     * @param idEtapaReceita ID da etapa
+     * @param etapaReceita   novos dados da etapa
      * @return etapa atualizada
      */
     @PutMapping("/{idReceita}/etapas/{idEtapaReceita}")
@@ -302,7 +302,7 @@ public class ReceitaController {
      */
     @GetMapping("/{idReceita}/ingredientes/{idIngredienteReceita}")
     public IngredienteReceita buscarIngredienteReceita(@PathVariable Integer idReceita,
-                                                   @PathVariable Integer idIngredienteReceita) {
+                                                       @PathVariable Integer idIngredienteReceita) {
 
         /// Busca o ingrediente pelo ID ou lança erro 404 se não existir
         IngredienteReceita ingredienteReceita = ingredienteReceitaRepository.findById(idIngredienteReceita)
@@ -322,7 +322,7 @@ public class ReceitaController {
      */
     @PostMapping("/{idReceita}/ingredientes")
     public IngredienteReceita criarIngredienteReceita(@PathVariable Integer idReceita,
-                                                  @RequestBody IngredienteReceita ingredienteReceita) {
+                                                      @RequestBody IngredienteReceita ingredienteReceita) {
 
         /// Busca a receita pelo ID ou lança erro 404 se não existir
         Receita receita = receitaRepository.findById(idReceita)
@@ -340,8 +340,8 @@ public class ReceitaController {
      */
     @PutMapping("/{idReceita}/ingredientes/{idIngredienteReceita}")
     public IngredienteReceita editarIngredienteReceita(@PathVariable Integer idReceita,
-                                                   @PathVariable Integer idIngredienteReceita,
-                                                   @RequestBody IngredienteReceita ingredienteReceita) {
+                                                       @PathVariable Integer idIngredienteReceita,
+                                                       @RequestBody IngredienteReceita ingredienteReceita) {
         /// Busca o ingrediente a ser alterado ou lança erro 404
         IngredienteReceita alterar = ingredienteReceitaRepository.findById(idIngredienteReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
@@ -365,7 +365,7 @@ public class ReceitaController {
      */
     @DeleteMapping("/{idReceita}/ingredientes/{idIngredienteReceita}")
     public IngredienteReceita removerIngredienteReceita(@PathVariable Integer idReceita,
-                                                    @PathVariable Integer idIngredienteReceita) {
+                                                        @PathVariable Integer idIngredienteReceita) {
         /// Busca o ingrediente pelo ID ou lança erro 404
         IngredienteReceita ingredienteReceita = ingredienteReceitaRepository.findById(idIngredienteReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));

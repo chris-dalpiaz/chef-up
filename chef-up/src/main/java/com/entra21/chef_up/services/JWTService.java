@@ -45,7 +45,7 @@ public class JWTService {
     /**
      * Verifica se o token é válido para o usuário informado.
      *
-     * @param token token JWT
+     * @param token       token JWT
      * @param userDetails informações do usuário para validar
      * @return true se token é válido e não expirou, false caso contrário
      */

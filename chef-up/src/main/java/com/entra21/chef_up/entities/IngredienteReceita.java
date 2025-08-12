@@ -27,6 +27,7 @@ public class IngredienteReceita {
 
     /**
      * Retorna o ID da relação ingrediente-receita.
+     *
      * @return id da relação
      */
     public Integer getId() {
@@ -35,6 +36,7 @@ public class IngredienteReceita {
 
     /**
      * Define o ID da relação ingrediente-receita.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -43,6 +45,7 @@ public class IngredienteReceita {
 
     /**
      * Retorna o ingrediente associado.
+     *
      * @return ingrediente
      */
     public Ingrediente getIngrediente() {
@@ -51,6 +54,7 @@ public class IngredienteReceita {
 
     /**
      * Define o ingrediente associado.
+     *
      * @param ingrediente novo ingrediente
      */
     public void setIngrediente(Ingrediente ingrediente) {
@@ -59,6 +63,7 @@ public class IngredienteReceita {
 
     /**
      * Retorna a receita associada.
+     *
      * @return receita
      */
     public Receita getReceita() {
@@ -67,6 +72,7 @@ public class IngredienteReceita {
 
     /**
      * Define a receita associada.
+     *
      * @param receita nova receita
      */
     public void setReceita(Receita receita) {
@@ -75,6 +81,7 @@ public class IngredienteReceita {
 
     /**
      * Retorna a unidade de medida da quantidade.
+     *
      * @return unidade de medida
      */
     public String getUnidadeMedida() {
@@ -83,6 +90,7 @@ public class IngredienteReceita {
 
     /**
      * Define a unidade de medida da quantidade.
+     *
      * @param unidadeMedida nova unidade
      */
     public void setUnidadeMedida(String unidadeMedida) {
@@ -91,6 +99,7 @@ public class IngredienteReceita {
 
     /**
      * Retorna a quantidade do ingrediente na receita.
+     *
      * @return quantidade
      */
     public Double getQuantidade() {
@@ -99,6 +108,7 @@ public class IngredienteReceita {
 
     /**
      * Define a quantidade do ingrediente na receita.
+     *
      * @param quantidade nova quantidade
      */
     public void setQuantidade(Double quantidade) {

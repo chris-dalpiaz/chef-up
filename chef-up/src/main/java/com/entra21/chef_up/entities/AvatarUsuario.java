@@ -1,6 +1,7 @@
 package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,6 +26,7 @@ public class AvatarUsuario {
 
     /**
      * Retorna o ID da relação.
+     *
      * @return id da relação usuário-avatar
      */
     public Integer getId() {
@@ -33,6 +35,7 @@ public class AvatarUsuario {
 
     /**
      * Define o ID da relação.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -41,6 +44,7 @@ public class AvatarUsuario {
 
     /**
      * Retorna o usuário associado.
+     *
      * @return usuário
      */
     public Usuario getUsuario() {
@@ -49,6 +53,7 @@ public class AvatarUsuario {
 
     /**
      * Define o usuário associado.
+     *
      * @param usuario usuário a ser associado
      */
     public void setUsuario(Usuario usuario) {
@@ -57,6 +62,7 @@ public class AvatarUsuario {
 
     /**
      * Retorna o avatar associado.
+     *
      * @return avatar
      */
     public Avatar getAvatar() {
@@ -65,6 +71,7 @@ public class AvatarUsuario {
 
     /**
      * Define o avatar associado.
+     *
      * @param avatar avatar a ser associado
      */
     public void setAvatar(Avatar avatar) {
@@ -73,6 +80,7 @@ public class AvatarUsuario {
 
     /**
      * Retorna a data e hora em que o avatar foi desbloqueado.
+     *
      * @return data e hora do desbloqueio
      */
     public LocalDateTime getDesbloqueadoEm() {
@@ -81,6 +89,7 @@ public class AvatarUsuario {
 
     /**
      * Define a data e hora do desbloqueio do avatar.
+     *
      * @param desbloqueadoEm data e hora do desbloqueio
      */
     public void setDesbloqueadoEm(LocalDateTime desbloqueadoEm) {

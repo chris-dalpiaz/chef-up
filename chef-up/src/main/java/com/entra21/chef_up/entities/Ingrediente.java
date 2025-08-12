@@ -26,6 +26,7 @@ public class Ingrediente {
 
     /**
      * Retorna o ID do ingrediente.
+     *
      * @return id do ingrediente
      */
     public Integer getId() {
@@ -34,6 +35,7 @@ public class Ingrediente {
 
     /**
      * Define o ID do ingrediente.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -42,6 +44,7 @@ public class Ingrediente {
 
     /**
      * Retorna o nome do ingrediente.
+     *
      * @return nome do ingrediente
      */
     public String getNome() {
@@ -50,6 +53,7 @@ public class Ingrediente {
 
     /**
      * Define o nome do ingrediente.
+     *
      * @param nome novo nome do ingrediente
      */
     public void setNome(String nome) {
@@ -58,6 +62,7 @@ public class Ingrediente {
 
     /**
      * Retorna a categoria do ingrediente.
+     *
      * @return categoria do ingrediente
      */
     public String getCategoria() {
@@ -66,6 +71,7 @@ public class Ingrediente {
 
     /**
      * Define a categoria do ingrediente.
+     *
      * @param categoria nova categoria
      */
     public void setCategoria(String categoria) {
@@ -74,6 +80,7 @@ public class Ingrediente {
 
     /**
      * Retorna a estimativa de validade do ingrediente em dias.
+     *
      * @return validade estimada em dias
      */
     public Integer getEstimativaValidade() {
@@ -82,6 +89,7 @@ public class Ingrediente {
 
     /**
      * Define a estimativa de validade do ingrediente em dias.
+     *
      * @param estimativaValidade validade estimada
      */
     public void setEstimativaValidade(Integer estimativaValidade) {
@@ -90,6 +98,7 @@ public class Ingrediente {
 
     /**
      * Retorna a dica de conservação do ingrediente.
+     *
      * @return dica de conservação
      */
     public String getDicaConservacao() {
@@ -98,6 +107,7 @@ public class Ingrediente {
 
     /**
      * Define a dica de conservação do ingrediente.
+     *
      * @param dicaConservacao dica para conservar o ingrediente
      */
     public void setDicaConservacao(String dicaConservacao) {

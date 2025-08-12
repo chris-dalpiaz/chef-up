@@ -29,72 +29,100 @@ public class Receita {
     @JoinColumn(name = "categorias_id")
     private Categoria categoria;
 
-    /** Retorna o ID da receita */
+    /**
+     * Retorna o ID da receita
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID da receita */
+    /**
+     * Define o ID da receita
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna o nome da receita */
+    /**
+     * Retorna o nome da receita
+     */
     public String getNome() {
         return nome;
     }
 
-    /** Define o nome da receita */
+    /**
+     * Define o nome da receita
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /** Retorna a descrição da receita */
+    /**
+     * Retorna a descrição da receita
+     */
     public String getDescricao() {
         return descricao;
     }
 
-    /** Define a descrição da receita */
+    /**
+     * Define a descrição da receita
+     */
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 
-    /** Retorna o tempo de preparo em segundos */
+    /**
+     * Retorna o tempo de preparo em segundos
+     */
     public Integer getTempoPreparoSegundos() {
         return tempoPreparoSegundos;
     }
 
-    /** Define o tempo de preparo em segundos */
+    /**
+     * Define o tempo de preparo em segundos
+     */
     public void setTempoPreparoSegundos(Integer tempoPreparoSegundos) {
         this.tempoPreparoSegundos = tempoPreparoSegundos;
     }
 
-    /** Retorna a dificuldade da receita */
+    /**
+     * Retorna a dificuldade da receita
+     */
     public String getDificuldade() {
         return dificuldade;
     }
 
-    /** Define a dificuldade da receita */
+    /**
+     * Define a dificuldade da receita
+     */
     public void setDificuldade(String dificuldade) {
         this.dificuldade = dificuldade;
     }
 
-    /** Retorna o XP ganho */
+    /**
+     * Retorna o XP ganho
+     */
     public Integer getXpGanho() {
         return xpGanho;
     }
 
-    /** Define o XP ganho */
+    /**
+     * Define o XP ganho
+     */
     public void setXpGanho(Integer xpGanho) {
         this.xpGanho = xpGanho;
     }
 
-    /** Retorna a categoria da receita */
+    /**
+     * Retorna a categoria da receita
+     */
     public Categoria getCategoria() {
         return categoria;
     }
 
-    /** Define a categoria da receita */
+    /**
+     * Define a categoria da receita
+     */
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }

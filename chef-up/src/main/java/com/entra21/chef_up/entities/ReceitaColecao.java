@@ -19,32 +19,44 @@ public class ReceitaColecao {
     @JoinColumn(name = "colecoes_id")
     private Colecao colecao;
 
-    /** Retorna o ID da associação */
+    /**
+     * Retorna o ID da associação
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID da associação */
+    /**
+     * Define o ID da associação
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna a receita associada */
+    /**
+     * Retorna a receita associada
+     */
     public Receita getReceita() {
         return receita;
     }
 
-    /** Define a receita associada */
+    /**
+     * Define a receita associada
+     */
     public void setReceita(Receita receita) {
         this.receita = receita;
     }
 
-    /** Retorna a coleção associada */
+    /**
+     * Retorna a coleção associada
+     */
     public Colecao getColecao() {
         return colecao;
     }
 
-    /** Define a coleção associada */
+    /**
+     * Define a coleção associada
+     */
     public void setColecao(Colecao colecao) {
         this.colecao = colecao;
     }

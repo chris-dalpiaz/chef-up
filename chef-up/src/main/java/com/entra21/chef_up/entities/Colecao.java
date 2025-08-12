@@ -19,6 +19,7 @@ public class Colecao {
 
     /**
      * Retorna o ID da coleção.
+     *
      * @return id da coleção
      */
     public Integer getId() {
@@ -27,6 +28,7 @@ public class Colecao {
 
     /**
      * Define o ID da coleção.
+     *
      * @param id novo valor para o ID
      */
     public void setId(Integer id) {
@@ -35,6 +37,7 @@ public class Colecao {
 
     /**
      * Retorna o nome da coleção.
+     *
      * @return nome da coleção
      */
     public String getNome() {
@@ -43,6 +46,7 @@ public class Colecao {
 
     /**
      * Define o nome da coleção.
+     *
      * @param nome novo nome da coleção
      */
     public void setNome(String nome) {
@@ -51,6 +55,7 @@ public class Colecao {
 
     /**
      * Retorna o usuário dono da coleção.
+     *
      * @return usuário dono da coleção
      */
     public Usuario getUsuario() {
@@ -59,6 +64,7 @@ public class Colecao {
 
     /**
      * Define o usuário dono da coleção.
+     *
      * @param usuario usuário que possui a coleção
      */
     public void setUsuario(Usuario usuario) {

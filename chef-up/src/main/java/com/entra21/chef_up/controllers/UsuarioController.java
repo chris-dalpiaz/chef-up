@@ -32,49 +32,28 @@ public class UsuarioController {
      */
     private final ProgressoUsuarioService progressoUsuarioService;
     private final UsuarioRepository usuarioRepository;
-    private final AdjetivoRepository adjetivoRepository;
     private final AdjetivoUsuarioRepository adjetivoUsuarioRepository;
-    private final AvatarRepository avatarRepository;
     private final AvatarUsuarioRepository avatarUsuarioRepository;
-    private final PasswordEncoder passwordEncoder;
     private final IngredienteUsuarioRepository ingredienteUsuarioRepository;
-    private final ProgressoUsuarioRepository progressoUsuarioRepository;
     private final ReceitaUsuarioRepository receitaUsuarioRepository;
     private final ReceitaRepository receitaRepository;
     private final TituloUsuarioRepository tituloUsuarioRepository;
     private final UsuarioService usuarioService;
     private final ModelMapper modelMapper;
+
     /**
      * Construtor que recebe todas as dependências necessárias para o funcionamento do controller.
      * O Spring Boot injeta automaticamente as instâncias dos repositórios e serviços aqui.
      * Ao usar `final` nas variáveis, garantimos que não poderão ser alteradas depois de inicializadas.
      */
-    public UsuarioController(
-            ProgressoUsuarioService progressoUsuarioService, UsuarioRepository usuarioRepository,
-            AdjetivoRepository adjetivoRepository,
-            AdjetivoUsuarioRepository adjetivoUsuarioRepository,
-            AvatarRepository avatarRepository,
-            AvatarUsuarioRepository avatarUsuarioRepository,
-            PasswordEncoder passwordEncoder,
-            IngredienteUsuarioRepository ingredienteUsuarioRepository,
-            ProgressoUsuarioRepository progressoUsuarioRepository,
-            ReceitaUsuarioRepository receitaUsuarioRepository,
-            ReceitaRepository receitaRepository,
-            TituloUsuarioRepository tituloUsuarioRepository,
-            UsuarioService usuarioService,
-            ModelMapper modelMapper
-    ) {
+    public UsuarioController(ProgressoUsuarioService progressoUsuarioService, UsuarioRepository usuarioRepository, AdjetivoRepository adjetivoRepository, AdjetivoUsuarioRepository adjetivoUsuarioRepository, AvatarRepository avatarRepository, AvatarUsuarioRepository avatarUsuarioRepository, PasswordEncoder passwordEncoder, IngredienteUsuarioRepository ingredienteUsuarioRepository, ProgressoUsuarioRepository progressoUsuarioRepository, ReceitaUsuarioRepository receitaUsuarioRepository, ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
         this.progressoUsuarioService = progressoUsuarioService;
         /// Associação dos parâmetros recebidos com os atributos da classe.
         /// Isso permite que os métodos do controller acessem os repositórios e serviços
         this.usuarioRepository = usuarioRepository;
-        this.adjetivoRepository = adjetivoRepository;
         this.adjetivoUsuarioRepository = adjetivoUsuarioRepository;
-        this.avatarRepository = avatarRepository;
         this.avatarUsuarioRepository = avatarUsuarioRepository;
-        this.passwordEncoder = passwordEncoder;
         this.ingredienteUsuarioRepository = ingredienteUsuarioRepository;
-        this.progressoUsuarioRepository = progressoUsuarioRepository;
         this.receitaUsuarioRepository = receitaUsuarioRepository;
         this.receitaRepository = receitaRepository;
         this.tituloUsuarioRepository = tituloUsuarioRepository;
@@ -107,8 +86,7 @@ public class UsuarioController {
      * - Atualiza a senha apenas se um novo valor for enviado (fazendo o hash)
      */
     @PutMapping("/{idUsuario}")
-    public UsuarioResponse alterarUsuario(@PathVariable Integer idUsuario,
-                                  @RequestBody UsuarioRequest request) {
+    public UsuarioResponse alterarUsuario(@PathVariable Integer idUsuario, @RequestBody UsuarioRequest request) {
         return usuarioService.alterar(idUsuario, request);
     }
 
@@ -137,12 +115,10 @@ public class UsuarioController {
      * Busca um adjetivo específico de um usuário.
      */
     @GetMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
-    public AdjetivoUsuario buscarAdjetivoUsuario(@PathVariable Integer idUsuario,
-                                          @PathVariable Integer idAdjetivoUsuario) {
+    public AdjetivoUsuario buscarAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario) {
 
         /// Busca o adjetivo pelo ID ou lança erro 404 se não existir
-        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivoUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
+        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivoUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
 
         /// Verifica se o adjetivo pertence ao usuário; se não, lança erro 400
         if (!adjetivo.getUsuario().getId().equals(idUsuario)) {
@@ -157,12 +133,10 @@ public class UsuarioController {
      * Cria um novo adjetivo associado a um usuário.
      */
     @PostMapping("/{idUsuario}/adjetivos")
-    public AdjetivoUsuario criarAdjetivoUsuario(@PathVariable Integer idUsuario,
-                                                @RequestBody AdjetivoUsuario adjetivoUsuario) {
+    public AdjetivoUsuario criarAdjetivoUsuario(@PathVariable Integer idUsuario, @RequestBody AdjetivoUsuario adjetivoUsuario) {
 
         /// Busca o usuário pelo ID ou lança erro 404 se não existir
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         /// Associa o usuário ao novo adjetivo
         adjetivoUsuario.setUsuario(usuario);
@@ -175,12 +149,9 @@ public class UsuarioController {
      * Edita um adjetivo associado a um usuário.
      */
     @PutMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
-    public AdjetivoUsuario editarAdjetivoUsuario(@PathVariable Integer idUsuario,
-                                                 @PathVariable Integer idAdjetivoUsuario,
-                                                 @RequestBody AdjetivoUsuario adjetivoUsuario) {
+    public AdjetivoUsuario editarAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario, @RequestBody AdjetivoUsuario adjetivoUsuario) {
         /// Busca o adjetivo a ser alterado ou lança erro 404
-        AdjetivoUsuario alterar = adjetivoUsuarioRepository.findById(idAdjetivoUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
+        AdjetivoUsuario alterar = adjetivoUsuarioRepository.findById(idAdjetivoUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
 
         /// Verifica se o adjetivo pertence ao usuário; se não, lança erro 400
         if (!alterar.getUsuario().getId().equals(idUsuario)) {
@@ -198,11 +169,9 @@ public class UsuarioController {
      * Remove um adjetivo associado a um usuário.
      */
     @DeleteMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
-    public AdjetivoUsuario removerAdjetivoUsuario(@PathVariable Integer idUsuario,
-                                                  @PathVariable Integer idAdjetivoUsuario) {
+    public AdjetivoUsuario removerAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario) {
         /// Busca o adjetivo pelo ID ou lança erro 404
-        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivoUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
+        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivoUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
 
         /// Verifica se o adjetivo pertence ao usuário; se não, lança erro 400
         if (!adjetivo.getUsuario().getId().equals(idUsuario)) {
@@ -231,11 +200,9 @@ public class UsuarioController {
      * Busca um avatar específico de um usuário.
      */
     @GetMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
-    public AvatarUsuario buscarAvatarUsuario(@PathVariable Integer idUsuario,
-                                      @PathVariable Integer idAvatarUsuario) {
+    public AvatarUsuario buscarAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario) {
         /// Busca o avatar pelo ID ou lança erro 404 se não encontrado
-        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatarUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
+        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatarUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
         /// Verifica se o avatar pertence ao usuário; se não, lança erro 400
         if (!avatar.getUsuario().getId().equals(idUsuario)) {
@@ -250,11 +217,9 @@ public class UsuarioController {
      * Cria um novo avatar associado a um usuário.
      */
     @PostMapping("/{idUsuario}/avatares")
-    public AvatarUsuario adicionarReceitaUsuario(@PathVariable Integer idUsuario,
-                                                 @RequestBody AvatarUsuario avatarUsuario) {
+    public AvatarUsuario adicionarReceitaUsuario(@PathVariable Integer idUsuario, @RequestBody AvatarUsuario avatarUsuario) {
         /// Busca o usuário pelo ID ou lança erro 404 se não encontrado
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         /// Define a data atual para quando o avatar foi desbloqueado
         avatarUsuario.setDesbloqueadoEm(LocalDateTime.now());
@@ -270,12 +235,9 @@ public class UsuarioController {
      * Edita um avatar associado a um usuário.
      */
     @PutMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
-    public AvatarUsuario editarAvatarUsuario(@PathVariable Integer idUsuario,
-                                             @PathVariable Integer idAvatarUsuario,
-                                             @RequestBody AvatarUsuario avatarUsuario) {
+    public AvatarUsuario editarAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario, @RequestBody AvatarUsuario avatarUsuario) {
         /// Busca o avatar a ser alterado ou lança erro 404
-        AvatarUsuario alterar = avatarUsuarioRepository.findById(idAvatarUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
+        AvatarUsuario alterar = avatarUsuarioRepository.findById(idAvatarUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
         /// Verifica se o avatar pertence ao usuário; se não, lança erro 400
         if (!alterar.getUsuario().getId().equals(idUsuario)) {
@@ -293,11 +255,9 @@ public class UsuarioController {
      * Remove um avatar associado a um usuário.
      */
     @DeleteMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
-    public AvatarUsuario removerAvatarUsuario(@PathVariable Integer idUsuario,
-                                              @PathVariable Integer idAvatarUsuario) {
+    public AvatarUsuario removerAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario) {
         /// Busca o avatar pelo ID ou lança erro 404
-        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatarUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
+        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatarUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
         /// Verifica se o avatar pertence ao usuário; se não, lança erro 400
         if (!avatar.getUsuario().getId().equals(idUsuario)) {
@@ -326,11 +286,9 @@ public class UsuarioController {
      * Busca um ingrediente específico do estoque virtual de um usuário.
      */
     @GetMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
-    public IngredienteUsuario buscarIngredienteUsuario(@PathVariable Integer idUsuario,
-                                                       @PathVariable Integer idIngredienteUsuario) {
+    public IngredienteUsuario buscarIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario) {
         /// Busca o ingrediente pelo ID ou lança erro 404 se não existir
-        IngredienteUsuario estoqueVirtual = ingredienteUsuarioRepository.findById(idIngredienteUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+        IngredienteUsuario estoqueVirtual = ingredienteUsuarioRepository.findById(idIngredienteUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
 
         /// Verifica se o ingrediente pertence ao usuário; se não, lança erro 400
         if (!estoqueVirtual.getUsuario().getId().equals(idUsuario)) {
@@ -345,11 +303,9 @@ public class UsuarioController {
      * Cria um novo ingrediente no estoque virtual associado a um usuário.
      */
     @PostMapping("/{idUsuario}/estoque-virtual")
-    public IngredienteUsuario criarIngredienteUsuario(@PathVariable Integer idUsuario,
-                                                      @RequestBody IngredienteUsuario ingredienteUsuario) {
+    public IngredienteUsuario criarIngredienteUsuario(@PathVariable Integer idUsuario, @RequestBody IngredienteUsuario ingredienteUsuario) {
         /// Busca o usuário pelo ID ou lança erro 404 se não encontrado
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         /// Define a data atual para quando o ingrediente foi adicionado
         ingredienteUsuario.setDataAdicionada(LocalDateTime.now());
@@ -365,12 +321,9 @@ public class UsuarioController {
      * Edita um ingrediente do estoque virtual associado a um usuário.
      */
     @PutMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
-    public IngredienteUsuario editarIngredienteUsuario(@PathVariable Integer idUsuario,
-                                                       @PathVariable Integer idIngredienteUsuario,
-                                                       @RequestBody IngredienteUsuario ingredienteUsuario) {
+    public IngredienteUsuario editarIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario, @RequestBody IngredienteUsuario ingredienteUsuario) {
         /// Busca o ingrediente a ser alterado ou lança erro 404
-        IngredienteUsuario alterar = ingredienteUsuarioRepository.findById(idIngredienteUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+        IngredienteUsuario alterar = ingredienteUsuarioRepository.findById(idIngredienteUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
 
         /// Verifica se o ingrediente pertence ao usuário; se não, lança erro 400
         if (!alterar.getUsuario().getId().equals(idUsuario)) {
@@ -388,11 +341,9 @@ public class UsuarioController {
      * Remove um ingrediente do estoque virtual associado a um usuário.
      */
     @DeleteMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
-    public IngredienteUsuario removerIngredienteUsuario(@PathVariable Integer idUsuario,
-                                                        @PathVariable Integer idIngredienteUsuario) {
+    public IngredienteUsuario removerIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario) {
         /// Busca o ingrediente pelo ID ou lança erro 404
-        IngredienteUsuario ingrediente = ingredienteUsuarioRepository.findById(idIngredienteUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+        IngredienteUsuario ingrediente = ingredienteUsuarioRepository.findById(idIngredienteUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
 
         /// Verifica se o ingrediente pertence ao usuário; se não, lança erro 400
         if (!ingrediente.getUsuario().getId().equals(idUsuario)) {
@@ -415,12 +366,12 @@ public class UsuarioController {
     public ProgressoUsuarioResponse buscarProgressoUsuario(@PathVariable Integer idUsuario) {
         return progressoUsuarioService.buscar(idUsuario);
     }
+
     /**
      * Edita o progresso do usuário.
      */
     @PutMapping("/{idUsuario}/progresso")
-    public ProgressoUsuarioResponse editarProgressoUsuario(@PathVariable Integer idUsuario,
-                                                   @RequestBody ProgressoUsuarioRequest request) {
+    public ProgressoUsuarioResponse editarProgressoUsuario(@PathVariable Integer idUsuario, @RequestBody ProgressoUsuarioRequest request) {
         return progressoUsuarioService.alterar(idUsuario, request);
     }
 
@@ -438,11 +389,9 @@ public class UsuarioController {
      * Busca uma receita concluída específica de um usuário pelo ID da receita.
      */
     @GetMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
-    public ReceitaUsuario buscarReceitaUsuario(@PathVariable Integer idUsuario,
-                                               @PathVariable Integer idReceitaUsuario) {
+    public ReceitaUsuario buscarReceitaUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idReceitaUsuario) {
         /// Busca receita concluída pelo id da receita
-        ReceitaUsuario receita = receitaUsuarioRepository.findById(idReceitaUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita do usuário não encontrada"));
+        ReceitaUsuario receita = receitaUsuarioRepository.findById(idReceitaUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita do usuário não encontrada"));
 
         /// Verifica se a receita pertence ao usuário solicitado
         if (!receita.getUsuario().getId().equals(idUsuario)) {
@@ -456,15 +405,12 @@ public class UsuarioController {
      * Adiciona uma nova receita concluída pelo usuário.
      */
     @PostMapping("/{idUsuario}/receitas")
-    public ReceitaUsuario adicionarReceitaUsuario(@PathVariable Integer idUsuario,
-                                                  @RequestBody ReceitaUsuario receitaUsuario) {
+    public ReceitaUsuario adicionarReceitaUsuario(@PathVariable Integer idUsuario, @RequestBody ReceitaUsuario receitaUsuario) {
         /// Busca usuário pelo ID ou retorna 404
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         /// Busca receita original pelo ID recebido no corpo da requisição
-        Receita receita = receitaRepository.findById(receitaUsuario.getReceita().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
+        Receita receita = receitaRepository.findById(receitaUsuario.getReceita().getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
 
         /// Associa usuário e receita ao objeto ReceitaUsuario
         receitaUsuario.setUsuario(usuario);
@@ -481,11 +427,9 @@ public class UsuarioController {
      * Remove uma receita concluída associada a um usuário.
      */
     @DeleteMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
-    public ReceitaUsuario removerReceitaUsuario(@PathVariable Integer idUsuario,
-                                                @PathVariable Integer idReceitaUsuario) {
+    public ReceitaUsuario removerReceitaUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idReceitaUsuario) {
         /// Busca a receita concluída pelo idReceita
-        ReceitaUsuario receitaUsuario = receitaUsuarioRepository.findById(idReceitaUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
+        ReceitaUsuario receitaUsuario = receitaUsuarioRepository.findById(idReceitaUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
 
         /// Verifica se a receita pertence ao usuário informado
         if (!receitaUsuario.getUsuario().getId().equals(idUsuario)) {
@@ -515,12 +459,10 @@ public class UsuarioController {
      * Busca um título específico de um usuário.
      */
     @GetMapping("/{idUsuario}/titulos/{idTituloUsuario}")
-    public TituloUsuario buscarTituloUsuario(@PathVariable Integer idUsuario,
-                                          @PathVariable Integer idTituloUsuario) {
+    public TituloUsuario buscarTituloUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idTituloUsuario) {
 
         /// Busca o título pelo ID ou lança erro 404 se não existir
-        TituloUsuario titulo = tituloUsuarioRepository.findById(idTituloUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
+        TituloUsuario titulo = tituloUsuarioRepository.findById(idTituloUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
         /// Verifica se o título pertence ao usuário; se não, lança erro 400
         if (!titulo.getUsuario().getId().equals(idUsuario)) {
@@ -535,12 +477,10 @@ public class UsuarioController {
      * Cria um novo título associado a um usuário.
      */
     @PostMapping("/{idUsuario}/titulos")
-    public TituloUsuario criarTituloUsuario(@PathVariable Integer idUsuario,
-                                                @RequestBody TituloUsuario tituloUsuario) {
+    public TituloUsuario criarTituloUsuario(@PathVariable Integer idUsuario, @RequestBody TituloUsuario tituloUsuario) {
 
         /// Busca o usuário pelo ID ou lança erro 404 se não existir
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         /// Associa o usuário ao novo título
         tituloUsuario.setUsuario(usuario);
@@ -556,12 +496,9 @@ public class UsuarioController {
      * Edita um título associado a um usuário.
      */
     @PutMapping("/{idUsuario}/titulos/{idTituloUsuario}")
-    public TituloUsuario editarTituloUsuario(@PathVariable Integer idUsuario,
-                                                 @PathVariable Integer idTituloUsuario,
-                                                 @RequestBody TituloUsuario tituloUsuario) {
+    public TituloUsuario editarTituloUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idTituloUsuario, @RequestBody TituloUsuario tituloUsuario) {
         /// Busca o título a ser alterado ou lança erro 404
-        TituloUsuario alterar = tituloUsuarioRepository.findById(idTituloUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
+        TituloUsuario alterar = tituloUsuarioRepository.findById(idTituloUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
         /// Verifica se o título pertence ao usuário; se não, lança erro 400
         if (!alterar.getUsuario().getId().equals(idUsuario)) {
@@ -579,11 +516,9 @@ public class UsuarioController {
      * Remove um título associado a um usuário.
      */
     @DeleteMapping("/{idUsuario}/titulos/{idTituloUsuario}")
-    public TituloUsuario removerTituloUsuario(@PathVariable Integer idUsuario,
-                                                  @PathVariable Integer idTituloUsuario) {
+    public TituloUsuario removerTituloUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idTituloUsuario) {
         /// Busca o título pelo ID ou lança erro 404
-        TituloUsuario tituloUsuario = tituloUsuarioRepository.findById(idTituloUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
+        TituloUsuario tituloUsuario = tituloUsuarioRepository.findById(idTituloUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
 
         /// Verifica se o título pertence ao usuário; se não, lança erro 400
         if (!tituloUsuario.getUsuario().getId().equals(idUsuario)) {

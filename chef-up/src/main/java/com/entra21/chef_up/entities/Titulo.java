@@ -18,32 +18,44 @@ public class Titulo {
     /// Condição para desbloquear o título (descrição)
     private String condicaoDesbloqueio;
 
-    /** Retorna o ID do título */
+    /**
+     * Retorna o ID do título
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID do título */
+    /**
+     * Define o ID do título
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna o nome do título */
+    /**
+     * Retorna o nome do título
+     */
     public String getNome() {
         return nome;
     }
 
-    /** Define o nome do título */
+    /**
+     * Define o nome do título
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /** Retorna a condição para desbloqueio do título */
+    /**
+     * Retorna a condição para desbloqueio do título
+     */
     public String getCondicaoDesbloqueio() {
         return condicaoDesbloqueio;
     }
 
-    /** Define a condição para desbloqueio do título */
+    /**
+     * Define a condição para desbloqueio do título
+     */
     public void setCondicaoDesbloqueio(String condicaoDesbloqueio) {
         this.condicaoDesbloqueio = condicaoDesbloqueio;
     }

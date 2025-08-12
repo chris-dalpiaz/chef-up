@@ -13,8 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/colecoes")
 public class ColecaoController {
-
-    /** Repositórios para coleções e receitas das coleções */
+    /**
+     * Repositórios para coleções e receitas das coleções
+     */
     private final ColecaoRepository colecaoRepository;
     private final ReceitaColecaoRepository receitaColecaoRepository;
 
@@ -67,7 +68,7 @@ public class ColecaoController {
      * Retorna 404 se não encontrar.
      *
      * @param idColecao ID da coleção a ser atualizada (URL)
-     * @param colecao novos dados da coleção (JSON no corpo)
+     * @param colecao   novos dados da coleção (JSON no corpo)
      * @return coleção atualizada
      */
     @PutMapping("/{idColecao}")
@@ -78,11 +79,9 @@ public class ColecaoController {
         /// Busca coleção existente
         Colecao alterar = colecaoRepository.findById(idColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
-
         /// Atualiza campos
         alterar.setNome(colecao.getNome());
         alterar.setUsuario(colecao.getUsuario());
-
         /// Salva as mudanças
         return colecaoRepository.save(alterar);
     }
@@ -98,14 +97,10 @@ public class ColecaoController {
     public Colecao removerColecao(@PathVariable Integer idColecao) {
         Colecao colecao = colecaoRepository.findById(idColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
-
         colecaoRepository.deleteById(idColecao);
-
         return colecao;
     }
-
     ///* ---------- Receitas da coleção ---------- */
-
     /**
      * Lista todas as receitas associadas a uma coleção.
      *
@@ -122,14 +117,13 @@ public class ColecaoController {
      * Retorna erro 404 se não encontrar.
      * Retorna erro 400 se a receita não pertence à coleção.
      *
-     * @param idColecao ID da coleção
+     * @param idColecao        ID da coleção
      * @param idReceitaColecao ID da receita da coleção
      * @return receita da coleção encontrada
      */
     @GetMapping("/{idColecao}/receitas/{idReceitaColecao}")
     public ReceitaColecao buscarReceitaColecao(@PathVariable Integer idColecao,
                                                @PathVariable Integer idReceitaColecao) {
-
         ReceitaColecao receitaColecao = receitaColecaoRepository.findById(idReceitaColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita da coleção não encontrada"));
 
@@ -143,19 +137,17 @@ public class ColecaoController {
     /**
      * Cria uma nova receita vinculada à coleção.
      *
-     * @param idColecao ID da coleção
+     * @param idColecao      ID da coleção
      * @param receitaColecao objeto ReceitaColecao a ser salvo
      * @return receitaColecao salva
      */
     @PostMapping("/{idColecao}/receitas")
     public ReceitaColecao criarReceitaColecao(@PathVariable Integer idColecao,
                                               @RequestBody ReceitaColecao receitaColecao) {
-
         Colecao colecao = colecaoRepository.findById(idColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
 
         receitaColecao.setColecao(colecao);
-
         return receitaColecaoRepository.save(receitaColecao);
     }
 
@@ -163,16 +155,15 @@ public class ColecaoController {
      * Atualiza uma receita da coleção.
      * Valida existência e pertencimento à coleção.
      *
-     * @param idColecao ID da coleção
+     * @param idColecao        ID da coleção
      * @param idReceitaColecao ID da receita da coleção
-     * @param receitaColecao novos dados da receita
+     * @param receitaColecao   novos dados da receita
      * @return receita atualizada
      */
     @PutMapping("/{idColecao}/receitas/{idReceitaColecao}")
     public ReceitaColecao editarReceitaColecao(@PathVariable Integer idColecao,
                                                @PathVariable Integer idReceitaColecao,
                                                @RequestBody ReceitaColecao receitaColecao) {
-
         ReceitaColecao alterar = receitaColecaoRepository.findById(idReceitaColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
 
@@ -181,7 +172,6 @@ public class ColecaoController {
         }
 
         alterar.setReceita(receitaColecao.getReceita());
-
         return receitaColecaoRepository.save(alterar);
     }
 
@@ -189,21 +179,19 @@ public class ColecaoController {
      * Remove uma receita associada a uma coleção.
      * Valida existência e pertencimento.
      *
-     * @param idColecao ID da coleção
+     * @param idColecao        ID da coleção
      * @param idReceitaColecao ID da receita da coleção
      * @return receita removida
      */
     @DeleteMapping("/{idColecao}/receitas/{idReceitaColecao}")
     public ReceitaColecao removerReceitaColecao(@PathVariable Integer idColecao,
                                                 @PathVariable Integer idReceitaColecao) {
-
         ReceitaColecao receita = receitaColecaoRepository.findById(idReceitaColecao)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
 
         if (!receita.getColecao().getId().equals(idColecao)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receita não pertence à coleção informada");
         }
-
         receitaColecaoRepository.delete(receita);
         return receita;
     }

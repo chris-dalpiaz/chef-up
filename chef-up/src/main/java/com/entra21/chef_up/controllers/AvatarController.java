@@ -14,8 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/avatares")
 public class AvatarController {
-
-    /** Repositório para acesso ao banco de dados dos avatares */
+    /**
+     * Repositório para acesso ao banco de dados dos avatares
+     */
     private final AvatarService avatarService;
 
     /**

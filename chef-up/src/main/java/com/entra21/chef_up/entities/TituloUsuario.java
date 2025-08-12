@@ -25,42 +25,58 @@ public class TituloUsuario {
     /// Data que o título foi desbloqueado pelo usuário
     private LocalDateTime desbloqueadoEm;
 
-    /** Retorna o ID da associação */
+    /**
+     * Retorna o ID da associação
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID da associação */
+    /**
+     * Define o ID da associação
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna o título associado */
+    /**
+     * Retorna o título associado
+     */
     public Titulo getTitulo() {
         return titulo;
     }
 
-    /** Define o título associado */
+    /**
+     * Define o título associado
+     */
     public void setTitulo(Titulo titulo) {
         this.titulo = titulo;
     }
 
-    /** Retorna o usuário associado */
+    /**
+     * Retorna o usuário associado
+     */
     public Usuario getUsuario() {
         return usuario;
     }
 
-    /** Define o usuário associado */
+    /**
+     * Define o usuário associado
+     */
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    /** Retorna a data que o título foi desbloqueado */
+    /**
+     * Retorna a data que o título foi desbloqueado
+     */
     public LocalDateTime getDesbloqueadoEm() {
         return desbloqueadoEm;
     }
 
-    /** Define a data que o título foi desbloqueado */
+    /**
+     * Define a data que o título foi desbloqueado
+     */
     public void setDesbloqueadoEm(LocalDateTime desbloqueadoEm) {
         this.desbloqueadoEm = desbloqueadoEm;
     }

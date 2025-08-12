@@ -22,15 +22,11 @@ public class AvatarService {
     }
 
     public List<AvatarResponse> listarTodos() {
-        return avatarRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, AvatarResponse.class))
-                .toList();
+        return avatarRepository.findAll().stream().map(u -> modelMapper.map(u, AvatarResponse.class)).toList();
     }
 
     public AvatarResponse buscar(Integer id) {
-        Avatar avatar = avatarRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Avatar não encontrado"));
+        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
         return modelMapper.map(avatar, AvatarResponse.class);
     }
@@ -48,9 +44,7 @@ public class AvatarService {
 
     public AvatarResponse alterar(Integer id, AvatarRequest request) {
         /// Busca pelo ID ou lança erro 404
-        Avatar alterar = avatarRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Avatar não encontrado"));
+        Avatar alterar = avatarRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
         /// Atualiza o nome com os dados do request
         alterar.setNome(request.getNome());
@@ -65,9 +59,7 @@ public class AvatarService {
 
     public AvatarResponse remover(Integer id) {
         /// Busca pelo ID ou lança 404
-        Avatar avatar = avatarRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Avatar não encontrado"));
+        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
 
         /// Deleta pelo ID
         avatarRepository.deleteById(id);

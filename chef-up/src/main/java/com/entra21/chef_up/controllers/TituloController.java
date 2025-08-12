@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/titulos") /// Define o caminho base das rotas deste controlador
+@RequestMapping("/titulos")
+/// Define o caminho base das rotas deste controlador
 public class TituloController {
 
     private final TituloService tituloService;

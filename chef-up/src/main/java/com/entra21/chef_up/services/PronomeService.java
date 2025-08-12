@@ -23,7 +23,7 @@ public class PronomeService {
     }
 
     public List<PronomeResponse> listarTodos() {
-        return  pronomeRepository.findAll().stream()
+        return pronomeRepository.findAll().stream()
                 .map(u -> modelMapper.map(u, PronomeResponse.class))
                 .toList();
     }
@@ -81,7 +81,7 @@ public class PronomeService {
                 "Pronome não encontrado"));
     }
 
-    public PronomeResponse mapParaResponse(Pronome pronome){
+    public PronomeResponse mapParaResponse(Pronome pronome) {
         return modelMapper.map(pronome, PronomeResponse.class);
     }
 }

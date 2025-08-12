@@ -25,18 +25,14 @@ public class ProgressoUsuarioService {
     }
 
     public ProgressoUsuarioResponse buscar(Integer id) {
-        ProgressoUsuario progressoUsuario = progressoUsuarioRepository.findByUsuarioId(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Progresso não encontrado"));
+        ProgressoUsuario progressoUsuario = progressoUsuarioRepository.findByUsuarioId(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso não encontrado"));
 
         return modelMapper.map(progressoUsuario, ProgressoUsuarioResponse.class);
     }
 
     public ProgressoUsuarioResponse alterar(Integer id, ProgressoUsuarioRequest request) {
         /// Busca o adjetivo pelo ID ou lança erro 404
-        ProgressoUsuario alterar = progressoUsuarioRepository.findByUsuarioId(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Progresso não encontrado"));
+        ProgressoUsuario alterar = progressoUsuarioRepository.findByUsuarioId(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso não encontrado"));
 
         /// Atualiza o nome com os dados do request
         alterar.setXp(request.getXp());

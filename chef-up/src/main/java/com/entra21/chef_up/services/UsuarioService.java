@@ -24,40 +24,30 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final ProgressoUsuarioRepository progressoUsuarioRepository;
     private final PronomeService pronomeService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository,
-                          ModelMapper modelMapper,
-                          PasswordEncoder passwordEncoder,
-                          ProgressoUsuarioRepository progressoUsuarioRepository,
-                          PronomeService pronomeService) {
+    public UsuarioService(UsuarioRepository usuarioRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, ProgressoUsuarioRepository progressoUsuarioRepository, PronomeService pronomeService) {
         this.usuarioRepository = usuarioRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
-        this.progressoUsuarioRepository = progressoUsuarioRepository;
         this.pronomeService = pronomeService;
     }
 
     /// Busca todos usuários do banco e cria um stream para processar um a um
     public List<UsuarioResponse> listarTodos() {
-        return usuarioRepository.findAll().stream()
-                .map(u -> {
-                    UsuarioResponse usuarioResponse = modelMapper.map(u, UsuarioResponse.class);
+        return usuarioRepository.findAll().stream().map(u -> {
+            UsuarioResponse usuarioResponse = modelMapper.map(u, UsuarioResponse.class);
 
-                    /// Mapear pronome manualmente, pois o modelmapper não consegue listar objetos complexos
-                    usuarioResponse.setPronome(pronomeService.mapParaResponse(u.getPronome()));
+            /// Mapear pronome manualmente, pois o modelmapper não consegue listar objetos complexos
+            usuarioResponse.setPronome(pronomeService.mapParaResponse(u.getPronome()));
 
-                    return usuarioResponse;
-                })
-                .toList();
+            return usuarioResponse;
+        }).toList();
     }
 
 
     public UsuarioResponse buscar(Integer id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         return modelMapper.map(usuario, UsuarioResponse.class);
     }
@@ -90,9 +80,7 @@ public class UsuarioService {
 
     public UsuarioResponse alterar(Integer id, UsuarioRequest request) {
         /// Busca pelo ID ou lança erro 404
-        Usuario alterar = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado"));
+        Usuario alterar = usuarioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         /// Atualiza o nome com os dados do request
         alterar.setNome(request.getNome());
@@ -110,9 +98,7 @@ public class UsuarioService {
 
     public UsuarioResponse remover(Integer id) {
         /// Busca pelo ID ou lança 404
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado"));
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
 
         /// Deleta pelo ID
         usuarioRepository.deleteById(id);

@@ -12,7 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/utensilios") /// Define o caminho base para as rotas deste controlador
+@RequestMapping("/utensilios")
+/// Define o caminho base para as rotas deste controlador
 public class UtensilioController {
 
     private final UtensilioService utensilioService;

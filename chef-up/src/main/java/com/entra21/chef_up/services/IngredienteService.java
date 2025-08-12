@@ -13,7 +13,9 @@ import java.util.List;
 
 @Service
 public class IngredienteService {
-    /** Repositório para acesso aos dados dos ingredientes */
+    /**
+     * Repositório para acesso aos dados dos ingredientes
+     */
     private final IngredienteRepository ingredienteRepository;
     private final ModelMapper modelMapper;
 

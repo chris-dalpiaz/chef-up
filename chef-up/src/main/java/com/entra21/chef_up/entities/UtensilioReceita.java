@@ -19,32 +19,44 @@ public class UtensilioReceita {
     @JoinColumn(name = "receitas_id")
     private Receita receita;
 
-    /** Retorna o ID da relação */
+    /**
+     * Retorna o ID da relação
+     */
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID da relação */
+    /**
+     * Define o ID da relação
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna o utensílio associado */
+    /**
+     * Retorna o utensílio associado
+     */
     public Utensilio getUtensilio() {
         return utensilio;
     }
 
-    /** Define o utensílio associado */
+    /**
+     * Define o utensílio associado
+     */
     public void setUtensilio(Utensilio utensilio) {
         this.utensilio = utensilio;
     }
 
-    /** Retorna a receita associada */
+    /**
+     * Retorna a receita associada
+     */
     public Receita getReceita() {
         return receita;
     }
 
-    /** Define a receita associada */
+    /**
+     * Define a receita associada
+     */
     public void setReceita(Receita receita) {
         this.receita = receita;
     }

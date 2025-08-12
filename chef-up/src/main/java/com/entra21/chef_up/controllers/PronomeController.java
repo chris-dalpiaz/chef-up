@@ -15,7 +15,9 @@ import java.util.List;
 @RequestMapping("/pronomes")
 public class PronomeController {
 
-    /** Repositório para manipular dados de pronomes */
+    /**
+     * Repositório para manipular dados de pronomes
+     */
     private final PronomeService pronomeService;
 
     /**
