@@ -22,19 +22,21 @@ input{
     font-size: 3.5vw;
     max-width: fit-content;
     width: auto; /* ajusta ao conteúdo */
+
 }
 .adjetivo:hover{
     background-color: #FFE4C2;
     border: 1px solid #F58700;
 }
 
-.adjetivos_usuario {
+.tag_usuario {
     display: flex;
     flex-direction: row;  /* já é padrão, mas deixei explícito */
     flex-wrap: wrap;      /* quebra linha se não couber */
     gap: 0.5vh;           /* espaçamento entre botões */
     align-items: center;
 }
+
 
 .botao_comum{
     margin: 0;
