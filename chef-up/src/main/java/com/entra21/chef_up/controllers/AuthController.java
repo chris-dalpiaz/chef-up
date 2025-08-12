@@ -2,10 +2,8 @@ package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.dtos.Login.LoginRequest;
 import com.entra21.chef_up.dtos.Login.LoginResponse;
-import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
-import com.entra21.chef_up.repositories.UsuarioRepository;
 import com.entra21.chef_up.services.AuthService;
 import com.entra21.chef_up.services.UsuarioService;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,8 +22,7 @@ public class AuthController {
     /**
      * Construtor com injeção das dependências necessárias
      */
-    public AuthController(UsuarioRepository usuarioRepository,
-                          UsuarioService usuarioService,
+    public AuthController(UsuarioService usuarioService,
                           AuthService authService) {
         this.usuarioService = usuarioService;
         this.authService = authService;
@@ -36,13 +33,11 @@ public class AuthController {
      * Recebe o objeto Usuario no corpo da requisição (JSON).
      *
      * @param request dados do novo usuário (senha em texto simples)
-     * @param progressoUsuarioRequest objeto para criar progresso inicial (recebido junto, mas ideal seria criado internamente)
      * @return usuário salvo no banco com ID gerado
      */
     @PostMapping("/register")
-    public UsuarioResponse criarUsuario(@RequestBody UsuarioRequest request,
-                                        ProgressoUsuarioRequest progressoUsuarioRequest) {
-        return usuarioService.criar(request, progressoUsuarioRequest);
+    public UsuarioResponse criarUsuario(@RequestBody UsuarioRequest request) {
+        return usuarioService.criar(request);
     }
 
     /**

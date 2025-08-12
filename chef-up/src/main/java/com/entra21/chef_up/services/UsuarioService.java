@@ -2,7 +2,6 @@ package com.entra21.chef_up.services;
 
 
 import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
-import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.ProgressoUsuario;
@@ -10,6 +9,7 @@ import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.entities.Usuario;
 import com.entra21.chef_up.repositories.ProgressoUsuarioRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -62,35 +62,31 @@ public class UsuarioService {
         return modelMapper.map(usuario, UsuarioResponse.class);
     }
 
-    public UsuarioResponse criar(UsuarioRequest request,
-                                 ProgressoUsuarioRequest progressoUsuarioRequest) {
+    public UsuarioResponse criar(UsuarioRequest request) {
 
-        /// Converte o DTO de requisição para a entidade
+        // Mapeia o request para a entidade Usuario
         Usuario usuario = modelMapper.map(request, Usuario.class);
-        ProgressoUsuario progressoUsuario = modelMapper.map(progressoUsuarioRequest, ProgressoUsuario.class);
-
-        /// Define a data de cadastro no momento atual
         usuario.setDataCadastro(LocalDateTime.now());
-
-        /// Criptografa a senha recebida para salvar no banco
         usuario.setSenhaHash(passwordEncoder.encode(usuario.getSenhaHash()));
+        usuario.setId(null);
 
-        /// Inicializa o progresso do usuário com nível 1 e XP 0
-        progressoUsuario.setUsuario(usuario);
-        progressoUsuario.setNivel(1);
-        progressoUsuario.setXp(0);
-        progressoUsuario.setAtualizadoEm(LocalDateTime.now());
+        // Cria o progresso do usuário
+        ProgressoUsuario progresso = new ProgressoUsuario();
+        progresso.setNivel(1);
+        progresso.setXp(0);
+        progresso.setAtualizadoEm(LocalDateTime.now());
 
-        /// Salva o progresso no banco
-        progressoUsuarioRepository.save(progressoUsuario);
-        /// Salva a entidade no banco de dados
-        Usuario salvo = usuarioRepository.save(usuario);
+        // Estabelece a relação bidirecional
+        usuario.setProgressoUsuario(progresso);
+        progresso.setUsuario(usuario);
 
+        // Salva o usuário e o progresso em cascata
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, UsuarioResponse.class);
-
+        // Retorna o DTO
+        return modelMapper.map(usuarioSalvo, UsuarioResponse.class);
     }
+
 
     public UsuarioResponse alterar(Integer id, UsuarioRequest request) {
         /// Busca pelo ID ou lança erro 404

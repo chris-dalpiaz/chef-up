@@ -3,6 +3,7 @@ package com.entra21.chef_up.config;
 import com.entra21.chef_up.filters.JwtAuthFilter;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,6 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
                 /// Desativa proteção contra CSRF (Cross-Site Request Forgery),
                 /// pois a aplicação usa tokens JWT e não sessão/cookies.
                 .csrf().disable()

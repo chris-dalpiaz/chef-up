@@ -23,10 +23,21 @@ public class Usuario {
     /// Data e hora do cadastro do usuário
     private LocalDateTime dataCadastro;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private ProgressoUsuario progressoUsuario;
+
     /// Pronome preferido do usuário (relação ManyToOne)
     @ManyToOne()
     @JoinColumn(name = "pronomes_id")
     private Pronome pronome;
+
+    public ProgressoUsuario getProgressoUsuario() {
+        return progressoUsuario;
+    }
+
+    public void setProgressoUsuario(ProgressoUsuario progressoUsuario) {
+        this.progressoUsuario = progressoUsuario;
+    }
 
     /** Retorna o ID do usuário */
     public Integer getId() {
