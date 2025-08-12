@@ -97,6 +97,12 @@ input:focus{
   font-size: 14px;
 }
 
+.botao-bloqueado{
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ===== Barra de progresso ===== */
 :root{
   --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
