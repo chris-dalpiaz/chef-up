@@ -58,6 +58,7 @@ input {
 input:focus{
   border-color: #f58700;
   outline: none;
+  transition: 0.3s; 
 }
 
 #botaocriar {
