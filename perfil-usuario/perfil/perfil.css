@@ -1,86 +1,118 @@
-.perfil {
-    display: flex;
-    flex-direction: row;
-    gap: 2vh;
+body {
+    margin: 0;
+    padding: 2vh 4vw;
+    color: #000;
+    background-color: #fffaf5;
 }
 
-.personagem {
-    width: 22vh;
-    /* Largura do quadrado */
-    height: 22vh;
-    /* Altura do quadrado */
-    background-color: #ff0000;
-    /* Cor de fundo */
-    border-radius: 6vh;
-}
 
-.dados_usuario {
-    flex: 1;
-    margin-top: 2vh;
-}
-
-.botao_pequeno {
-    background-color: #F58700;
-    border: none;
-    padding: 1vh 3vh 1vh 3vh;
-    border-radius: 2vh;
-    cursor: pointer;
-    text-align: center;
-    align-items: center;
-    font-size: 18px;
-    margin-top: 1vh;
-}
-
-.barra_progresso {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 3vh;
-}
-
-.nivel {
-    width: 40px;
-    height: 40px;
-    background-color: #2bb3a3;
-    /* verde-água */
-    color: black;
-    font-weight: bold;
-    transform: rotate(45deg);
+h1, h2 {
+    margin: 0 0 2vh 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.nivel span {
-    transform: rotate(-45deg);
+header{ 
+    display: flex;
+    flex-direction: row;
+    margin: 1.5vh 0 1vh 0; 
+    align-items: center;
+    justify-content: center;
 }
 
-.barra_container {
+/* ===== Perfil ===== */
+.perfil {
+    display: flex;
+    gap: 2vh;
+    align-items: center;
+}
+
+.foto_usuario img,
+.personagem {
+    width: 33.5vw;   /* proporcional à largura da tela */
+    height: 33.5vw;
+    border-radius: 8vw;
+    object-fit: cover;
+    background-color: #ccc;
+}
+
+.dados_usuario {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    gap: 0.3vh;
 }
 
-.barra_bg {
-    width: 350px;
-    height: 20px;
-    background-color: #a7ddd7;
-    /* azul-claro */
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
+.nome_usuario {
+    font-size: 4.5vw;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1;
+    margin-left: 0.5vh;
 }
 
-.barra_xp {
-    position: absolute;
-    height: 100%;
-    background-color: #fcb347;
-    /* laranja */
-    border-radius: 20px;
-    /* tamanho da barra laranja */
+.titulo_usuario {
+    font-size: 3.5vw;
+    font-style: italic;
+    color: #555;
+    margin-bottom: 0.3vh;
+    margin-top: 0.2vh;
+    margin-left: 0.5vh;
 }
 
-.pontos_xp {
-    margin-top: 5px;
-    font-size: 14px;
-    color: #333;
+.adjetivos_usuario {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 1.5vw;
+    flex-wrap: wrap;
+    margin-bottom: 1vh;
+}
+
+.adjetivo {
+    background-color: #FFE4C2;
+    border: 1px solid #F58700;
+    border-radius: 15px;
+    padding: 0.5vh 1vw;
+    font-size: 3vw;
+
+}
+
+/* Botão editar perfil */
+.botao_pequeno {
+    margin-top: 1vh;
+    background-color: #F58700;
+    justify-content: center;
+    border: none;
+    padding: 0.8vh 3vw;
+    border-radius: 2vh;
+    cursor: pointer;
+    font-size: 3.5vw;
+    font-weight: bold;
+    color: #000000;
+}
+
+/* ===== Barra de progresso ===== */
+
+/* ===== Grid de pratos ===== */
+.pratos_feitos h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2vh;
+    font-size: 4vw;
+}
+
+.grid_pratos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1vw;
+}
+
+.grid_pratos img {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* mantém proporção quadrada */
+    object-fit: cover;
+    border-radius: 8px;
 }
