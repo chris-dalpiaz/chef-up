@@ -11,4 +11,6 @@ public interface ReceitaColecaoRepository extends JpaRepository<ReceitaColecao, 
     List<ReceitaColecao> findByColecaoId(Integer idColecao);
 
     List<ReceitaColecao> removeByReceitaId(Integer idReceita);
+
+    List<ReceitaColecao> removeByColecaoId(Integer id);
 }

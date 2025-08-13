@@ -1,5 +1,7 @@
 package com.entra21.chef_up.config;
 
+import com.entra21.chef_up.dtos.Colecao.ColecaoRequest;
+import com.entra21.chef_up.entities.Colecao;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,14 +16,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 
 public class AppConfig {
-    /**
-     * Marca este método para que o Spring crie e registre um bean no contexto da aplicação.
-     * O bean é uma instância de ModelMapper, que poderá ser usada em outras partes do projeto.
-     * Bean: objeto gerenciado pelo Spring. Pode ser qualquer classe (ex: ModelMapper, serviços, repositórios).
-     * ModelMapper: biblioteca que converte um objeto em outro (ex: Entity → DTO).
-     */
+
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper mapper = new ModelMapper();
+        mapper.typeMap(ColecaoRequest.class, Colecao.class)
+                .addMappings(m -> m.skip(Colecao::setId));
+        return mapper;
     }
+
 }
