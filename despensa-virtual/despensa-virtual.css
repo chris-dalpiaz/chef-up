@@ -1,3 +1,7 @@
+body {
+    margin: 0 !important;
+}
+
 #despensavirtual {
     font-size: 26px;
     text-align: center;
@@ -12,7 +16,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin: 3vh 0;
+    margin: 2vh;
 }
 
 .nivel {
@@ -66,4 +70,58 @@
     margin: 0;
     font-size: 14px;
     color: #333;
+}
+
+#barraNavegacao {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-item {
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    flex: 1;
+    padding: 0 16px;
+}
+  
+.nav-item .icon {
+    font-size: 20px;
+    display: block;
+    color: #B3B3B3;
+}
+  
+.nav-item .text {
+    font-size: 12px;
+    color: #B3B3B3;
+}
+
+#perfil-item {
+    transition: all 0.5 ease-in-out;
+}
+
+#perfil-item:hover {
+    content: url(circle-user-round2.svg);
+}
+
+#despensa-item {
+    transition: all 0.5 ease-in-out;
+}
+
+#despensa-item:hover {
+    content: url(package2.svg);
+}
+
+#receitas-item {
+    transition: all 0.5 ease-in-out;
+}
+
+#receitas-item:hover {
+    content: url(utensils2.svg);
 }
