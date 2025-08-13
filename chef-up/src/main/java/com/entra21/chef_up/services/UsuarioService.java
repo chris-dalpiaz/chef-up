@@ -35,14 +35,15 @@ public class UsuarioService {
 
     /// Busca todos usuários do banco e cria um stream para processar um a um
     public List<UsuarioResponse> listarTodos() {
-        return usuarioRepository.findAll().stream().map(u -> {
-            UsuarioResponse usuarioResponse = modelMapper.map(u, UsuarioResponse.class);
+        return usuarioRepository.findAll().stream()
+                .map(u -> {
+                    UsuarioResponse usuarioResponse = modelMapper.map(u, UsuarioResponse.class);
 
-            /// Mapear pronome manualmente, pois o modelmapper não consegue listar objetos complexos
-            usuarioResponse.setPronome(pronomeService.mapParaResponse(u.getPronome()));
+                    /// Mapear pronome manualmente, pois o modelmapper não consegue listar objetos complexos
+                    usuarioResponse.setPronome(pronomeService.mapParaResponse(u.getPronome()));
 
-            return usuarioResponse;
-        }).toList();
+                    return usuarioResponse;
+                }).toList();
     }
 
 

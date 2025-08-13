@@ -2,6 +2,8 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Receita {
     /// ID único da receita
@@ -28,6 +30,17 @@ public class Receita {
     @ManyToOne()
     @JoinColumn(name = "categorias_id")
     private Categoria categoria;
+
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
+    private List<IngredienteReceita> ingredientes;
+
+    public List<IngredienteReceita> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteReceita> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
 
     /**
      * Retorna o ID da receita

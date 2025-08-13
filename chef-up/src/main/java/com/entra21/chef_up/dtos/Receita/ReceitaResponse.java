@@ -18,7 +18,7 @@ public class ReceitaResponse {
     /// XP ganho ao completar a receita
     private Integer xpGanho;
 
-    /// categoria da receita (relacionamento muitos para um)
+    /// Categoria da receita (relacionamento muitos para um)
     private CategoriaResponse categoria;
 
     public String getNome() {

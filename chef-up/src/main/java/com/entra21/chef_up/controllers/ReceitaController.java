@@ -1,7 +1,10 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.Receita.ReceitaRequest;
+import com.entra21.chef_up.dtos.Receita.ReceitaResponse;
 import com.entra21.chef_up.entities.*;
 import com.entra21.chef_up.repositories.*;
+import com.entra21.chef_up.services.ReceitaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,22 +17,21 @@ public class ReceitaController {
 
     private final ReceitaRepository receitaRepository;
     private final EtapaReceitaRepository etapaReceitaRepository;
-    private final UtensilioRepository utensilioRepository;
     private final UtensilioReceitaRepository utensilioReceitaRepository;
-    private final IngredienteRepository ingredienteRepository;
     private final IngredienteReceitaRepository ingredienteReceitaRepository;
+    private final ReceitaService receitaService;
 
     /// Construtor com injeção de dependência dos repositórios
     public ReceitaController(ReceitaRepository receitaRepository,
                              EtapaReceitaRepository etapaReceitaRepository,
-                             UtensilioRepository utensilioRepository,
-                             UtensilioReceitaRepository utensilioReceitaRepository, IngredienteRepository ingredienteRepository, IngredienteReceitaRepository ingredienteReceitaRepository) {
+                             UtensilioReceitaRepository utensilioReceitaRepository,
+                             IngredienteReceitaRepository ingredienteReceitaRepository,
+                             ReceitaService receitaService) {
         this.receitaRepository = receitaRepository;
         this.etapaReceitaRepository = etapaReceitaRepository;
-        this.utensilioRepository = utensilioRepository;
         this.utensilioReceitaRepository = utensilioReceitaRepository;
-        this.ingredienteRepository = ingredienteRepository;
         this.ingredienteReceitaRepository = ingredienteReceitaRepository;
+        this.receitaService = receitaService;
     }
 
     /**
@@ -38,8 +40,8 @@ public class ReceitaController {
      * @return lista de receitas
      */
     @GetMapping
-    public List<Receita> listarReceitas() {
-        return receitaRepository.findAll();
+    public List<ReceitaResponse> listarReceitas() {
+        return receitaService.listarTodos();
     }
 
     /**
@@ -50,20 +52,19 @@ public class ReceitaController {
      * @return receita encontrada
      */
     @GetMapping("/{idReceita}")
-    public Receita buscarReceita(@PathVariable Integer idReceita) {
-        return receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
+    public ReceitaResponse buscarReceita(@PathVariable Integer idReceita) {
+        return receitaService.buscar(idReceita);
     }
 
     /**
      * Cria uma nova receita.
      *
-     * @param receita dados da receita no corpo da requisição
+     * @param request dados da receita no corpo da requisição
      * @return receita criada
      */
     @PostMapping
-    public Receita criarReceita(@RequestBody Receita receita) {
-        return receitaRepository.save(receita);
+    public ReceitaResponse criarReceita(@RequestBody ReceitaRequest request) {
+        return receitaService.criar(request);
     }
 
     /**
@@ -71,25 +72,15 @@ public class ReceitaController {
      * Retorna 404 se não existir.
      *
      * @param idReceita ID da receita a alterar
-     * @param receita   novos dados da receita
+     * @param request   novos dados da receita
      * @return receita atualizada
      */
     @PutMapping("/{idReceita}")
-    public Receita alterarReceita(
+    public ReceitaResponse alterarReceita(
             @PathVariable Integer idReceita,
-            @RequestBody Receita receita
+            @RequestBody ReceitaRequest request
     ) {
-        Receita alterar = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        alterar.setCategoria(receita.getCategoria());
-        alterar.setNome(receita.getNome());
-        alterar.setDificuldade(receita.getDificuldade());
-        alterar.setDescricao(receita.getDescricao());
-        alterar.setXpGanho(receita.getXpGanho());
-        alterar.setTempoPreparoSegundos(receita.getTempoPreparoSegundos());
-
-        return receitaRepository.save(alterar);
+        return receitaService.alterar(idReceita, request);
     }
 
     /**
@@ -100,13 +91,8 @@ public class ReceitaController {
      * @return receita removida
      */
     @DeleteMapping("/{idReceita}")
-    public Receita removerReceita(@PathVariable Integer idReceita) {
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        receitaRepository.deleteById(idReceita);
-
-        return receita;
+    public ReceitaResponse removerReceita(@PathVariable Integer idReceita) {
+        return receitaService.remover(idReceita);
     }
 
     ///* ---------- Etapas da Receita ---------- */
