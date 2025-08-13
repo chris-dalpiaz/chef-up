@@ -3,6 +3,7 @@ package com.entra21.chef_up.services;
 import com.entra21.chef_up.dtos.Categoria.CategoriaRequest;
 import com.entra21.chef_up.dtos.Categoria.CategoriaResponse;
 import com.entra21.chef_up.entities.Categoria;
+import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.repositories.CategoriaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -70,6 +71,15 @@ public class CategoriaService {
         categoriaRepository.deleteById(id);
 
         /// Retorna o DTO do deletado
+        return modelMapper.map(categoria, CategoriaResponse.class);
+    }
+
+    public Categoria buscarPorId(Integer idCategoria) {
+        return categoriaRepository.findById(idCategoria).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Categoria não encontrada"));
+    }
+
+    public CategoriaResponse mapParaResponse(Categoria categoria) {
         return modelMapper.map(categoria, CategoriaResponse.class);
     }
 }

@@ -1,8 +1,5 @@
 package com.entra21.chef_up.dtos.Receita;
 
-import com.entra21.chef_up.entities.Categoria;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 public class ReceitaRequest {
     /// Nome da receita
