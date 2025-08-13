@@ -7,13 +7,10 @@
 .info {
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid #ccc;
 }
 
-
-
 :root {
-  --bar-height: 12px;
+  --bar-height: 16px;
   --bar-space: 4px;
 }
 
@@ -27,15 +24,24 @@
   display: flex;
   align-items: center; /* Centraliza com a foto */
   gap: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 4px solid #ddd;
   z-index: 1000;
+  height: 120px;
 }
 
 .foto_usuario {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: cover; 
+  margin-left: 10px;
+}
+
+ .foto_usuario img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;         /* agora funciona */
+  display: block;
 }
 
 .conteudo-usuario {
@@ -45,18 +51,25 @@
   flex: 1;
 }
 
+.linha-superior {
+  position: relative;
+  top: 15px; /* abaixa tudo dentro dela */
+  left: 27px;
+}
+
 .nome_usuario {
   font-size: 14px;
   font-weight: bold;
   color: #000;
-  line-height: 1.2;
-  margin-bottom: 4px; /* Espaço pequeno entre nome e barra */
+  line-height: 1; /* diminui altura da linha */
+  margin-bottom: 2px; /* reduz espaço abaixo do nome */
 }
 
 .barra_progresso {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  align-items: center;     /* Alinha ícone e barra no mesmo eixo */
+  gap: 7px;    
+  transform: translateY(-10px); /* sobe 2px, ajuste o valor conforme precisar */
 }
 
 .nivel {
@@ -79,6 +92,7 @@
 .barra_container {
   flex: 0 0 78%; /* barra ocupa 78% do espaço disponível */
   position: relative;
+   
   height: var(--bar-height);
 }
 
@@ -104,4 +118,43 @@
   margin: 0;
   font-size: 12px;
   color: #333;
+}
+  .grid_pratos {
+    width: 100vw; /* Garante que o grid ocupe toda a largura da viewport */
+    margin-left: calc(-50vw + 50%); /* Corrige o espaço à esquerda */
+    padding: 0; /* Remove paddings do grid */
+    display: flex; /* Use flexbox se necessário para alinhar itens */
+    justify-content: center; /* Centraliza os itens se necessário */
+    flex-direction: column;
+    margin-top: 130px;
+  }
+
+
+.post{
+  display: flex;
+  flex-direction: column;
+  margin-left: 0px;
+  padding: 0vh, 0vh;
+  border-bottom: 2px solid #ccc;
+}
+
+.post img{
+  width: 430px;
+  height: 430px;
+  height: auto;
+}
+
+.estrelas{
+  display: flex;
+  margin-inline: 40px ;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  
+}
+
+.estrelas img{
+  height: 5vh;
 }
