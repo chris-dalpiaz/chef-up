@@ -1,14 +1,17 @@
 package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.dtos.Adjetivo.AdjetivoResponse;
+import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioRequest;
+import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
+import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioRequest;
+import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioResponse;
 import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
 import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.*;
 import com.entra21.chef_up.repositories.*;
-import com.entra21.chef_up.services.ProgressoUsuarioService;
-import com.entra21.chef_up.services.UsuarioService;
+import com.entra21.chef_up.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,17 +42,16 @@ public class UsuarioController {
     private final ReceitaRepository receitaRepository;
     private final TituloUsuarioRepository tituloUsuarioRepository;
     private final UsuarioService usuarioService;
-    private final ModelMapper modelMapper;
+    private final AdjetivoUsuarioService adjetivoUsuarioService;
+    private final AvatarUsuarioService avatarUsuarioService;
 
     /**
      * Construtor que recebe todas as dependências necessárias para o funcionamento do controller.
      * O Spring Boot injeta automaticamente as instâncias dos repositórios e serviços aqui.
      * Ao usar `final` nas variáveis, garantimos que não poderão ser alteradas depois de inicializadas.
      */
-    public UsuarioController(ProgressoUsuarioService progressoUsuarioService, UsuarioRepository usuarioRepository, AdjetivoRepository adjetivoRepository, AdjetivoUsuarioRepository adjetivoUsuarioRepository, AvatarRepository avatarRepository, AvatarUsuarioRepository avatarUsuarioRepository, PasswordEncoder passwordEncoder, IngredienteUsuarioRepository ingredienteUsuarioRepository, ProgressoUsuarioRepository progressoUsuarioRepository, ReceitaUsuarioRepository receitaUsuarioRepository, ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository, UsuarioService usuarioService, ModelMapper modelMapper) {
+    public UsuarioController(ProgressoUsuarioService progressoUsuarioService, UsuarioRepository usuarioRepository, AdjetivoUsuarioRepository adjetivoUsuarioRepository, AvatarUsuarioRepository avatarUsuarioRepository, IngredienteUsuarioRepository ingredienteUsuarioRepository, ReceitaUsuarioRepository receitaUsuarioRepository, ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository, UsuarioService usuarioService, AdjetivoUsuarioService adjetivoUsuarioService, AvatarUsuarioService avatarUsuarioService) {
         this.progressoUsuarioService = progressoUsuarioService;
-        /// Associação dos parâmetros recebidos com os atributos da classe.
-        /// Isso permite que os métodos do controller acessem os repositórios e serviços
         this.usuarioRepository = usuarioRepository;
         this.adjetivoUsuarioRepository = adjetivoUsuarioRepository;
         this.avatarUsuarioRepository = avatarUsuarioRepository;
@@ -58,7 +60,8 @@ public class UsuarioController {
         this.receitaRepository = receitaRepository;
         this.tituloUsuarioRepository = tituloUsuarioRepository;
         this.usuarioService = usuarioService;
-        this.modelMapper = modelMapper;
+        this.adjetivoUsuarioService = adjetivoUsuarioService;
+        this.avatarUsuarioService = avatarUsuarioService;
     }
 
     /**
@@ -105,84 +108,42 @@ public class UsuarioController {
      * Lista todos os adjetivos associados a um usuário pelo ID.
      */
     @GetMapping("/{idUsuario}/adjetivos")
-    public List<AdjetivoUsuario> listarAdjetivosUsuario(@PathVariable Integer idUsuario) {
+    public List<AdjetivoUsuarioResponse> listarAdjetivosUsuario(@PathVariable Integer idUsuario) {
 
         /// Retorna todos os adjetivos do usuário usando o repositório
-        return adjetivoUsuarioRepository.findByUsuarioId(idUsuario);
+        return adjetivoUsuarioService.listarTodos();
     }
 
     /**
      * Busca um adjetivo específico de um usuário.
      */
     @GetMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
-    public AdjetivoUsuario buscarAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario) {
-
-        /// Busca o adjetivo pelo ID ou lança erro 404 se não existir
-        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivoUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        /// Verifica se o adjetivo pertence ao usuário; se não, lança erro 400
-        if (!adjetivo.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adjetivo não pertence ao usuário");
-        }
-
-        /// Retorna o adjetivo válido
-        return adjetivo;
+    public AdjetivoUsuarioResponse buscarAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario) {
+        return adjetivoUsuarioService.buscar(idUsuario, idAdjetivoUsuario);
     }
 
     /**
      * Cria um novo adjetivo associado a um usuário.
      */
     @PostMapping("/{idUsuario}/adjetivos")
-    public AdjetivoUsuario criarAdjetivoUsuario(@PathVariable Integer idUsuario, @RequestBody AdjetivoUsuario adjetivoUsuario) {
-
-        /// Busca o usuário pelo ID ou lança erro 404 se não existir
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        /// Associa o usuário ao novo adjetivo
-        adjetivoUsuario.setUsuario(usuario);
-
-        /// Salva e retorna o adjetivo criado no banco
-        return adjetivoUsuarioRepository.save(adjetivoUsuario);
+    public AdjetivoUsuarioResponse criarAdjetivoUsuario(@PathVariable Integer idUsuario, @RequestBody AdjetivoUsuarioRequest request) {
+        return adjetivoUsuarioService.criar(idUsuario, request);
     }
 
     /**
      * Edita um adjetivo associado a um usuário.
      */
     @PutMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
-    public AdjetivoUsuario editarAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario, @RequestBody AdjetivoUsuario adjetivoUsuario) {
-        /// Busca o adjetivo a ser alterado ou lança erro 404
-        AdjetivoUsuario alterar = adjetivoUsuarioRepository.findById(idAdjetivoUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        /// Verifica se o adjetivo pertence ao usuário; se não, lança erro 400
-        if (!alterar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adjetivo não pertence ao usuário");
-        }
-
-        /// Atualiza o campo adjetivo com os dados recebidos
-        alterar.setAdjetivo(adjetivoUsuario.getAdjetivo());
-
-        /// Salva e retorna o adjetivo atualizado
-        return adjetivoUsuarioRepository.save(alterar);
+    public AdjetivoUsuarioResponse editarAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario, @RequestBody AdjetivoUsuarioRequest request) {
+        return adjetivoUsuarioService.alterar(idUsuario, idAdjetivoUsuario, request);
     }
 
     /**
      * Remove um adjetivo associado a um usuário.
      */
     @DeleteMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
-    public AdjetivoUsuario removerAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario) {
-        /// Busca o adjetivo pelo ID ou lança erro 404
-        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivoUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        /// Verifica se o adjetivo pertence ao usuário; se não, lança erro 400
-        if (!adjetivo.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adjetivo não pertence ao usuário");
-        }
-
-        /// Deleta o adjetivo do banco
-        adjetivoUsuarioRepository.delete(adjetivo);
-
-        /// Retorna o adjetivo removido (opcional)
-        return adjetivo;
+    public AdjetivoUsuarioResponse removerAdjetivoUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAdjetivoUsuario) {
+        return adjetivoUsuarioService.remover(idUsuario, idAdjetivoUsuario);
     }
 
     ///* ---------- Avatares do Usuário ---------- */
@@ -191,84 +152,40 @@ public class UsuarioController {
      * Lista todos os avatares associados a um usuário pelo ID.
      */
     @GetMapping("/{idUsuario}/avatares")
-    public List<AvatarUsuario> listarAvataresUsuario(@PathVariable Integer idUsuario) {
-        // Retorna a lista de avatares do usuário pelo ID
-        return avatarUsuarioRepository.findByUsuarioId(idUsuario);
+    public List<AvatarUsuarioResponse> listarAvataresUsuario(@PathVariable Integer idUsuario) {
+        return avatarUsuarioService.listarTodos();
     }
 
     /**
      * Busca um avatar específico de um usuário.
      */
     @GetMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
-    public AvatarUsuario buscarAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario) {
-        /// Busca o avatar pelo ID ou lança erro 404 se não encontrado
-        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatarUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        /// Verifica se o avatar pertence ao usuário; se não, lança erro 400
-        if (!avatar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
-        }
-
-        /// Retorna o avatar válido
-        return avatar;
+    public AvatarUsuarioResponse buscarAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario) {
+        return avatarUsuarioService.buscar(idUsuario, idAvatarUsuario);
     }
 
     /**
      * Cria um novo avatar associado a um usuário.
      */
     @PostMapping("/{idUsuario}/avatares")
-    public AvatarUsuario adicionarReceitaUsuario(@PathVariable Integer idUsuario, @RequestBody AvatarUsuario avatarUsuario) {
-        /// Busca o usuário pelo ID ou lança erro 404 se não encontrado
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        /// Define a data atual para quando o avatar foi desbloqueado
-        avatarUsuario.setDesbloqueadoEm(LocalDateTime.now());
-
-        /// Associa o usuário ao avatar criado
-        avatarUsuario.setUsuario(usuario);
-
-        /// Salva e retorna o avatar criado no banco
-        return avatarUsuarioRepository.save(avatarUsuario);
+    public AvatarUsuarioResponse adicionarReceitaUsuario(@PathVariable Integer idUsuario, @RequestBody AvatarUsuarioRequest request) {
+        return avatarUsuarioService.criar(idUsuario, request);
     }
 
     /**
      * Edita um avatar associado a um usuário.
      */
     @PutMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
-    public AvatarUsuario editarAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario, @RequestBody AvatarUsuario avatarUsuario) {
-        /// Busca o avatar a ser alterado ou lança erro 404
-        AvatarUsuario alterar = avatarUsuarioRepository.findById(idAvatarUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        /// Verifica se o avatar pertence ao usuário; se não, lança erro 400
-        if (!alterar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
-        }
-
-        /// Atualiza o avatar com os dados recebidos
-        alterar.setAvatar(avatarUsuario.getAvatar());
-
-        /// Salva e retorna o avatar atualizado
-        return avatarUsuarioRepository.save(alterar);
+    public AvatarUsuarioResponse editarAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario, @RequestBody AvatarUsuarioRequest request) {
+       return avatarUsuarioService.alterar(idUsuario, idAvatarUsuario, request);
     }
 
     /**
      * Remove um avatar associado a um usuário.
      */
     @DeleteMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
-    public AvatarUsuario removerAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario) {
-        /// Busca o avatar pelo ID ou lança erro 404
-        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatarUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        /// Verifica se o avatar pertence ao usuário; se não, lança erro 400
-        if (!avatar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
-        }
-
-        /// Deleta o avatar do banco
-        avatarUsuarioRepository.delete(avatar);
-
-        /// Retorna o avatar removido (opcional)
-        return avatar;
+    public AvatarUsuarioResponse removerAvatarUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idAvatarUsuario) {
+        return avatarUsuarioService.remover(idUsuario, idAvatarUsuario);
     }
 
     ///* ---------- Estoque Virtual do Usuário ---------- */
