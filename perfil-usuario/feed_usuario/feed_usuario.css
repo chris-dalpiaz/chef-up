@@ -1,0 +1,21 @@
+.body{
+    margin: 0;
+    padding: 2vh 4vw;
+
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #ccc;
+}
+
+
+
+.foto_usuario img {
+    width: 33.5vw;   /* proporcional à largura da tela */
+    height: 33.5vw;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #ccc;
+}

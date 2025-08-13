@@ -46,7 +46,7 @@ input{
     margin-top: 110px;
 }
 
-.botao-bloqueado{
+.bloqueado{
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
