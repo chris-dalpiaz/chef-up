@@ -5,6 +5,8 @@ import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioRequest;
 import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
 import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioRequest;
 import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioResponse;
+import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioRequest;
+import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioResponse;
 import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
 import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
@@ -44,13 +46,14 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final AdjetivoUsuarioService adjetivoUsuarioService;
     private final AvatarUsuarioService avatarUsuarioService;
+    private final IngredienteUsuarioService ingredienteUsuarioService;
 
     /**
      * Construtor que recebe todas as dependências necessárias para o funcionamento do controller.
      * O Spring Boot injeta automaticamente as instâncias dos repositórios e serviços aqui.
      * Ao usar `final` nas variáveis, garantimos que não poderão ser alteradas depois de inicializadas.
      */
-    public UsuarioController(ProgressoUsuarioService progressoUsuarioService, UsuarioRepository usuarioRepository, AdjetivoUsuarioRepository adjetivoUsuarioRepository, AvatarUsuarioRepository avatarUsuarioRepository, IngredienteUsuarioRepository ingredienteUsuarioRepository, ReceitaUsuarioRepository receitaUsuarioRepository, ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository, UsuarioService usuarioService, AdjetivoUsuarioService adjetivoUsuarioService, AvatarUsuarioService avatarUsuarioService) {
+    public UsuarioController(ProgressoUsuarioService progressoUsuarioService, UsuarioRepository usuarioRepository, AdjetivoUsuarioRepository adjetivoUsuarioRepository, AvatarUsuarioRepository avatarUsuarioRepository, IngredienteUsuarioRepository ingredienteUsuarioRepository, ReceitaUsuarioRepository receitaUsuarioRepository, ReceitaRepository receitaRepository, TituloUsuarioRepository tituloUsuarioRepository, UsuarioService usuarioService, AdjetivoUsuarioService adjetivoUsuarioService, AvatarUsuarioService avatarUsuarioService, IngredienteUsuarioService ingredienteUsuarioService) {
         this.progressoUsuarioService = progressoUsuarioService;
         this.usuarioRepository = usuarioRepository;
         this.adjetivoUsuarioRepository = adjetivoUsuarioRepository;
@@ -62,6 +65,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
         this.adjetivoUsuarioService = adjetivoUsuarioService;
         this.avatarUsuarioService = avatarUsuarioService;
+        this.ingredienteUsuarioService = ingredienteUsuarioService;
     }
 
     /**
@@ -111,7 +115,7 @@ public class UsuarioController {
     public List<AdjetivoUsuarioResponse> listarAdjetivosUsuario(@PathVariable Integer idUsuario) {
 
         /// Retorna todos os adjetivos do usuário usando o repositório
-        return adjetivoUsuarioService.listarTodos();
+        return adjetivoUsuarioService.listarTodos(idUsuario);
     }
 
     /**
@@ -153,7 +157,7 @@ public class UsuarioController {
      */
     @GetMapping("/{idUsuario}/avatares")
     public List<AvatarUsuarioResponse> listarAvataresUsuario(@PathVariable Integer idUsuario) {
-        return avatarUsuarioService.listarTodos();
+        return avatarUsuarioService.listarTodos(idUsuario);
     }
 
     /**
@@ -194,84 +198,40 @@ public class UsuarioController {
      * Lista todos os ingredientes associados a um usuário (estoque virtual).
      */
     @GetMapping("/{idUsuario}/estoque-virtual")
-    public List<IngredienteUsuario> listarIngredienteUsuario(@PathVariable Integer idUsuario) {
-        /// Retorna todos os ingredientes do usuário pelo ID
-        return ingredienteUsuarioRepository.findByUsuarioId(idUsuario);
+    public List<IngredienteUsuarioResponse> listarIngredienteUsuario(@PathVariable Integer idUsuario) {
+        return ingredienteUsuarioService.listarTodos(idUsuario);
     }
 
     /**
      * Busca um ingrediente específico do estoque virtual de um usuário.
      */
     @GetMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
-    public IngredienteUsuario buscarIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario) {
-        /// Busca o ingrediente pelo ID ou lança erro 404 se não existir
-        IngredienteUsuario estoqueVirtual = ingredienteUsuarioRepository.findById(idIngredienteUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        /// Verifica se o ingrediente pertence ao usuário; se não, lança erro 400
-        if (!estoqueVirtual.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
-        }
-
-        /// Retorna o ingrediente válido
-        return estoqueVirtual;
+    public IngredienteUsuarioResponse buscarIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario) {
+        return ingredienteUsuarioService.buscar(idUsuario, idIngredienteUsuario);
     }
 
     /**
      * Cria um novo ingrediente no estoque virtual associado a um usuário.
      */
     @PostMapping("/{idUsuario}/estoque-virtual")
-    public IngredienteUsuario criarIngredienteUsuario(@PathVariable Integer idUsuario, @RequestBody IngredienteUsuario ingredienteUsuario) {
-        /// Busca o usuário pelo ID ou lança erro 404 se não encontrado
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        /// Define a data atual para quando o ingrediente foi adicionado
-        ingredienteUsuario.setDataAdicionada(LocalDateTime.now());
-
-        /// Associa o usuário ao ingrediente criado
-        ingredienteUsuario.setUsuario(usuario);
-
-        /// Salva e retorna o ingrediente criado no banco
-        return ingredienteUsuarioRepository.save(ingredienteUsuario);
+    public IngredienteUsuarioResponse criarIngredienteUsuario(@PathVariable Integer idUsuario, @RequestBody IngredienteUsuarioRequest request) {
+        return ingredienteUsuarioService.criar(idUsuario, request);
     }
 
     /**
      * Edita um ingrediente do estoque virtual associado a um usuário.
      */
     @PutMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
-    public IngredienteUsuario editarIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario, @RequestBody IngredienteUsuario ingredienteUsuario) {
-        /// Busca o ingrediente a ser alterado ou lança erro 404
-        IngredienteUsuario alterar = ingredienteUsuarioRepository.findById(idIngredienteUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        /// Verifica se o ingrediente pertence ao usuário; se não, lança erro 400
-        if (!alterar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
-        }
-
-        /// Atualiza o ingrediente com os dados recebidos
-        alterar.setIngrediente(ingredienteUsuario.getIngrediente());
-
-        /// Salva e retorna o ingrediente atualizado
-        return ingredienteUsuarioRepository.save(alterar);
+    public IngredienteUsuarioResponse editarIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario, @RequestBody IngredienteUsuarioRequest request) {
+        return ingredienteUsuarioService.alterar(idUsuario, idIngredienteUsuario, request);
     }
 
     /**
      * Remove um ingrediente do estoque virtual associado a um usuário.
      */
     @DeleteMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
-    public IngredienteUsuario removerIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario) {
-        /// Busca o ingrediente pelo ID ou lança erro 404
-        IngredienteUsuario ingrediente = ingredienteUsuarioRepository.findById(idIngredienteUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        /// Verifica se o ingrediente pertence ao usuário; se não, lança erro 400
-        if (!ingrediente.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
-        }
-
-        /// Deleta o ingrediente do banco
-        ingredienteUsuarioRepository.delete(ingrediente);
-
-        /// Retorna o ingrediente removido (opcional)
-        return ingrediente;
+    public IngredienteUsuarioResponse removerIngredienteUsuario(@PathVariable Integer idUsuario, @PathVariable Integer idIngredienteUsuario) {
+        return ingredienteUsuarioService.remover(idUsuario, idIngredienteUsuario);
     }
 
 

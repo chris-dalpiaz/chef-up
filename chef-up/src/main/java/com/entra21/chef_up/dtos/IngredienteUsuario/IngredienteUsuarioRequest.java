@@ -1,0 +1,15 @@
+package com.entra21.chef_up.dtos.IngredienteUsuario;
+
+import com.entra21.chef_up.dtos.Ingrediente.IngredienteResponse;
+
+public class IngredienteUsuarioRequest {
+    private Integer idIngrediente;
+
+    public Integer getIdIngrediente() {
+        return idIngrediente;
+    }
+
+    public void setIdIngrediente(Integer idIngrediente) {
+        this.idIngrediente = idIngrediente;
+    }
+}

@@ -107,7 +107,7 @@ public class ColecaoController {
      */
     @GetMapping("/{idColecao}/receitas")
     public List<ReceitaColecaoResponse> listarReceitas(@PathVariable Integer idColecao) {
-        return receitaColecaoService.listarTodos();
+        return receitaColecaoService.listarTodos(idColecao);
     }
 
     /**
