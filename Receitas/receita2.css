@@ -1,0 +1,136 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #fff;
+  }
+  
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .top-buttons {
+    position: fixed;
+    top: 40px;    
+    display: flex;
+    justify-content: space-around;
+    padding: 0 0px;
+    z-index: 1000;
+    width: 430px;
+  }
+  
+  
+  .xp-button {
+
+    background: none;
+    border: none;
+    padding: 0; 
+    left: 10px;
+    cursor: pointer;
+  }
+
+  .svg-button{
+    background: none;
+    border: none;
+    padding: 0;
+    right: 60px;
+    cursor: pointer;
+
+  }
+  
+  
+  /* Imagem */
+  .imagem-receita img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* Conteúdo */
+  .receita-container {
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    margin-top: -20px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .receita-titulo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 6px;
+  }
+  
+  .receita-info {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 16px;
+  }
+  
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .tab {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #FFA336;
+    background-color: transparent;
+    font-weight: bold;
+    color: #FFA336;
+    cursor: pointer;
+  }
+  
+  .tab.ativo {
+    background-color: #FFA336;
+    color: white;
+    border: none;
+  }
+  
+  .conteudo {
+    font-weight: bold;
+    margin-bottom: 24px;
+  }
+  
+  /* Botões */
+  .botoes {
+    margin-top: 90px;
+    display: flex;
+    gap: 8px;
+
+   
+  }
+  
+  .botao-feito {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0px;
+    padding: 0px 0px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .botao-comecar {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 0px;
+    padding: 0px 0px;
+    background-color: #f05a28;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+
+ 
