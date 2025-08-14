@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    padding: 2vh 4vw;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+}
+
+input{
+    margin: 0;
+}
+
+.input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.buscar{
+    width: 100%;
+    border-bottom: 4px solid #ccc;
+}
