@@ -1,9 +1,12 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaRequest;
+import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaResponse;
 import com.entra21.chef_up.dtos.Receita.ReceitaRequest;
 import com.entra21.chef_up.dtos.Receita.ReceitaResponse;
 import com.entra21.chef_up.entities.*;
 import com.entra21.chef_up.repositories.*;
+import com.entra21.chef_up.services.EtapaReceitaService;
 import com.entra21.chef_up.services.ReceitaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +23,20 @@ public class ReceitaController {
     private final UtensilioReceitaRepository utensilioReceitaRepository;
     private final IngredienteReceitaRepository ingredienteReceitaRepository;
     private final ReceitaService receitaService;
+    private final EtapaReceitaService etapaReceitaService;
 
     /// Construtor com injeção de dependência dos repositórios
     public ReceitaController(ReceitaRepository receitaRepository,
                              EtapaReceitaRepository etapaReceitaRepository,
                              UtensilioReceitaRepository utensilioReceitaRepository,
                              IngredienteReceitaRepository ingredienteReceitaRepository,
-                             ReceitaService receitaService) {
+                             ReceitaService receitaService, EtapaReceitaService etapaReceitaService) {
         this.receitaRepository = receitaRepository;
         this.etapaReceitaRepository = etapaReceitaRepository;
         this.utensilioReceitaRepository = utensilioReceitaRepository;
         this.ingredienteReceitaRepository = ingredienteReceitaRepository;
         this.receitaService = receitaService;
+        this.etapaReceitaService = etapaReceitaService;
     }
 
     /**
@@ -103,10 +108,12 @@ public class ReceitaController {
      * @param idReceita ID da receita
      * @return lista de etapas
      */
+
     @GetMapping("/{idReceita}/etapas")
-    public List<EtapaReceita> listarEtapaReceita(@PathVariable Integer idReceita) {
-        return etapaReceitaRepository.findByReceitaId(idReceita);
+    public List<EtapaReceitaResponse> listarEtapaReceita(@PathVariable Integer idReceita) {
+        return etapaReceitaService.listarTodos(idReceita);
     }
+
 
     /**
      * Busca uma etapa específica de uma receita pelo ID.
@@ -117,16 +124,9 @@ public class ReceitaController {
      * @return etapa encontrada
      */
     @GetMapping("/{idReceita}/etapas/{idEtapaReceita}")
-    public EtapaReceita buscarEtapaReceita(@PathVariable Integer idReceita,
+    public EtapaReceitaResponse buscarEtapaReceita(@PathVariable Integer idReceita,
                                            @PathVariable Integer idEtapaReceita) {
-        EtapaReceita etapa = etapaReceitaRepository.findById(idEtapaReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa da receita não encontrada"));
-
-        if (!etapa.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etapa não pertence a receita");
-        }
-
-        return etapa;
+        return etapaReceitaService.buscarPorId(idReceita, idEtapaReceita);
     }
 
     /**
@@ -134,21 +134,12 @@ public class ReceitaController {
      * Define ordem incrementando o maior valor atual.
      *
      * @param idReceita    ID da receita
-     * @param etapaReceita dados da etapa no corpo da requisição
+     * @param request dados da etapa no corpo da requisição
      * @return etapa criada
      */
     @PostMapping("/{idReceita}/etapas")
-    public EtapaReceita adicionarEtapa(@PathVariable Integer idReceita, @RequestBody EtapaReceita etapaReceita) {
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        Integer maxOrdem = etapaReceitaRepository.findMaxOrdemByReceitaId(idReceita);
-        if (maxOrdem == null) maxOrdem = 0;
-
-        etapaReceita.setReceita(receita);
-        etapaReceita.setOrdem(maxOrdem + 1);
-
-        return etapaReceitaRepository.save(etapaReceita);
+    public EtapaReceitaResponse adicionarEtapa(@PathVariable Integer idReceita, @RequestBody EtapaReceitaRequest request) {
+        return etapaReceitaService.criar(idReceita, request);
     }
 
     /**
@@ -164,16 +155,7 @@ public class ReceitaController {
     public EtapaReceita editarEtapaReceita(@PathVariable Integer idReceita,
                                            @PathVariable Integer idEtapaReceita,
                                            @RequestBody EtapaReceita etapaReceita) {
-        EtapaReceita alterar = etapaReceitaRepository.findById(idEtapaReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa não encontrada"));
-
-        if (!alterar.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etapa não pertence a receita");
-        }
-
-        alterar.setConteudo(etapaReceita.getConteudo());
-
-        return etapaReceitaRepository.save(alterar);
+        return etapaReceitaService.alterar(idReceita, idEtapaReceita, etapaReceita);
     }
 
     ///* ---------- Utensílios da Receita ---------- */

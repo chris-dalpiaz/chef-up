@@ -31,8 +31,11 @@ public class AdjetivoUsuarioService {
         this.modelMapper = modelMapper;
     }
 
-    public List<AdjetivoUsuarioResponse> listarTodos() {
-        return adjetivoUsuarioRepository.findAll().stream().map(au -> modelMapper.map(au, AdjetivoUsuarioResponse.class)).toList();
+    public List<AdjetivoUsuarioResponse> listarTodos(Integer idUsuario) {
+        return adjetivoUsuarioRepository.findByUsuarioId(idUsuario)
+                .stream()
+                .map(etapa -> modelMapper.map(etapa, AdjetivoUsuarioResponse.class))
+                .toList();
     }
 
     public AdjetivoUsuarioResponse buscar(Integer idUsuario, Integer idAdjetivoUsuario) {

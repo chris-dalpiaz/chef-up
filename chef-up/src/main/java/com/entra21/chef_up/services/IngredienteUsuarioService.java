@@ -1,6 +1,7 @@
 package com.entra21.chef_up.services;
 
 
+import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
 import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioRequest;
 import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioResponse;
 import com.entra21.chef_up.entities.Ingrediente;
@@ -33,8 +34,11 @@ public class IngredienteUsuarioService {
         this.modelMapper = modelMapper;
     }
 
-    public List<IngredienteUsuarioResponse> listarTodos() {
-        return ingredienteUsuarioRepository.findAll().stream().map(iu -> modelMapper.map(iu, IngredienteUsuarioResponse.class)).toList();
+    public List<IngredienteUsuarioResponse> listarTodos(Integer idUsuario) {
+        return ingredienteUsuarioRepository.findByUsuarioId(idUsuario)
+                .stream()
+                .map(etapa -> modelMapper.map(etapa, IngredienteUsuarioResponse.class))
+                .toList();
     }
 
     public IngredienteUsuarioResponse buscar(Integer idUsuario, Integer idIngredienteUsuario) {

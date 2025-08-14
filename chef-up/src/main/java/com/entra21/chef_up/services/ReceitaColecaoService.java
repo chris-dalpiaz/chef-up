@@ -1,5 +1,6 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
 import com.entra21.chef_up.dtos.ReceitaColecao.ReceitaColecaoRequest;
 import com.entra21.chef_up.dtos.ReceitaColecao.ReceitaColecaoResponse;
 import com.entra21.chef_up.entities.Colecao;
@@ -31,8 +32,11 @@ public class ReceitaColecaoService {
         this.receitaRepository = receitaRepository;
     }
 
-    public List<ReceitaColecaoResponse> listarTodos() {
-        return receitaColecaoRepository.findAll().stream().map(rc -> modelMapper.map(rc, ReceitaColecaoResponse.class)).toList();
+    public List<ReceitaColecaoResponse> listarTodos(Integer idColecao) {
+        return receitaColecaoRepository.findByColecaoId(idColecao)
+                .stream()
+                .map(etapa -> modelMapper.map(etapa, ReceitaColecaoResponse.class))
+                .toList();
     }
 
     public ReceitaColecaoResponse buscar(Integer idColecao, Integer idReceitaColecao) {

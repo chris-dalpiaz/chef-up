@@ -1,5 +1,6 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
 import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioRequest;
 import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioResponse;
 import com.entra21.chef_up.entities.Avatar;
@@ -31,9 +32,12 @@ public class AvatarUsuarioService {
         this.modelMapper = modelMapper;
     }
 
-    public List<AvatarUsuarioResponse> listarTodos() {
-        return avatarUsuarioRepository.findAll().stream().map(au -> modelMapper.map(au, AvatarUsuarioResponse.class)).toList();
-    }
+    public List<AvatarUsuarioResponse> listarTodos(Integer idUsuario) {
+            return avatarUsuarioRepository.findByUsuarioId(idUsuario)
+                    .stream()
+                    .map(etapa -> modelMapper.map(etapa, AvatarUsuarioResponse.class))
+                    .toList();
+        }
 
     public AvatarUsuarioResponse buscar(Integer idUsuario, Integer idAvatarUsuario) {
         AvatarUsuario avatarUsuario = avatarUsuarioRepository.findById(idAvatarUsuario)

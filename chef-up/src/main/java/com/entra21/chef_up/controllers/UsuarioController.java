@@ -115,7 +115,7 @@ public class UsuarioController {
     public List<AdjetivoUsuarioResponse> listarAdjetivosUsuario(@PathVariable Integer idUsuario) {
 
         /// Retorna todos os adjetivos do usuário usando o repositório
-        return adjetivoUsuarioService.listarTodos();
+        return adjetivoUsuarioService.listarTodos(idUsuario);
     }
 
     /**
@@ -157,7 +157,7 @@ public class UsuarioController {
      */
     @GetMapping("/{idUsuario}/avatares")
     public List<AvatarUsuarioResponse> listarAvataresUsuario(@PathVariable Integer idUsuario) {
-        return avatarUsuarioService.listarTodos();
+        return avatarUsuarioService.listarTodos(idUsuario);
     }
 
     /**
@@ -199,7 +199,7 @@ public class UsuarioController {
      */
     @GetMapping("/{idUsuario}/estoque-virtual")
     public List<IngredienteUsuarioResponse> listarIngredienteUsuario(@PathVariable Integer idUsuario) {
-        return ingredienteUsuarioService.listarTodos();
+        return ingredienteUsuarioService.listarTodos(idUsuario);
     }
 
     /**
