@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.box {
+    
+}
+
+input, select {
+    width: 90%;
+}
+
+.adicionar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+    max-width: 430px;
+    width: 90%;
+}
+
+.botao {
+    font-weight: bold;
+}
