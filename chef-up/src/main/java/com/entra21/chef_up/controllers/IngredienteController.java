@@ -2,18 +2,18 @@ package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.dtos.Ingrediente.IngredienteRequest;
 import com.entra21.chef_up.dtos.Ingrediente.IngredienteResponse;
-import com.entra21.chef_up.entities.Ingrediente;
-import com.entra21.chef_up.repositories.IngredienteRepository;
 import com.entra21.chef_up.services.IngredienteService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Ingrediente.
+ */
 @RestController
 @RequestMapping("/ingredientes")
 public class IngredienteController {
+
     private final IngredienteService ingredienteService;
 
     public IngredienteController(IngredienteService ingredienteService) {
@@ -26,8 +26,8 @@ public class IngredienteController {
      * @return lista com todos ingredientes no banco
      */
     @GetMapping
-    public List<IngredienteResponse> listarIngredientes() {
-        return ingredienteService.listarTodos();
+    public List<IngredienteResponse> listIngredients() {
+        return ingredienteService.listAll();
     }
 
     /**
@@ -38,18 +38,19 @@ public class IngredienteController {
      * @return ingrediente encontrado
      */
     @GetMapping("/{idIngrediente}")
-    public IngredienteResponse buscarIngrediente(@PathVariable Integer idIngrediente) {
-        return ingredienteService.buscar(idIngrediente);
+    public IngredienteResponse getIngredient(@PathVariable Integer idIngrediente) {
+        return ingredienteService.getById(idIngrediente);
     }
 
     /**
      * Cria um novo ingrediente.
      *
+     * @param request dados do novo ingrediente
      * @return ingrediente criado com ID gerado
      */
     @PostMapping
-    public IngredienteResponse criarIngrediente(@RequestBody IngredienteRequest request) {
-        return ingredienteService.criar(request);
+    public IngredienteResponse createIngredient(@RequestBody IngredienteRequest request) {
+        return ingredienteService.create(request);
     }
 
     /**
@@ -57,14 +58,13 @@ public class IngredienteController {
      * Retorna erro 404 se não existir.
      *
      * @param idIngrediente ID do ingrediente a ser atualizado
+     * @param request       novos dados do ingrediente
      * @return ingrediente atualizado
      */
     @PutMapping("/{idIngrediente}")
-    public IngredienteResponse alterarIngrediente(
-            @PathVariable Integer idIngrediente,
-            @RequestBody IngredienteRequest request
-    ) {
-        return ingredienteService.alterar(idIngrediente, request);
+    public IngredienteResponse updateIngredient(@PathVariable Integer idIngrediente,
+                                                @RequestBody IngredienteRequest request) {
+        return ingredienteService.update(idIngrediente, request);
     }
 
     /**
@@ -75,7 +75,7 @@ public class IngredienteController {
      * @return ingrediente removido
      */
     @DeleteMapping("/{idIngrediente}")
-    public IngredienteResponse removerIngrediente(@PathVariable Integer idIngrediente) {
-        return ingredienteService.remover(idIngrediente);
+    public IngredienteResponse deleteIngredient(@PathVariable Integer idIngrediente) {
+        return ingredienteService.delete(idIngrediente);
     }
 }

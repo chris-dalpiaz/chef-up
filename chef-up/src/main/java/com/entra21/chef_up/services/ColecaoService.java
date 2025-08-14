@@ -14,77 +14,112 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações de CRUD para Colecao.
+ */
 @Service
 public class ColecaoService {
 
-    private final UsuarioRepository usuarioRepository;
-    private final ReceitaColecaoRepository receitaColecaoRepository;
-    private final ColecaoRepository colecaoRepository;
-    private final ModelMapper modelMapper;
+    private static final String ERROR_COLLECTION_NOT_FOUND = "Coleção não encontrada";
+    private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
 
-    public ColecaoService(UsuarioRepository usuarioRepository, ReceitaColecaoRepository receitaColecaoRepository, ColecaoRepository colecaoRepository, ModelMapper modelMapper) {
-        this.usuarioRepository = usuarioRepository;
-        this.receitaColecaoRepository = receitaColecaoRepository;
-        this.colecaoRepository = colecaoRepository;
-        this.modelMapper = modelMapper;
+    private final UsuarioRepository userRepository;
+    private final ReceitaColecaoRepository recipeCollectionRepository;
+    private final ColecaoRepository collectionRepository;
+    private final ModelMapper mapper;
+
+    public ColecaoService(UsuarioRepository userRepository,
+                          ReceitaColecaoRepository recipeCollectionRepository,
+                          ColecaoRepository collectionRepository,
+                          ModelMapper mapper) {
+        this.userRepository = userRepository;
+        this.recipeCollectionRepository = recipeCollectionRepository;
+        this.collectionRepository = collectionRepository;
+        this.mapper = mapper;
     }
 
-
-    public List<ColecaoResponse> listarTodos() {
-        return colecaoRepository.findAll().stream().map(u -> modelMapper.map(u, ColecaoResponse.class)).toList();
+    /**
+     * Lista todas as coleções cadastradas.
+     *
+     * @return lista de ColecaoResponse
+     */
+    public List<ColecaoResponse> listAll() {
+        return collectionRepository.findAll()
+                .stream()
+                .map(collection -> mapper.map(collection, ColecaoResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public ColecaoResponse buscar(Integer id) {
-        Colecao colecao = colecaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
-
-        return modelMapper.map(colecao, ColecaoResponse.class);
+    /**
+     * Busca uma coleção pelo seu ID.
+     *
+     * @param id identificador da coleção
+     * @return DTO da coleção encontrada
+     */
+    public ColecaoResponse getById(Integer id) {
+        Colecao collection = findByIdOrThrow(id);
+        return mapper.map(collection, ColecaoResponse.class);
     }
 
-    public ColecaoResponse criar(ColecaoRequest request) {
-        // Busca o usuário pelo ID
-        Usuario usuario = usuarioRepository.findById(request.getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    /**
+     * Cria uma nova coleção associada a um usuário.
+     *
+     * @param request DTO com os dados da coleção
+     * @return DTO da coleção criada
+     */
+    public ColecaoResponse create(ColecaoRequest request) {
+        Usuario user = userRepository.findById(request.getIdUsuario())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
 
-        // Cria a entidade Colecao
-        Colecao colecao = new Colecao();
-        colecao.setNome(request.getNome());
-        colecao.setUsuario(usuario); // associa o usuário
+        Colecao newCollection = new Colecao();
+        newCollection.setNome(request.getNome());
+        newCollection.setUsuario(user);
 
-        // Salva no banco
-        Colecao salvo = colecaoRepository.save(colecao);
-
-        // Converte para DTO de resposta
-        return modelMapper.map(salvo, ColecaoResponse.class);
+        Colecao saved = collectionRepository.save(newCollection);
+        return mapper.map(saved, ColecaoResponse.class);
     }
 
+    /**
+     * Atualiza uma coleção existente.
+     *
+     * @param id      identificador da coleção
+     * @param request DTO com os dados atualizados
+     * @return DTO da coleção atualizada
+     */
+    public ColecaoResponse update(Integer id, ColecaoRequest request) {
+        Colecao collection = findByIdOrThrow(id);
+        collection.setNome(request.getNome());
 
-    public ColecaoResponse alterar(Integer id, ColecaoRequest request) {
-        /// Busca pelo ID ou lança erro 404
-        Colecao alterar = colecaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
-
-        /// Atualiza o nome com os dados do request
-        alterar.setNome(request.getNome());
-
-        /// Salva a alteração no banco
-        Colecao salvo = colecaoRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, ColecaoResponse.class);
+        Colecao updated = collectionRepository.save(collection);
+        return mapper.map(updated, ColecaoResponse.class);
     }
 
+    /**
+     * Remove uma coleção e suas dependências.
+     *
+     * @param id identificador da coleção
+     * @return DTO da coleção removida
+     */
     @Transactional
-    public ColecaoResponse remover(Integer id) {
-        /// Busca pelo ID ou lança 404
-        Colecao colecao = colecaoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
+    public ColecaoResponse delete(Integer id) {
+        Colecao collection = findByIdOrThrow(id);
 
-        /// removendo dados que usam a fk da receita em outras tabelas, para poder removê-la
-        receitaColecaoRepository.removeByColecaoId(id);
+        recipeCollectionRepository.removeByColecaoId(id);
+        collectionRepository.deleteById(id);
 
-        /// Deleta o adjetivo pelo ID
-        colecaoRepository.deleteById(id);
+        return mapper.map(collection, ColecaoResponse.class);
+    }
 
-        /// Retorna o DTO do adjetivo deletado
-        return modelMapper.map(colecao, ColecaoResponse.class);
+    /**
+     * Busca uma coleção ou lança exceção 404.
+     *
+     * @param id identificador
+     * @return entidade Colecao
+     */
+    private Colecao findByIdOrThrow(Integer id) {
+        return collectionRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_COLLECTION_NOT_FOUND));
     }
 }

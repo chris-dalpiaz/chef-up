@@ -1,6 +1,5 @@
 package com.entra21.chef_up.services;
 
-
 import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
 import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioResponse;
 import com.entra21.chef_up.entities.ProgressoUsuario;
@@ -11,38 +10,62 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+/**
+ * Serviço responsável por gerenciar a entidade ProgressoUsuario.
+ */
 @Service
 public class ProgressoUsuarioService {
 
-    private final ProgressoUsuarioRepository progressoUsuarioRepository;
-    private final ModelMapper modelMapper;
+    private static final String ERROR_PROGRESS_NOT_FOUND = "Progresso não encontrado";
 
-    public ProgressoUsuarioService(UsuarioService usuarioService, ProgressoUsuarioRepository progressoUsuario, ModelMapper modelMapper) {
-        this.progressoUsuarioRepository = progressoUsuario;
-        this.modelMapper = modelMapper;
+    private final ProgressoUsuarioRepository progressRepository;
+    private final ModelMapper mapper;
+
+    public ProgressoUsuarioService(UsuarioService usuarioService,
+                                   ProgressoUsuarioRepository progressRepository,
+                                   ModelMapper mapper) {
+        this.progressRepository = progressRepository;
+        this.mapper = mapper;
     }
 
-    public ProgressoUsuarioResponse buscar(Integer id) {
-        ProgressoUsuario progressoUsuario = progressoUsuarioRepository.findByUsuarioId(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso não encontrado"));
-
-        return modelMapper.map(progressoUsuario, ProgressoUsuarioResponse.class);
+    /**
+     * Recupera os dados de progresso de um determinado usuário.
+     *
+     * @param userId identificador do usuário
+     * @return DTO com os dados de progresso
+     */
+    public ProgressoUsuarioResponse getByUserId(Integer userId) {
+        ProgressoUsuario progress = findByUserIdOrThrow(userId);
+        return mapper.map(progress, ProgressoUsuarioResponse.class);
     }
 
-    public ProgressoUsuarioResponse alterar(Integer id, ProgressoUsuarioRequest request) {
-        /// Busca o adjetivo pelo ID ou lança erro 404
-        ProgressoUsuario alterar = progressoUsuarioRepository.findByUsuarioId(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Progresso não encontrado"));
+    /**
+     * Atualiza os dados de progresso de um determinado usuário.
+     *
+     * @param userId  identificador do usuário
+     * @param request DTO com os dados atualizados de progresso
+     * @return DTO com os dados de progresso atualizados
+     */
+    public ProgressoUsuarioResponse update(Integer userId, ProgressoUsuarioRequest request) {
+        ProgressoUsuario progress = findByUserIdOrThrow(userId);
 
-        /// Atualiza o nome com os dados do request
-        alterar.setXp(request.getXp());
-        alterar.setNivel(request.getNivel());
-        alterar.setAtualizadoEm(LocalDateTime.now());
+        progress.setXp(request.getXp());
+        progress.setNivel(request.getNivel());
+        progress.setAtualizadoEm(LocalDateTime.now());
 
-        /// Salva a alteração no banco
-        ProgressoUsuario salvo = progressoUsuarioRepository.save(alterar);
+        ProgressoUsuario updated = progressRepository.save(progress);
+        return mapper.map(updated, ProgressoUsuarioResponse.class);
+    }
 
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, ProgressoUsuarioResponse.class);
+    /**
+     * Busca o progresso pelo ID do usuário ou lança exceção 404.
+     *
+     * @param userId identificador do usuário
+     * @return entidade ProgressoUsuario
+     */
+    private ProgressoUsuario findByUserIdOrThrow(Integer userId) {
+        return progressRepository.findByUsuarioId(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_PROGRESS_NOT_FOUND));
     }
 }

@@ -3,13 +3,11 @@ package com.entra21.chef_up.dtos.IngredienteReceita;
 import com.entra21.chef_up.dtos.Ingrediente.IngredienteResponse;
 
 public class IngredienteReceitaResponse {
-    /// Ingrediente associado à receita
+
     private IngredienteResponse ingrediente;
 
-    /// Unidade de medida da quantidade (ex: gramas, ml, unidades)
     private String unidadeMedida;
 
-    /// Quantidade do ingrediente na receita
     private Double quantidade;
 
     public IngredienteResponse getIngrediente() {

@@ -6,10 +6,9 @@ import com.entra21.chef_up.dtos.Titulo.TituloResponse;
 import java.time.LocalDateTime;
 
 public class TituloUsuarioResponse {
-    /// Referência ao título associado
+
     private TituloResponse titulo;
 
-    /// Data que o título foi desbloqueado pelo usuário
     private LocalDateTime desbloqueadoEm;
 
     public TituloResponse getTitulo() {

@@ -8,17 +8,17 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Adjetivo.
+ */
 @RestController
 @RequestMapping("/adjetivos")
 public class AdjetivoController {
-    /**
-     * Repositório para operações CRUD com a entidade Adjetivo no banco de dados
-     */
+
     private final AdjetivoService adjetivoService;
 
     /**
-     * Construtor com injeção do repositório via dependência.
-     * Permite usar o repositório para acessar os dados.
+     * Construtor com injeção do serviço de adjetivo.
      */
     public AdjetivoController(AdjetivoService adjetivoService) {
         this.adjetivoService = adjetivoService;
@@ -30,8 +30,8 @@ public class AdjetivoController {
      * @return lista com todos os adjetivos encontrados no banco
      */
     @GetMapping
-    public List<AdjetivoResponse> listarAdjetivos() {
-        return adjetivoService.listarTodos();
+    public List<AdjetivoResponse> listAdjectives() {
+        return adjetivoService.listAll();
     }
 
     /**
@@ -42,27 +42,32 @@ public class AdjetivoController {
      * @throws ResponseStatusException 404 se não encontrar o adjetivo
      */
     @GetMapping("/{idAdjetivo}")
-    public AdjetivoResponse buscarAdjetivo(@PathVariable Integer idAdjetivo) {
-        return adjetivoService.buscar(idAdjetivo);
+    public AdjetivoResponse getAdjective(@PathVariable Integer idAdjetivo) {
+        return adjetivoService.getById(idAdjetivo);
     }
 
     /**
      * Cria um novo adjetivo no banco.
+     *
+     * @param request dados do novo adjetivo
+     * @return adjetivo criado
      */
     @PostMapping
-    public AdjetivoResponse criarAdjetivo(@RequestBody AdjetivoRequest request) {
-        return adjetivoService.criar(request);
+    public AdjetivoResponse createAdjective(@RequestBody AdjetivoRequest request) {
+        return adjetivoService.create(request);
     }
 
     /**
      * Atualiza os dados de um adjetivo existente pelo ID.
+     *
+     * @param idAdjetivo id do adjetivo a ser alterado
+     * @param request    novos dados do adjetivo
+     * @return adjetivo atualizado
      */
     @PutMapping("/{idAdjetivo}")
-    public AdjetivoResponse alterarAdjetivo(
-            @PathVariable Integer idAdjetivo,
-            @RequestBody AdjetivoRequest request
-    ) {
-        return adjetivoService.alterar(idAdjetivo, request);
+    public AdjetivoResponse updateAdjective(@PathVariable Integer idAdjetivo,
+                                            @RequestBody AdjetivoRequest request) {
+        return adjetivoService.update(idAdjetivo, request);
     }
 
     /**
@@ -73,7 +78,7 @@ public class AdjetivoController {
      * @throws ResponseStatusException 404 se não encontrar o adjetivo
      */
     @DeleteMapping("/{idAdjetivo}")
-    public AdjetivoResponse removerAdjetivo(@PathVariable Integer idAdjetivo) {
-        return adjetivoService.remover(idAdjetivo);
+    public AdjetivoResponse deleteAdjective(@PathVariable Integer idAdjetivo) {
+        return adjetivoService.delete(idAdjetivo);
     }
 }

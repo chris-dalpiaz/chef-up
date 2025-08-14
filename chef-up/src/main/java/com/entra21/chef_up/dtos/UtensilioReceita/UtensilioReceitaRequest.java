@@ -1,6 +1,7 @@
 package com.entra21.chef_up.dtos.UtensilioReceita;
 
 public class UtensilioReceitaRequest {
+
     private Integer idUtensilio;
 
     public Integer getIdUtensilio() {

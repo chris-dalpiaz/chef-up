@@ -5,16 +5,12 @@ import java.time.LocalDateTime;
 
 public class ReceitaUsuarioRequest {
 
-    /// Receita que foi realizada (muitos para um)
     private Integer idReceita;
 
-    /// Data e hora em que o usuário concluiu a receita
     private LocalDateTime dataConclusao;
 
-    /// URL ou caminho da foto do prato feito pelo usuário
     private String fotoPrato;
 
-    /// Pontuação dada ao prato feito pelo usuário
     private Integer pontuacaoPrato;
 
     public Integer getIdReceita() {

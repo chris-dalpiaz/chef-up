@@ -1,6 +1,7 @@
 package com.entra21.chef_up.dtos.AvatarUsuario;
 
 public class AvatarUsuarioRequest {
+
     private Integer idAvatar;
 
     public Integer getIdAvatar() {

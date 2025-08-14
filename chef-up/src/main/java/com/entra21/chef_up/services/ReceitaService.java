@@ -12,102 +12,140 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações CRUD de Receita.
+ */
 @Service
 public class ReceitaService {
 
-    private final ReceitaRepository receitaRepository;
-    private final ModelMapper modelMapper;
-    private final CategoriaService categoriaService;
-    private final IngredienteReceitaRepository ingredienteReceitaRepository;
-    private final EtapaReceitaRepository etapaReceitaRepository;
-    private final ReceitaUsuarioRepository receitaUsuarioRepository;
-    private final ReceitaColecaoRepository receitaColecaoRepository;
-    private final UtensilioReceitaRepository utensilioReceitaRepository;
+    private static final String ERROR_RECIPE_NOT_FOUND = "Receita não encontrada";
 
-    public ReceitaService(ReceitaRepository receitaRepository, ModelMapper modelMapper, CategoriaService categoriaService, IngredienteReceitaRepository ingredienteReceitaRepository, EtapaReceitaRepository etapaReceitaRepository, ReceitaUsuarioRepository receitaUsuarioRepository, ReceitaColecaoRepository receitaColecaoRepository, UtensilioReceitaRepository utensilioReceitaRepository) {
-        this.receitaRepository = receitaRepository;
-        this.modelMapper = modelMapper;
-        this.categoriaService = categoriaService;
-        this.ingredienteReceitaRepository = ingredienteReceitaRepository;
-        this.etapaReceitaRepository = etapaReceitaRepository;
-        this.receitaUsuarioRepository = receitaUsuarioRepository;
-        this.receitaColecaoRepository = receitaColecaoRepository;
-        this.utensilioReceitaRepository = utensilioReceitaRepository;
+    private final ReceitaRepository recipeRepository;
+    private final ModelMapper mapper;
+    private final CategoriaService categoryService;
+    private final IngredienteReceitaRepository ingredientRecipeRepository;
+    private final EtapaReceitaRepository stepRecipeRepository;
+    private final ReceitaUsuarioRepository userRecipeRepository;
+    private final ReceitaColecaoRepository collectionRecipeRepository;
+    private final UtensilioReceitaRepository utensilRecipeRepository;
+
+    public ReceitaService(ReceitaRepository recipeRepository,
+                          ModelMapper mapper,
+                          CategoriaService categoryService,
+                          IngredienteReceitaRepository ingredientRecipeRepository,
+                          EtapaReceitaRepository stepRecipeRepository,
+                          ReceitaUsuarioRepository userRecipeRepository,
+                          ReceitaColecaoRepository collectionRecipeRepository,
+                          UtensilioReceitaRepository utensilRecipeRepository) {
+        this.recipeRepository = recipeRepository;
+        this.mapper = mapper;
+        this.categoryService = categoryService;
+        this.ingredientRecipeRepository = ingredientRecipeRepository;
+        this.stepRecipeRepository = stepRecipeRepository;
+        this.userRecipeRepository = userRecipeRepository;
+        this.collectionRecipeRepository = collectionRecipeRepository;
+        this.utensilRecipeRepository = utensilRecipeRepository;
     }
 
-    public List<ReceitaResponse> listarTodos() {
-        return receitaRepository.findAll().stream()
-                .map(r -> {
-                    ReceitaResponse receitaResponse = modelMapper.map(r, ReceitaResponse.class);
-
-                    /// Mapear manualmente, pois o modelmapper não consegue listar objetos complexos
-                    receitaResponse.setCategoria(categoriaService.mapParaResponse(r.getCategoria()));
-
-                    return receitaResponse;
+    /**
+     * Retorna todas as receitas cadastradas, incluindo a categoria mapeada.
+     *
+     * @return lista de ReceitaResponse
+     */
+    public List<ReceitaResponse> listAll() {
+        return recipeRepository.findAll()
+                .stream()
+                .map(recipe -> {
+                    ReceitaResponse response = mapper.map(recipe, ReceitaResponse.class);
+                    response.setCategoria(categoryService.toResponse(recipe.getCategoria()));
+                    return response;
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 
-    public ReceitaResponse buscar(Integer id) {
-        Receita receita = receitaRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Receita não encontrada"));
-
-        return modelMapper.map(receita, ReceitaResponse.class);
+    /**
+     * Busca uma receita pelo seu identificador.
+     *
+     * @param id identificador da receita
+     * @return DTO contendo os dados da receita
+     * @throws ResponseStatusException se a receita não for encontrada
+     */
+    public ReceitaResponse getById(Integer id) {
+        Receita recipe = findEntityById(id);
+        return mapper.map(recipe, ReceitaResponse.class);
     }
 
-    public ReceitaResponse criar(ReceitaRequest request) {
-        /// Converte o DTO de requisição para a entidade
-        Receita receita = modelMapper.map(request, Receita.class);
-
-        /// Salva a entidade no banco de dados
-        Receita salvo = receitaRepository.save(receita);
-
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, ReceitaResponse.class);
+    /**
+     * Cria uma nova receita com base nos dados fornecidos.
+     *
+     * @param request DTO contendo as informações para criação
+     * @return DTO da receita criada
+     */
+    public ReceitaResponse create(ReceitaRequest request) {
+        Receita entity = mapper.map(request, Receita.class);
+        Receita saved = recipeRepository.save(entity);
+        return mapper.map(saved, ReceitaResponse.class);
     }
 
-    public ReceitaResponse alterar(Integer id, ReceitaRequest request) {
-        /// Busca pelo ID ou lança erro 404
-        Receita alterar = receitaRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Receita não encontrada"));
+    /**
+     * Atualiza os dados de uma receita existente.
+     *
+     * @param id      identificador da receita a ser atualizada
+     * @param request DTO contendo os novos dados
+     * @return DTO da receita atualizada
+     * @throws ResponseStatusException se a receita não for encontrada
+     */
+    public ReceitaResponse update(Integer id, ReceitaRequest request) {
+        Receita entity = findEntityById(id);
 
-        alterar.setNome(request.getNome());
-        alterar.setDificuldade(request.getDificuldade());
-        alterar.setDescricao(request.getDescricao());
-        alterar.setXpGanho(request.getXpGanho());
-        alterar.setTempoPreparoSegundos(request.getTempoPreparoSegundos());
+        entity.setNome(request.getNome());
+        entity.setDificuldade(request.getDificuldade());
+        entity.setDescricao(request.getDescricao());
+        entity.setXpGanho(request.getXpGanho());
+        entity.setTempoPreparoSegundos(request.getTempoPreparoSegundos());
 
-        Categoria categoria = categoriaService.buscarPorId(request.getIdCategoria());
-        alterar.setCategoria(categoria);
+        Categoria category = categoryService.findByIdOrThrow(request.getIdCategoria());
+        entity.setCategoria(category);
 
-        /// Salva a alteração no banco
-        Receita salvo = receitaRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, ReceitaResponse.class);
+        Receita updated = recipeRepository.save(entity);
+        return mapper.map(updated, ReceitaResponse.class);
     }
 
+    /**
+     * Remove uma receita e todas as dependências relacionadas.
+     *
+     * @param id identificador da receita a ser removida
+     * @return DTO da receita removida
+     * @throws ResponseStatusException se a receita não for encontrada
+     */
     @Transactional
-    public ReceitaResponse remover(Integer id) {
-        /// Busca pelo ID ou lança 404
-        Receita receita = receitaRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Receita não encontrada"));
+    public ReceitaResponse delete(Integer id) {
+        Receita entity = findEntityById(id);
 
-        /// removendo dados que usam a fk da receita em outras tabelas, para poder removê-la
-        ingredienteReceitaRepository.removeByReceitaId(id);
-        etapaReceitaRepository.removeByReceitaId(id);
-        receitaUsuarioRepository.removeByReceitaId(id);
-        receitaColecaoRepository.removeByReceitaId(id);
-        utensilioReceitaRepository.removeByReceitaId(id);
+        // Remove registros relacionados à receita em outras tabelas
+        ingredientRecipeRepository.removeByReceitaId(id);
+        stepRecipeRepository.removeByReceitaId(id);
+        userRecipeRepository.removeByReceitaId(id);
+        collectionRecipeRepository.removeByReceitaId(id);
+        utensilRecipeRepository.removeByReceitaId(id);
 
+        recipeRepository.deleteById(id);
+        return mapper.map(entity, ReceitaResponse.class);
+    }
 
-        receitaRepository.deleteById(id);
-
-        /// Retorna o DTO do deletado
-        return modelMapper.map(receita, ReceitaResponse.class);
+    /**
+     * Busca a entidade Receita pelo ID ou lança exceção 404.
+     *
+     * @param id identificador da receita
+     * @return entidade encontrada
+     * @throws ResponseStatusException se não encontrar a entidade
+     */
+    private Receita findEntityById(Integer id) {
+        return recipeRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RECIPE_NOT_FOUND)
+                );
     }
 }

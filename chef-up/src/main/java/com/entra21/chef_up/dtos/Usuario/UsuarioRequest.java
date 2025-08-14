@@ -1,16 +1,13 @@
 package com.entra21.chef_up.dtos.Usuario;
 
 public class UsuarioRequest {
-    /// Nome completo do usuário
+
     private String nome;
 
-    /// Email do usuário (único para login)
     private String email;
 
-    /// Hash da senha do usuário (para segurança)
     private String senhaHash;
 
-    /// Pronome preferido do usuário (relação ManyToOne)
     private Integer idPronome;
 
     public String getSenhaHash() {

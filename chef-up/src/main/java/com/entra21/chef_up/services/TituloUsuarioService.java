@@ -1,9 +1,10 @@
 package com.entra21.chef_up.services;
 
-import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioResponse;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioRequest;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
-import com.entra21.chef_up.entities.*;
+import com.entra21.chef_up.entities.Titulo;
+import com.entra21.chef_up.entities.TituloUsuario;
+import com.entra21.chef_up.entities.Usuario;
 import com.entra21.chef_up.repositories.TituloRepository;
 import com.entra21.chef_up.repositories.TituloUsuarioRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
@@ -15,96 +16,139 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável por gerenciar a relação entre Titulo e Usuario.
+ */
 @Service
 public class TituloUsuarioService {
 
-    private final TituloRepository tituloRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final TituloUsuarioRepository tituloUsuarioRepository;
-    private final ModelMapper modelMapper;
+    private static final String ERROR_ASSOCIATION_NOT_FOUND = "Associação não encontrada";
+    private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
+    private static final String ERROR_TITLE_NOT_FOUND = "Título não encontrado";
+    private static final String ERROR_TITLE_NOT_OWNED = "Título não pertence ao usuário";
 
-    public TituloUsuarioService(TituloRepository tituloRepository, UsuarioRepository usuarioRepository, TituloUsuarioRepository tituloUsuarioRepository, ModelMapper modelMapper) {
-        this.tituloRepository = tituloRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.tituloUsuarioRepository = tituloUsuarioRepository;
-        this.modelMapper = modelMapper;
+    private final TituloRepository titleRepository;
+    private final UsuarioRepository userRepository;
+    private final TituloUsuarioRepository titleUserRepository;
+    private final ModelMapper mapper;
+
+    public TituloUsuarioService(TituloRepository titleRepository,
+                                UsuarioRepository userRepository,
+                                TituloUsuarioRepository titleUserRepository,
+                                ModelMapper mapper) {
+        this.titleRepository = titleRepository;
+        this.userRepository = userRepository;
+        this.titleUserRepository = titleUserRepository;
+        this.mapper = mapper;
     }
 
-    public List<TituloUsuarioResponse> listarTodos(Integer idUsuario) {
-        return tituloUsuarioRepository.findByUsuarioId(idUsuario)
+    /**
+     * Lista todas as associações entre título e usuário para um determinado usuário.
+     *
+     * @param userId identificador do usuário
+     * @return lista de TituloUsuarioResponse
+     */
+    public List<TituloUsuarioResponse> listAll(Integer userId) {
+        return titleUserRepository.findByUsuarioId(userId)
                 .stream()
-                .map(etapa -> modelMapper.map(etapa, TituloUsuarioResponse.class))
-                .toList();
+                .map(association -> mapper.map(association, TituloUsuarioResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public TituloUsuarioResponse buscar(Integer idUsuario, Integer idTituloUsuario) {
-        TituloUsuario tituloUsuario = tituloUsuarioRepository.findById(idTituloUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    /**
+     * Recupera uma associação específica entre título e usuário.
+     *
+     * @param userId        identificador do usuário
+     * @param associationId identificador da associação
+     * @return DTO da associação encontrada
+     */
+    public TituloUsuarioResponse getById(Integer userId, Integer associationId) {
+        TituloUsuario association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence ao usuário
-        if (!tituloUsuario.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título não pertence ao usuário");
+        if (!association.getUsuario().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_TITLE_NOT_OWNED);
         }
 
-        return modelMapper.map(tituloUsuario, TituloUsuarioResponse.class);
+        return mapper.map(association, TituloUsuarioResponse.class);
     }
 
-    public TituloUsuarioResponse criar(Integer idUsuario, TituloUsuarioRequest request) {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    /**
+     * Cria uma nova associação entre título e usuário.
+     *
+     * @param userId  identificador do usuário
+     * @param request DTO com o ID do título
+     * @return DTO da associação criada
+     */
+    public TituloUsuarioResponse create(Integer userId, TituloUsuarioRequest request) {
+        Usuario user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
 
-        Titulo titulo = tituloRepository.findById(request.getIdTitulo())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
+        Titulo title = titleRepository.findById(request.getIdTitulo())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_TITLE_NOT_FOUND));
 
-        TituloUsuario tituloUsuario = new TituloUsuario();
-        tituloUsuario.setTitulo(titulo);
-        tituloUsuario.setUsuario(usuario);
-        tituloUsuario.setDesbloqueadoEm(LocalDateTime.now());
+        TituloUsuario newAssociation = new TituloUsuario();
+        newAssociation.setUsuario(user);
+        newAssociation.setTitulo(title);
+        newAssociation.setDesbloqueadoEm(LocalDateTime.now());
 
-        TituloUsuario salvo = tituloUsuarioRepository.save(tituloUsuario);
-
-        return modelMapper.map(salvo, TituloUsuarioResponse.class);
+        TituloUsuario saved = titleUserRepository.save(newAssociation);
+        return mapper.map(saved, TituloUsuarioResponse.class);
     }
 
-    public TituloUsuarioResponse alterar(Integer idUsuario, Integer idTituloUsuario, TituloUsuarioRequest request) {
-        TituloUsuario tituloUsuario = tituloUsuarioRepository.findById(idTituloUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    /**
+     * Atualiza uma associação existente entre título e usuário.
+     *
+     * @param userId        identificador do usuário
+     * @param associationId identificador da associação
+     * @param request       DTO com o novo ID do título
+     * @return DTO da associação atualizada
+     */
+    public TituloUsuarioResponse update(Integer userId, Integer associationId, TituloUsuarioRequest request) {
+        TituloUsuario association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence ao usuário
-        if (!tituloUsuario.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título não pertence ao usuário");
+        if (!association.getUsuario().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_TITLE_NOT_OWNED);
         }
 
-        // Atualiza os dados do adjetivo associado, se necessário
-        if (request.getIdTitulo() != null && !request.getIdTitulo().equals(tituloUsuario.getTitulo().getId())) {
-            Titulo novoTitulo = tituloRepository.findById(request.getIdTitulo())
+        if (request.getIdTitulo() != null && !request.getIdTitulo().equals(association.getTitulo().getId())) {
+            Titulo newTitle = titleRepository.findById(request.getIdTitulo())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Novo título não encontrado"));
-            tituloUsuario.setTitulo(novoTitulo);
+            association.setTitulo(newTitle);
         }
 
-        // Salva as alterações
-        TituloUsuario atualizado = tituloUsuarioRepository.save(tituloUsuario);
-
-        return modelMapper.map(atualizado, TituloUsuarioResponse.class);
+        TituloUsuario updated = titleUserRepository.save(association);
+        return mapper.map(updated, TituloUsuarioResponse.class);
     }
 
-
+    /**
+     * Remove uma associação entre título e usuário.
+     *
+     * @param userId        identificador do usuário
+     * @param associationId identificador da associação
+     * @return DTO da associação removida
+     */
     @Transactional
-    public TituloUsuarioResponse remover(Integer idUsuario, Integer idITituloUsuario) {
-        /// Busca pelo ID ou lança 404
-        TituloUsuario tituloUsuario = tituloUsuarioRepository.findById(idITituloUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    public TituloUsuarioResponse delete(Integer userId, Integer associationId) {
+        TituloUsuario association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence ao usuário informado
-        if (!tituloUsuario.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título não pertence ao usuário");
+        if (!association.getUsuario().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_TITLE_NOT_OWNED);
         }
 
-        /// Deleta pelo ID
-        tituloUsuarioRepository.deleteById(idITituloUsuario);
+        titleUserRepository.deleteById(associationId);
+        return mapper.map(association, TituloUsuarioResponse.class);
+    }
 
-        /// Retorna o DTO do adjetivo deletado
-        return modelMapper.map(tituloUsuario, TituloUsuarioResponse.class);
+    /**
+     * Busca uma associação entre título e usuário ou lança exceção 404.
+     *
+     * @param id identificador da associação
+     * @return entidade TituloUsuario
+     */
+    private TituloUsuario findByIdOrThrow(Integer id) {
+        return titleUserRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
     }
 }

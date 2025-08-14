@@ -1,9 +1,7 @@
 package com.entra21.chef_up.dtos.TituloUsuario;
 
-import java.time.LocalDateTime;
-
 public class TituloUsuarioRequest {
-    /// Referência ao título associado
+
     private Integer idTitulo;
 
 

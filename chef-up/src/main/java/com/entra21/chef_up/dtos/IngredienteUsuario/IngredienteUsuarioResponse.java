@@ -5,7 +5,9 @@ import com.entra21.chef_up.dtos.Ingrediente.IngredienteResponse;
 import java.time.LocalDateTime;
 
 public class IngredienteUsuarioResponse {
+
     private IngredienteResponse ingrediente;
+
     private LocalDateTime dataAdicionada;
 
     public LocalDateTime getDataAdicionada() {

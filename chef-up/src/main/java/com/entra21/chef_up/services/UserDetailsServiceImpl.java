@@ -8,34 +8,38 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Serviço responsável por carregar os detalhes do usuário para autenticação.
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UsuarioRepository repository;
+
+    private final UsuarioRepository userRepository;
 
     /**
      * Construtor com injeção de dependência do repositório de usuários.
      */
-    public UserDetailsServiceImpl(UsuarioRepository repository) {
-        this.repository = repository;
+    public UserDetailsServiceImpl(UsuarioRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     /**
-     * Busca um usuário pelo email para autenticação.
+     * Carrega um usuário pelo e-mail para fins de autenticação.
      * Lança exceção se o usuário não for encontrado.
      *
-     * @param email Email usado como username para login
-     * @return UserDetails com dados para autenticação
+     * @param email E-mail utilizado como nome de usuário no login
+     * @return UserDetails com os dados de autenticação
      * @throws UsernameNotFoundException se o usuário não existir
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = repository.findByEmail(email)
+        Usuario user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
         return User.builder()
-                .username(usuario.getEmail())           /// Define o email como username
-                .password(usuario.getSenhaHash())       /// Define a senha (hash) do usuário
-                .authorities("USER")                     /// Define a autoridade padrão (não usada)
+                .username(user.getEmail())           // Define o e-mail como nome de usuário
+                .password(user.getSenhaHash())       // Define a senha criptografada
+                .authorities("USER")                 // Autoridade padrão (não utilizada)
                 .build();
     }
 }

@@ -4,34 +4,32 @@ import com.entra21.chef_up.dtos.Colecao.ColecaoRequest;
 import com.entra21.chef_up.dtos.Colecao.ColecaoResponse;
 import com.entra21.chef_up.dtos.ReceitaColecao.ReceitaColecaoRequest;
 import com.entra21.chef_up.dtos.ReceitaColecao.ReceitaColecaoResponse;
-import com.entra21.chef_up.entities.ReceitaColecao;
-import com.entra21.chef_up.entities.Colecao;
 import com.entra21.chef_up.repositories.ReceitaColecaoRepository;
 import com.entra21.chef_up.repositories.ColecaoRepository;
 import com.entra21.chef_up.services.ColecaoService;
 import com.entra21.chef_up.services.ReceitaColecaoService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Colecao e suas receitas.
+ */
 @RestController
 @RequestMapping("/colecoes")
 public class ColecaoController {
-    /**
-     * Repositórios para coleções e receitas das coleções
-     */
-        private final ReceitaColecaoRepository receitaColecaoRepository;
-        private final ColecaoService colecaoService;
-        private final ReceitaColecaoService receitaColecaoService;
+
+    private final ReceitaColecaoRepository receitaColecaoRepository;
+    private final ColecaoService colecaoService;
+    private final ReceitaColecaoService receitaColecaoService;
 
     /**
-     * Construtor com injeção de dependência
-     * Permite acessar dados de coleção e receitaColecao no banco
+     * Construtor com injeção de dependência.
      */
     public ColecaoController(ColecaoRepository colecaoRepository,
-                             ReceitaColecaoRepository receitaColecaoRepository, ColecaoService colecaoService, ReceitaColecaoService receitaColecaoService) {
+                             ReceitaColecaoRepository receitaColecaoRepository,
+                             ColecaoService colecaoService,
+                             ReceitaColecaoService receitaColecaoService) {
         this.receitaColecaoRepository = receitaColecaoRepository;
         this.colecaoService = colecaoService;
         this.receitaColecaoService = receitaColecaoService;
@@ -43,8 +41,8 @@ public class ColecaoController {
      * @return lista de coleções
      */
     @GetMapping
-    public List<ColecaoResponse> listarColecoes() {
-        return colecaoService.listarTodos();
+    public List<ColecaoResponse> listCollections() {
+        return colecaoService.listAll();
     }
 
     /**
@@ -55,8 +53,8 @@ public class ColecaoController {
      * @return coleção encontrada
      */
     @GetMapping("/{idColecao}")
-    public ColecaoResponse buscarColecao(@PathVariable Integer idColecao) {
-        return colecaoService.buscar(idColecao);
+    public ColecaoResponse getCollection(@PathVariable Integer idColecao) {
+        return colecaoService.getById(idColecao);
     }
 
     /**
@@ -66,8 +64,8 @@ public class ColecaoController {
      * @return coleção criada com ID gerado
      */
     @PostMapping
-    public ColecaoResponse criarColecao(@RequestBody ColecaoRequest request) {
-        return colecaoService.criar(request);
+    public ColecaoResponse createCollection(@RequestBody ColecaoRequest request) {
+        return colecaoService.create(request);
     }
 
     /**
@@ -79,11 +77,9 @@ public class ColecaoController {
      * @return coleção atualizada
      */
     @PutMapping("/{idColecao}")
-    public ColecaoResponse alterarColecao(
-            @PathVariable Integer idColecao,
-            @RequestBody ColecaoRequest request
-    ) {
-        return colecaoService.alterar(idColecao, request);
+    public ColecaoResponse updateCollection(@PathVariable Integer idColecao,
+                                            @RequestBody ColecaoRequest request) {
+        return colecaoService.update(idColecao, request);
     }
 
     /**
@@ -94,11 +90,12 @@ public class ColecaoController {
      * @return coleção removida
      */
     @DeleteMapping("/{idColecao}")
-    public ColecaoResponse removerColecao(@PathVariable Integer idColecao) {
-        return colecaoService.remover(idColecao);
+    public ColecaoResponse deleteCollection(@PathVariable Integer idColecao) {
+        return colecaoService.delete(idColecao);
     }
 
-    ///* ---------- Receitas da coleção ---------- */
+    /* ---------- Receitas da coleção ---------- */
+
     /**
      * Lista todas as receitas associadas a uma coleção.
      *
@@ -106,8 +103,8 @@ public class ColecaoController {
      * @return lista de receitas da coleção
      */
     @GetMapping("/{idColecao}/receitas")
-    public List<ReceitaColecaoResponse> listarReceitas(@PathVariable Integer idColecao) {
-        return receitaColecaoService.listarTodos(idColecao);
+    public List<ReceitaColecaoResponse> listCollectionRecipes(@PathVariable Integer idColecao) {
+        return receitaColecaoService.listAll(idColecao);
     }
 
     /**
@@ -120,18 +117,23 @@ public class ColecaoController {
      * @return receita da coleção encontrada
      */
     @GetMapping("/{idColecao}/receitas/{idReceitaColecao}")
-    public ReceitaColecaoResponse buscarReceitaColecao(@PathVariable Integer idColecao,
-                                               @PathVariable Integer idReceitaColecao) {
-        return receitaColecaoService.buscar(idColecao, idReceitaColecao);
+    public ReceitaColecaoResponse getCollectionRecipe(@PathVariable Integer idColecao,
+                                                      @PathVariable Integer idReceitaColecao) {
+        return receitaColecaoService.getById(idColecao, idReceitaColecao);
     }
 
-
+    /**
+     * Cria uma nova associação entre receita e coleção.
+     *
+     * @param idColecao ID da coleção
+     * @param request   dados da receita a ser associada
+     * @return associação criada
+     */
     @PostMapping("/{idColecao}/receitas")
-    public ReceitaColecaoResponse criarReceitaColecao(@PathVariable Integer idColecao,
-                                                      @RequestBody ReceitaColecaoRequest request) {
-        return receitaColecaoService.criar(idColecao, request);
+    public ReceitaColecaoResponse createCollectionRecipe(@PathVariable Integer idColecao,
+                                                         @RequestBody ReceitaColecaoRequest request) {
+        return receitaColecaoService.create(idColecao, request);
     }
-
 
     /**
      * Atualiza uma receita da coleção.
@@ -139,14 +141,14 @@ public class ColecaoController {
      *
      * @param idColecao        ID da coleção
      * @param idReceitaColecao ID da receita da coleção
-     * @param request   novos dados da receita
+     * @param request          novos dados da receita
      * @return receita atualizada
      */
     @PutMapping("/{idColecao}/receitas/{idReceitaColecao}")
-    public ReceitaColecaoResponse editarReceitaColecao(@PathVariable Integer idColecao,
-                                                       @PathVariable Integer idReceitaColecao,
-                                                       @RequestBody ReceitaColecaoRequest request) {
-        return receitaColecaoService.alterar(idColecao, idReceitaColecao, request);
+    public ReceitaColecaoResponse updateCollectionRecipe(@PathVariable Integer idColecao,
+                                                         @PathVariable Integer idReceitaColecao,
+                                                         @RequestBody ReceitaColecaoRequest request) {
+        return receitaColecaoService.update(idColecao, idReceitaColecao, request);
     }
 
     /**
@@ -158,8 +160,8 @@ public class ColecaoController {
      * @return receita removida
      */
     @DeleteMapping("/{idColecao}/receitas/{idReceitaColecao}")
-    public ReceitaColecaoResponse removerReceitaColecao(@PathVariable Integer idColecao,
-                                                @PathVariable Integer idReceitaColecao) {
-        return receitaColecaoService.remover(idColecao, idReceitaColecao);
+    public ReceitaColecaoResponse deleteCollectionRecipe(@PathVariable Integer idColecao,
+                                                         @PathVariable Integer idReceitaColecao) {
+        return receitaColecaoService.delete(idColecao, idReceitaColecao);
     }
 }

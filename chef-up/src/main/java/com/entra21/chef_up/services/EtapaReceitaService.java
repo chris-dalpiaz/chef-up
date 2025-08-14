@@ -13,85 +13,125 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável por gerenciar entidades EtapaReceita.
+ */
 @Service
 public class EtapaReceitaService {
 
-    private final EtapaReceitaRepository etapaReceitaRepository;
-    private final ReceitaRepository receitaRepository;
-    private final ModelMapper modelMapper;
+    private static final String ERROR_STEP_NOT_FOUND = "Etapa não encontrada";
+    private static final String ERROR_RECIPE_NOT_FOUND = "Receita não encontrada";
+    private static final String ERROR_STEP_NOT_OWNED = "Etapa não pertence à receita informada";
 
-    public EtapaReceitaService(EtapaReceitaRepository etapaReceitaRepository, ReceitaRepository receitaRepository, ModelMapper modelMapper) {
-        this.etapaReceitaRepository = etapaReceitaRepository;
-        this.receitaRepository = receitaRepository;
-        this.modelMapper = modelMapper;
+    private final EtapaReceitaRepository stepRepository;
+    private final ReceitaRepository recipeRepository;
+    private final ModelMapper mapper;
+
+    public EtapaReceitaService(EtapaReceitaRepository stepRepository,
+                               ReceitaRepository recipeRepository,
+                               ModelMapper mapper) {
+        this.stepRepository = stepRepository;
+        this.recipeRepository = recipeRepository;
+        this.mapper = mapper;
     }
 
-    public List<EtapaReceitaResponse> listarTodos(Integer idReceita) {
-        return etapaReceitaRepository.findByReceitaId(idReceita)
+    /**
+     * Lista todas as etapas de uma determinada receita.
+     *
+     * @param recipeId identificador da receita
+     * @return lista de EtapaReceitaResponse
+     */
+    public List<EtapaReceitaResponse> listByRecipe(Integer recipeId) {
+        return stepRepository.findByReceitaId(recipeId)
                 .stream()
-                .map(etapa -> modelMapper.map(etapa, EtapaReceitaResponse.class))
-                .toList();
+                .map(step -> mapper.map(step, EtapaReceitaResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public EtapaReceitaResponse buscarPorId(Integer idReceita, Integer idEtapaReceita) {
-        EtapaReceita etapa = etapaReceitaRepository.findById(idEtapaReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa não encontrada"));
+    /**
+     * Recupera uma etapa específica pelo seu ID e pela receita.
+     *
+     * @param recipeId identificador da receita
+     * @param stepId   identificador da etapa
+     * @return DTO da etapa encontrada
+     */
+    public EtapaReceitaResponse getById(Integer recipeId, Integer stepId) {
+        EtapaReceita step = findByIdOrThrow(stepId);
 
-        // Verifica se a etapa pertence à receita informada
-        if (!etapa.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etapa não pertence à receita informada");
+        if (!step.getReceita().getId().equals(recipeId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_STEP_NOT_OWNED);
         }
 
-        return modelMapper.map(etapa, EtapaReceitaResponse.class);
+        return mapper.map(step, EtapaReceitaResponse.class);
     }
 
-
+    /**
+     * Cria uma nova etapa para uma determinada receita.
+     *
+     * @param recipeId identificador da receita
+     * @param request  DTO com os dados da etapa
+     * @return DTO da etapa criada
+     */
     @Transactional
-    public EtapaReceitaResponse criar(Integer idReceita, EtapaReceitaRequest request) {
-        // Verifica se a receita existe
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
+    public EtapaReceitaResponse create(Integer recipeId, EtapaReceitaRequest request) {
+        Receita recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RECIPE_NOT_FOUND));
 
-        // Cria nova etapa
-        EtapaReceita novaEtapa = new EtapaReceita();
-        novaEtapa.setReceita(receita);
-        novaEtapa.setOrdem(request.getOrdem());
-        novaEtapa.setConteudo(request.getConteudo());
+        EtapaReceita newStep = new EtapaReceita();
+        newStep.setReceita(recipe);
+        newStep.setOrdem(request.getOrdem());
+        newStep.setConteudo(request.getConteudo());
 
-        // Salva e retorna
-        EtapaReceita salva = etapaReceitaRepository.save(novaEtapa);
-        return modelMapper.map(salva, EtapaReceitaResponse.class);
+        EtapaReceita saved = stepRepository.save(newStep);
+        return mapper.map(saved, EtapaReceitaResponse.class);
     }
 
+    /**
+     * Atualiza uma etapa existente.
+     *
+     * @param recipeId identificador da receita
+     * @param stepId   identificador da etapa
+     * @param request  DTO com os dados atualizados
+     * @return DTO da etapa atualizada
+     */
     @Transactional
-    public EtapaReceitaResponse alterar(Integer idReceita, Integer idEtapaReceita, EtapaReceitaRequest request) {
-        // Busca a etapa existente
-        EtapaReceita etapaExistente = etapaReceitaRepository.findById(idEtapaReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa não encontrada"));
+    public EtapaReceitaResponse update(Integer recipeId, Integer stepId, EtapaReceitaRequest request) {
+        EtapaReceita existingStep = findByIdOrThrow(stepId);
 
-        // Verifica se a etapa pertence à receita informada
-        if (!etapaExistente.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etapa não pertence à receita informada");
+        if (!existingStep.getReceita().getId().equals(recipeId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_STEP_NOT_OWNED);
         }
 
-        // Atualiza os campos
-        etapaExistente.setOrdem(request.getOrdem());
-        etapaExistente.setConteudo(request.getConteudo());
+        existingStep.setOrdem(request.getOrdem());
+        existingStep.setConteudo(request.getConteudo());
 
-        // Salva e retorna a entidade atualizada
-        etapaReceitaRepository.save(etapaExistente);
-        return modelMapper.map(etapaExistente, EtapaReceitaResponse.class);
-
+        stepRepository.save(existingStep);
+        return mapper.map(existingStep, EtapaReceitaResponse.class);
     }
 
+    /**
+     * Remove uma etapa pelo seu ID.
+     *
+     * @param stepId identificador da etapa
+     * @return DTO da etapa removida
+     */
     @Transactional
-    public EtapaReceitaResponse remover(Integer idEtapa) {
-        EtapaReceita etapa = etapaReceitaRepository.findById(idEtapa)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa não encontrada"));
+    public EtapaReceitaResponse delete(Integer stepId) {
+        EtapaReceita step = findByIdOrThrow(stepId);
+        stepRepository.deleteById(stepId);
+        return mapper.map(step, EtapaReceitaResponse.class);
+    }
 
-        etapaReceitaRepository.deleteById(idEtapa);
-
-        return modelMapper.map(etapa, EtapaReceitaResponse.class);
+    /**
+     * Busca uma etapa ou lança exceção 404.
+     *
+     * @param id identificador da etapa
+     * @return entidade EtapaReceita
+     */
+    private EtapaReceita findByIdOrThrow(Integer id) {
+        return stepRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_STEP_NOT_FOUND));
     }
 }

@@ -1,10 +1,9 @@
 package com.entra21.chef_up.dtos.Avatar;
 
 public class AvatarResponse {
-    /// Nome do avatar
+
     private String nome;
 
-    /// URL da imagem do avatar
     private String imagemUrl;
 
     public String getNome() {

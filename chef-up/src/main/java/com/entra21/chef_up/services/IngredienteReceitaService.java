@@ -1,6 +1,5 @@
 package com.entra21.chef_up.services;
 
-import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaResponse;
 import com.entra21.chef_up.dtos.IngredienteReceita.IngredienteReceitaRequest;
 import com.entra21.chef_up.dtos.IngredienteReceita.IngredienteReceitaResponse;
 import com.entra21.chef_up.entities.Ingrediente;
@@ -16,99 +15,138 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável por gerenciar entidades IngredienteReceita.
+ */
 @Service
 public class IngredienteReceitaService {
 
-    private final IngredienteReceitaRepository ingredienteReceitaRepository;
-    private final IngredienteRepository ingredienteRepository;
-    private final ReceitaRepository receitaRepository;
-    private final ModelMapper modelMapper;
+    private static final String ERROR_RECIPE_NOT_FOUND = "Receita não encontrada";
+    private static final String ERROR_INGREDIENT_NOT_FOUND = "Ingrediente não encontrado";
+    private static final String ERROR_INGREDIENT_NOT_OWNED = "Ingrediente não pertence à receita informada";
 
-    public IngredienteReceitaService(IngredienteReceitaRepository ingredienteReceitaRepository, IngredienteRepository ingredienteRepository, ReceitaRepository receitaRepository, ModelMapper modelMapper) {
-        this.ingredienteReceitaRepository = ingredienteReceitaRepository;
-        this.ingredienteRepository = ingredienteRepository;
-        this.receitaRepository = receitaRepository;
-        this.modelMapper = modelMapper;
+    private final IngredienteReceitaRepository ingredientRecipeRepository;
+    private final IngredienteRepository ingredientRepository;
+    private final ReceitaRepository recipeRepository;
+    private final ModelMapper mapper;
+
+    public IngredienteReceitaService(IngredienteReceitaRepository ingredientRecipeRepository,
+                                     IngredienteRepository ingredientRepository,
+                                     ReceitaRepository recipeRepository,
+                                     ModelMapper mapper) {
+        this.ingredientRecipeRepository = ingredientRecipeRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.recipeRepository = recipeRepository;
+        this.mapper = mapper;
     }
 
-
-    public List<IngredienteReceitaResponse> listarTodos(Integer idReceita) {
-        return ingredienteReceitaRepository.findByReceitaId(idReceita)
+    /**
+     * Lista todos os ingredientes de uma determinada receita.
+     *
+     * @param recipeId identificador da receita
+     * @return lista de IngredienteReceitaResponse
+     */
+    public List<IngredienteReceitaResponse> listByRecipe(Integer recipeId) {
+        return ingredientRecipeRepository.findByReceitaId(recipeId)
                 .stream()
-                .map(etapa -> modelMapper.map(etapa, IngredienteReceitaResponse.class))
-                .toList();
+                .map(ingredient -> mapper.map(ingredient, IngredienteReceitaResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public IngredienteReceitaResponse buscarPorId(Integer idReceita, Integer idIngredienteReceita) {
-        IngredienteReceita ingredienteReceita = ingredienteReceitaRepository.findById(idIngredienteReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+    /**
+     * Recupera uma associação específica entre ingrediente e receita.
+     *
+     * @param recipeId           identificador da receita
+     * @param ingredientRecipeId identificador da associação
+     * @return DTO da associação encontrada
+     */
+    public IngredienteReceitaResponse getById(Integer recipeId, Integer ingredientRecipeId) {
+        IngredienteReceita association = findByIdOrThrow(ingredientRecipeId);
 
-        // Verifica se a etapa pertence à receita informada
-        if (!ingredienteReceita.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence à receita informada");
+        if (!association.getReceita().getId().equals(recipeId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_INGREDIENT_NOT_OWNED);
         }
 
-        return modelMapper.map(ingredienteReceita, IngredienteReceitaResponse.class);
+        return mapper.map(association, IngredienteReceitaResponse.class);
     }
 
-
+    /**
+     * Cria uma nova associação entre ingrediente e receita.
+     *
+     * @param recipeId identificador da receita
+     * @param request  DTO com os dados do ingrediente
+     * @return DTO da associação criada
+     */
     @Transactional
-    public IngredienteReceitaResponse criar(Integer idReceita, IngredienteReceitaRequest request) {
-        // Verifica se a receita existe
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
+    public IngredienteReceitaResponse create(Integer recipeId, IngredienteReceitaRequest request) {
+        Receita recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RECIPE_NOT_FOUND));
 
-        // Verifica se o ingrediente existe
-        Ingrediente ingrediente = ingredienteRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+        Ingrediente ingredient = ingredientRepository.findById(request.getIdIngrediente())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_INGREDIENT_NOT_FOUND));
 
-        // Cria nova etapa
-        IngredienteReceita novoIngredienteReceita = new IngredienteReceita();
-        novoIngredienteReceita.setReceita(receita);
-        novoIngredienteReceita.setIngrediente(ingrediente);
-        novoIngredienteReceita.setQuantidade(request.getQuantidade());
-        novoIngredienteReceita.setUnidadeMedida(request.getUnidadeMedida());
+        IngredienteReceita newAssociation = new IngredienteReceita();
+        newAssociation.setReceita(recipe);
+        newAssociation.setIngrediente(ingredient);
+        newAssociation.setQuantidade(request.getQuantidade());
+        newAssociation.setUnidadeMedida(request.getUnidadeMedida());
 
-        // Salva e retorna
-        IngredienteReceita salva = ingredienteReceitaRepository.save(novoIngredienteReceita);
-        return modelMapper.map(salva, IngredienteReceitaResponse.class);
+        IngredienteReceita saved = ingredientRecipeRepository.save(newAssociation);
+        return mapper.map(saved, IngredienteReceitaResponse.class);
     }
 
+    /**
+     * Atualiza uma associação existente entre ingrediente e receita.
+     *
+     * @param recipeId           identificador da receita
+     * @param ingredientRecipeId identificador da associação
+     * @param request            DTO com os dados atualizados
+     * @return DTO da associação atualizada
+     */
     @Transactional
-    public IngredienteReceitaResponse alterar(Integer idReceita, Integer idIngredienteReceita, IngredienteReceitaRequest request) {
-        // Busca a etapa existente
-        IngredienteReceita ingredienteExistente = ingredienteReceitaRepository.findById(idIngredienteReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+    public IngredienteReceitaResponse update(Integer recipeId, Integer ingredientRecipeId, IngredienteReceitaRequest request) {
+        IngredienteReceita existing = findByIdOrThrow(ingredientRecipeId);
 
-        // Verifica se a etapa pertence à receita informada
-        if (!ingredienteExistente.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence à receita informada");
+        if (!existing.getReceita().getId().equals(recipeId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_INGREDIENT_NOT_OWNED);
         }
 
-        // Atualiza os campos
-        ingredienteExistente.setUnidadeMedida(request.getUnidadeMedida());
-        ingredienteExistente.setQuantidade(request.getQuantidade());
+        existing.setQuantidade(request.getQuantidade());
+        existing.setUnidadeMedida(request.getUnidadeMedida());
 
-        // Salva e retorna a entidade atualizada
-        ingredienteReceitaRepository.save(ingredienteExistente);
-        return modelMapper.map(ingredienteExistente, IngredienteReceitaResponse.class);
-
+        ingredientRecipeRepository.save(existing);
+        return mapper.map(existing, IngredienteReceitaResponse.class);
     }
 
+    /**
+     * Remove uma associação entre ingrediente e receita.
+     *
+     * @param recipeId           identificador da receita
+     * @param ingredientRecipeId identificador da associação
+     * @return DTO da associação removida
+     */
     @Transactional
-    public IngredienteReceitaResponse remover(Integer idReceita, Integer idIngredienteReceita) {
-        IngredienteReceita ingredienteReceita = ingredienteReceitaRepository.findById(idIngredienteReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+    public IngredienteReceitaResponse delete(Integer recipeId, Integer ingredientRecipeId) {
+        IngredienteReceita association = findByIdOrThrow(ingredientRecipeId);
 
-        // Verifica se o ingrediente pertence à receita informada
-        if (!ingredienteReceita.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence à receita informada");
+        if (!association.getReceita().getId().equals(recipeId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_INGREDIENT_NOT_OWNED);
         }
 
-        ingredienteReceitaRepository.deleteById(idIngredienteReceita);
-
-        return modelMapper.map(ingredienteReceita, IngredienteReceitaResponse.class);
+        ingredientRecipeRepository.deleteById(ingredientRecipeId);
+        return mapper.map(association, IngredienteReceitaResponse.class);
     }
 
+    /**
+     * Busca uma associação entre ingrediente e receita ou lança exceção 404.
+     *
+     * @param id identificador da associação
+     * @return entidade IngredienteReceita
+     */
+    private IngredienteReceita findByIdOrThrow(Integer id) {
+        return ingredientRecipeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_INGREDIENT_NOT_FOUND));
+    }
 }
