@@ -1,17 +1,23 @@
 meta {
-  name: listar_titulo-usuario
+  name: alterar_titulo-usuario
   type: http
-  seq: 1
+  seq: 4
 }
 
-get {
-  url: http://localhost:8080/usuarios/5/titulos
-  body: none
+put {
+  url: http://localhost:8080/usuarios/5/titulos/1
+  body: json
   auth: bearer
 }
 
 auth:bearer {
   token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2Fvc0BlbWFpbC5jb20iLCJpYXQiOjE3NTUxMzUwNTgsImV4cCI6MTc1NTEzODY1OH0.bilByb3Z3WIYYXTE2YcLP2UqizwtChBDvH9W2hwcOwc
+}
+
+body:json {
+  {
+    "idTitulo": 2
+  }
 }
 
 settings {

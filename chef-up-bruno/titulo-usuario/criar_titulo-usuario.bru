@@ -5,20 +5,18 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/usuarios/1/titulos
+  url: http://localhost:8080/usuarios/5/titulos
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2FvQGVtYWlsLmNvbSIsImlhdCI6MTc1NTA0MjQxNCwiZXhwIjoxNzU1MDQ2MDE0fQ.DQ3EA3XaGHxSkhjU5ijaL-dC014LlEItTcOiW6fVhsI
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2Fvc0BlbWFpbC5jb20iLCJpYXQiOjE3NTUxMzUwNTgsImV4cCI6MTc1NTEzODY1OH0.bilByb3Z3WIYYXTE2YcLP2UqizwtChBDvH9W2hwcOwc
 }
 
 body:json {
   {
-    "titulo":{
-      "id": 1
-    }
+    "idTitulo": 2
   }
 }
 

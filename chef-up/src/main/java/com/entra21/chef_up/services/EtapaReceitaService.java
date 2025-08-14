@@ -48,7 +48,7 @@ public class EtapaReceitaService {
 
 
     @Transactional
-    public EtapaReceitaResponse criar(Integer idReceita, EtapaReceitaRequest etapaReceitaRequest) {
+    public EtapaReceitaResponse criar(Integer idReceita, EtapaReceitaRequest request) {
         // Verifica se a receita existe
         Receita receita = receitaRepository.findById(idReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
@@ -56,8 +56,8 @@ public class EtapaReceitaService {
         // Cria nova etapa
         EtapaReceita novaEtapa = new EtapaReceita();
         novaEtapa.setReceita(receita);
-        novaEtapa.setOrdem(etapaReceitaRequest.getOrdem());
-        novaEtapa.setConteudo(etapaReceitaRequest.getConteudo());
+        novaEtapa.setOrdem(request.getOrdem());
+        novaEtapa.setConteudo(request.getConteudo());
 
         // Salva e retorna
         EtapaReceita salva = etapaReceitaRepository.save(novaEtapa);
@@ -65,7 +65,7 @@ public class EtapaReceitaService {
     }
 
     @Transactional
-    public EtapaReceita alterar(Integer idReceita, Integer idEtapaReceita, EtapaReceita etapaReceitaRequest) {
+    public EtapaReceitaResponse alterar(Integer idReceita, Integer idEtapaReceita, EtapaReceitaRequest request) {
         // Busca a etapa existente
         EtapaReceita etapaExistente = etapaReceitaRepository.findById(idEtapaReceita)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa não encontrada"));
@@ -76,11 +76,13 @@ public class EtapaReceitaService {
         }
 
         // Atualiza os campos
-        etapaExistente.setOrdem(etapaReceitaRequest.getOrdem());
-        etapaExistente.setConteudo(etapaReceitaRequest.getConteudo());
+        etapaExistente.setOrdem(request.getOrdem());
+        etapaExistente.setConteudo(request.getConteudo());
 
         // Salva e retorna a entidade atualizada
-        return etapaReceitaRepository.save(etapaExistente);
+        etapaReceitaRepository.save(etapaExistente);
+        return modelMapper.map(etapaExistente, EtapaReceitaResponse.class);
+
     }
 
     @Transactional
