@@ -3,22 +3,17 @@ package com.entra21.chef_up.dtos.Receita;
 import com.entra21.chef_up.dtos.Categoria.CategoriaResponse;
 
 public class ReceitaResponse {
-    /// Nome da receita
+
     private String nome;
 
-    /// Descrição da receita
     private String descricao;
 
-    /// Tempo de preparo em segundos
     private Integer tempoPreparoSegundos;
 
-    /// Dificuldade da receita (ex: fácil, médio, difícil)
     private String dificuldade;
 
-    /// XP ganho ao completar a receita
     private Integer xpGanho;
 
-    /// Categoria da receita (relacionamento muitos para um)
     private CategoriaResponse categoria;
 
     public String getNome() {

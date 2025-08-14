@@ -2,22 +2,17 @@ package com.entra21.chef_up.dtos.Receita;
 
 
 public class ReceitaRequest {
-    /// Nome da receita
+
     private String nome;
 
-    /// Descrição da receita
     private String descricao;
 
-    /// Tempo de preparo em segundos
     private Integer tempoPreparoSegundos;
 
-    /// Dificuldade da receita (ex: fácil, médio, difícil)
     private String dificuldade;
 
-    /// XP ganho ao completar a receita
     private Integer xpGanho;
 
-    /// idCategoria da receita (relacionamento muitos para um)
     private Integer idCategoria;
 
     public String getNome() {

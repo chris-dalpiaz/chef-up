@@ -1,6 +1,5 @@
 package com.entra21.chef_up.services;
 
-import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
 import com.entra21.chef_up.dtos.ReceitaColecao.ReceitaColecaoRequest;
 import com.entra21.chef_up.dtos.ReceitaColecao.ReceitaColecaoResponse;
 import com.entra21.chef_up.entities.Colecao;
@@ -16,95 +15,140 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável por gerenciar a relação entre Receita e Colecao.
+ */
 @Service
 public class ReceitaColecaoService {
 
-    private final ReceitaColecaoRepository receitaColecaoRepository;
-    private final ModelMapper modelMapper;
-    private final ColecaoRepository colecaoRepository;
-    private final ReceitaRepository receitaRepository;
+    private static final String ERROR_ASSOCIATION_NOT_FOUND = "Associação não encontrada";
+    private static final String ERROR_COLLECTION_NOT_FOUND = "Coleção não encontrada";
+    private static final String ERROR_RECIPE_NOT_FOUND = "Receita não encontrada";
+    private static final String ERROR_RECIPE_NOT_OWNED = "Receita não pertence à coleção informada";
 
-    public ReceitaColecaoService(ReceitaColecaoRepository receitaColecaoRepository, ModelMapper modelMapper, ColecaoService colecaoService, ColecaoRepository colecaoRepository, ReceitaService receitaService, ReceitaRepository receitaRepository) {
-        this.receitaColecaoRepository = receitaColecaoRepository;
-        this.modelMapper = modelMapper;
-        this.colecaoRepository = colecaoRepository;
-        this.receitaRepository = receitaRepository;
+    private final ReceitaColecaoRepository recipeCollectionRepository;
+    private final ModelMapper mapper;
+    private final ColecaoRepository collectionRepository;
+    private final ReceitaRepository recipeRepository;
+
+    public ReceitaColecaoService(ReceitaColecaoRepository recipeCollectionRepository,
+                                 ModelMapper mapper,
+                                 ColecaoService colecaoService,
+                                 ColecaoRepository collectionRepository,
+                                 ReceitaService receitaService,
+                                 ReceitaRepository recipeRepository) {
+        this.recipeCollectionRepository = recipeCollectionRepository;
+        this.mapper = mapper;
+        this.collectionRepository = collectionRepository;
+        this.recipeRepository = recipeRepository;
     }
 
-    public List<ReceitaColecaoResponse> listarTodos(Integer idColecao) {
-        return receitaColecaoRepository.findByColecaoId(idColecao)
+    /**
+     * Lista todas as associações entre receita e coleção para uma determinada coleção.
+     *
+     * @param collectionId identificador da coleção
+     * @return lista de ReceitaColecaoResponse
+     */
+    public List<ReceitaColecaoResponse> listAll(Integer collectionId) {
+        return recipeCollectionRepository.findByColecaoId(collectionId)
                 .stream()
-                .map(etapa -> modelMapper.map(etapa, ReceitaColecaoResponse.class))
-                .toList();
+                .map(association -> mapper.map(association, ReceitaColecaoResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public ReceitaColecaoResponse buscar(Integer idColecao, Integer idReceitaColecao) {
-        ReceitaColecao receitaColecao = receitaColecaoRepository.findById(idReceitaColecao)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    /**
+     * Recupera uma associação específica entre receita e coleção.
+     *
+     * @param collectionId  identificador da coleção
+     * @param associationId identificador da associação
+     * @return DTO da associação encontrada
+     */
+    public ReceitaColecaoResponse getById(Integer collectionId, Integer associationId) {
+        ReceitaColecao association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence à coleção informada
-        if (!receitaColecao.getColecao().getId().equals(idColecao)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receita não pertence à coleção informada");
+        if (!association.getColecao().getId().equals(collectionId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_RECIPE_NOT_OWNED);
         }
 
-        return modelMapper.map(receitaColecao, ReceitaColecaoResponse.class);
+        return mapper.map(association, ReceitaColecaoResponse.class);
     }
 
-    public ReceitaColecaoResponse criar(Integer idColecao, ReceitaColecaoRequest request) {
-        Colecao colecao = colecaoRepository.findById(idColecao)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coleção não encontrada"));
+    /**
+     * Cria uma nova associação entre receita e coleção.
+     *
+     * @param collectionId identificador da coleção
+     * @param request      DTO com o ID da receita
+     * @return DTO da associação criada
+     */
+    public ReceitaColecaoResponse create(Integer collectionId, ReceitaColecaoRequest request) {
+        Colecao collection = collectionRepository.findById(collectionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_COLLECTION_NOT_FOUND));
 
-        Receita receita = receitaRepository.findById(request.getIdReceita())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
+        Receita recipe = recipeRepository.findById(request.getIdReceita())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_RECIPE_NOT_FOUND));
 
-        ReceitaColecao receitaColecao = new ReceitaColecao();
-        receitaColecao.setColecao(colecao);
-        receitaColecao.setReceita(receita);
+        ReceitaColecao newAssociation = new ReceitaColecao();
+        newAssociation.setColecao(collection);
+        newAssociation.setReceita(recipe);
 
-        ReceitaColecao salvo = receitaColecaoRepository.save(receitaColecao);
-
-        return modelMapper.map(salvo, ReceitaColecaoResponse.class);
+        ReceitaColecao saved = recipeCollectionRepository.save(newAssociation);
+        return mapper.map(saved, ReceitaColecaoResponse.class);
     }
 
-    public ReceitaColecaoResponse alterar(Integer idColecao, Integer idReceitaColecao, ReceitaColecaoRequest request) {
-        ReceitaColecao receitaColecao = receitaColecaoRepository.findById(idReceitaColecao)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    /**
+     * Atualiza uma associação existente entre receita e coleção.
+     *
+     * @param collectionId  identificador da coleção
+     * @param associationId identificador da associação
+     * @param request       DTO com o novo ID da receita
+     * @return DTO da associação atualizada
+     */
+    public ReceitaColecaoResponse update(Integer collectionId, Integer associationId, ReceitaColecaoRequest request) {
+        ReceitaColecao association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence à coleção informada
-        if (!receitaColecao.getColecao().getId().equals(idColecao)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receita não pertence à coleção informada");
+        if (!association.getColecao().getId().equals(collectionId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_RECIPE_NOT_OWNED);
         }
 
-        // Atualiza os dados da receita associada, se necessário
-        if (request.getIdReceita() != null && !request.getIdReceita().equals(receitaColecao.getReceita().getId())) {
-            Receita novaReceita = receitaRepository.findById(request.getIdReceita())
+        if (request.getIdReceita() != null && !request.getIdReceita().equals(association.getReceita().getId())) {
+            Receita newRecipe = recipeRepository.findById(request.getIdReceita())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nova receita não encontrada"));
-            receitaColecao.setReceita(novaReceita);
+            association.setReceita(newRecipe);
         }
 
-        // Salva as alterações
-        ReceitaColecao atualizado = receitaColecaoRepository.save(receitaColecao);
-
-        return modelMapper.map(atualizado, ReceitaColecaoResponse.class);
+        ReceitaColecao updated = recipeCollectionRepository.save(association);
+        return mapper.map(updated, ReceitaColecaoResponse.class);
     }
 
-
+    /**
+     * Remove uma associação entre receita e coleção.
+     *
+     * @param collectionId  identificador da coleção
+     * @param associationId identificador da associação
+     * @return DTO da associação removida
+     */
     @Transactional
-    public ReceitaColecaoResponse remover(Integer idColecao, Integer idReceitaColecao) {
-        /// Busca pelo ID ou lança 404
-        ReceitaColecao receitaColecao = receitaColecaoRepository.findById(idReceitaColecao)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    public ReceitaColecaoResponse delete(Integer collectionId, Integer associationId) {
+        ReceitaColecao association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence à coleção informada
-        if (!receitaColecao.getColecao().getId().equals(idColecao)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receita não pertence à coleção informada");
+        if (!association.getColecao().getId().equals(collectionId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_RECIPE_NOT_OWNED);
         }
 
-        /// Deleta pelo ID
-        receitaColecaoRepository.deleteById(idReceitaColecao);
+        recipeCollectionRepository.deleteById(associationId);
+        return mapper.map(association, ReceitaColecaoResponse.class);
+    }
 
-        /// Retorna o DTO do adjetivo deletado
-        return modelMapper.map(receitaColecao, ReceitaColecaoResponse.class);
+    /**
+     * Busca uma associação entre receita e coleção ou lança exceção 404.
+     *
+     * @param id identificador da associação
+     * @return entidade ReceitaColecao
+     */
+    private ReceitaColecao findByIdOrThrow(Integer id) {
+        return recipeCollectionRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
     }
 }

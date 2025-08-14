@@ -1,7 +1,5 @@
 package com.entra21.chef_up.services;
 
-
-import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
 import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioRequest;
 import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioResponse;
 import com.entra21.chef_up.entities.Ingrediente;
@@ -18,96 +16,139 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável por gerenciar a relação entre Ingrediente e Usuario.
+ */
 @Service
 public class IngredienteUsuarioService {
 
-    private final IngredienteRepository ingredienteRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final IngredienteUsuarioRepository ingredienteUsuarioRepository;
-    private final ModelMapper modelMapper;
+    private static final String ERROR_ASSOCIATION_NOT_FOUND = "Associação não encontrada";
+    private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
+    private static final String ERROR_INGREDIENT_NOT_FOUND = "Ingrediente não encontrado";
+    private static final String ERROR_INGREDIENT_NOT_OWNED = "Ingrediente não pertence ao usuário";
 
-    public IngredienteUsuarioService(IngredienteRepository ingredienteRepository, UsuarioRepository usuarioRepository, IngredienteUsuarioRepository ingredienteUsuarioRepository, ModelMapper modelMapper) {
-        this.ingredienteRepository = ingredienteRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.ingredienteUsuarioRepository = ingredienteUsuarioRepository;
-        this.modelMapper = modelMapper;
+    private final IngredienteRepository ingredientRepository;
+    private final UsuarioRepository userRepository;
+    private final IngredienteUsuarioRepository ingredientUserRepository;
+    private final ModelMapper mapper;
+
+    public IngredienteUsuarioService(IngredienteRepository ingredientRepository,
+                                     UsuarioRepository userRepository,
+                                     IngredienteUsuarioRepository ingredientUserRepository,
+                                     ModelMapper mapper) {
+        this.ingredientRepository = ingredientRepository;
+        this.userRepository = userRepository;
+        this.ingredientUserRepository = ingredientUserRepository;
+        this.mapper = mapper;
     }
 
-    public List<IngredienteUsuarioResponse> listarTodos(Integer idUsuario) {
-        return ingredienteUsuarioRepository.findByUsuarioId(idUsuario)
+    /**
+     * Lista todas as associações entre ingrediente e usuário para um determinado usuário.
+     *
+     * @param userId identificador do usuário
+     * @return lista de IngredienteUsuarioResponse
+     */
+    public List<IngredienteUsuarioResponse> listByUser(Integer userId) {
+        return ingredientUserRepository.findByUsuarioId(userId)
                 .stream()
-                .map(etapa -> modelMapper.map(etapa, IngredienteUsuarioResponse.class))
-                .toList();
+                .map(association -> mapper.map(association, IngredienteUsuarioResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public IngredienteUsuarioResponse buscar(Integer idUsuario, Integer idIngredienteUsuario) {
-        IngredienteUsuario ingredienteUsuario = ingredienteUsuarioRepository.findById(idIngredienteUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    /**
+     * Recupera uma associação específica entre ingrediente e usuário.
+     *
+     * @param userId        identificador do usuário
+     * @param associationId identificador da associação
+     * @return DTO da associação encontrada
+     */
+    public IngredienteUsuarioResponse getById(Integer userId, Integer associationId) {
+        IngredienteUsuario association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence ao usuário
-        if (!ingredienteUsuario.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
+        if (!association.getUsuario().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_INGREDIENT_NOT_OWNED);
         }
 
-        return modelMapper.map(ingredienteUsuario, IngredienteUsuarioResponse.class);
+        return mapper.map(association, IngredienteUsuarioResponse.class);
     }
 
-    public IngredienteUsuarioResponse criar(Integer idUsuario, IngredienteUsuarioRequest request) {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    /**
+     * Cria uma nova associação entre ingrediente e usuário.
+     *
+     * @param userId  identificador do usuário
+     * @param request DTO com o ID do ingrediente
+     * @return DTO da associação criada
+     */
+    public IngredienteUsuarioResponse create(Integer userId, IngredienteUsuarioRequest request) {
+        Usuario user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
 
-        Ingrediente ingrediente = ingredienteRepository.findById(request.getIdIngrediente())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
+        Ingrediente ingredient = ingredientRepository.findById(request.getIdIngrediente())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_INGREDIENT_NOT_FOUND));
 
-        IngredienteUsuario ingredienteUsuario = new IngredienteUsuario();
-        ingredienteUsuario.setIngrediente(ingrediente);
-        ingredienteUsuario.setUsuario(usuario);
-        ingredienteUsuario.setDataAdicionada(LocalDateTime.now());
+        IngredienteUsuario newAssociation = new IngredienteUsuario();
+        newAssociation.setUsuario(user);
+        newAssociation.setIngrediente(ingredient);
+        newAssociation.setDataAdicionada(LocalDateTime.now());
 
-        IngredienteUsuario salvo = ingredienteUsuarioRepository.save(ingredienteUsuario);
-
-        return modelMapper.map(salvo, IngredienteUsuarioResponse.class);
+        IngredienteUsuario saved = ingredientUserRepository.save(newAssociation);
+        return mapper.map(saved, IngredienteUsuarioResponse.class);
     }
 
-    public IngredienteUsuarioResponse alterar(Integer idUsuario, Integer idIngredienteUsuario, IngredienteUsuarioRequest request) {
-        IngredienteUsuario ingredienteUsuario = ingredienteUsuarioRepository.findById(idIngredienteUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    /**
+     * Atualiza uma associação existente entre ingrediente e usuário.
+     *
+     * @param userId        identificador do usuário
+     * @param associationId identificador da associação
+     * @param request       DTO com o novo ID do ingrediente
+     * @return DTO da associação atualizada
+     */
+    public IngredienteUsuarioResponse update(Integer userId, Integer associationId, IngredienteUsuarioRequest request) {
+        IngredienteUsuario association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence ao usuário
-        if (!ingredienteUsuario.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
+        if (!association.getUsuario().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_INGREDIENT_NOT_OWNED);
         }
 
-        // Atualiza os dados do adjetivo associado, se necessário
-        if (request.getIdIngrediente() != null && !request.getIdIngrediente().equals(ingredienteUsuario.getIngrediente().getId())) {
-            Ingrediente novoIngrediente = ingredienteRepository.findById(request.getIdIngrediente())
+        if (request.getIdIngrediente() != null && !request.getIdIngrediente().equals(association.getIngrediente().getId())) {
+            Ingrediente newIngredient = ingredientRepository.findById(request.getIdIngrediente())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Novo ingrediente não encontrado"));
-            ingredienteUsuario.setIngrediente(novoIngrediente);
+            association.setIngrediente(newIngredient);
         }
 
-        // Salva as alterações
-        IngredienteUsuario atualizado = ingredienteUsuarioRepository.save(ingredienteUsuario);
-
-        return modelMapper.map(atualizado, IngredienteUsuarioResponse.class);
+        IngredienteUsuario updated = ingredientUserRepository.save(association);
+        return mapper.map(updated, IngredienteUsuarioResponse.class);
     }
 
-
+    /**
+     * Remove uma associação entre ingrediente e usuário.
+     *
+     * @param userId        identificador do usuário
+     * @param associationId identificador da associação
+     * @return DTO da associação removida
+     */
     @Transactional
-    public IngredienteUsuarioResponse remover(Integer idUsuario, Integer idIngredienteUsuario) {
-        /// Busca pelo ID ou lança 404
-        IngredienteUsuario ingredienteUsuario = ingredienteUsuarioRepository.findById(idIngredienteUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Associação não encontrada"));
+    public IngredienteUsuarioResponse delete(Integer userId, Integer associationId) {
+        IngredienteUsuario association = findByIdOrThrow(associationId);
 
-        // Verifica se a associação pertence ao usuário informado
-        if (!ingredienteUsuario.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence ao usuário");
+        if (!association.getUsuario().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_INGREDIENT_NOT_OWNED);
         }
 
-        /// Deleta pelo ID
-        ingredienteUsuarioRepository.deleteById(idIngredienteUsuario);
+        ingredientUserRepository.deleteById(associationId);
+        return mapper.map(association, IngredienteUsuarioResponse.class);
+    }
 
-        /// Retorna o DTO do adjetivo deletado
-        return modelMapper.map(ingredienteUsuario, IngredienteUsuarioResponse.class);
+    /**
+     * Busca uma associação entre ingrediente e usuário ou lança exceção 404.
+     *
+     * @param id identificador da associação
+     * @return entidade IngredienteUsuario
+     */
+    private IngredienteUsuario findByIdOrThrow(Integer id) {
+        return ingredientUserRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
     }
 }

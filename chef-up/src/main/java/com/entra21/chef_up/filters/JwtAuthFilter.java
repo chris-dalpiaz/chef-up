@@ -13,16 +13,20 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtro responsável por interceptar requisições e validar tokens JWT.
+ */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
-    private final JWTService jwtUtil;
+
+    private final JWTService jwtService;
     private final UserDetailsService userDetailsService;
 
     /**
-     * Construtor com injeção do serviço JWT e serviço de detalhes do usuário.
+     * Construtor com injeção de dependência do serviço de JWT e do serviço de detalhes do usuário.
      */
-    public JwtAuthFilter(JWTService jwtUtil, UserDetailsService userDetailsService) {
-        this.jwtUtil = jwtUtil;
+    public JwtAuthFilter(JWTService jwtService, UserDetailsService userDetailsService) {
+        this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 
@@ -32,42 +36,37 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      * @param request  Requisição HTTP
      * @param response Resposta HTTP
      * @param chain    Cadeia de filtros
-     * @throws ServletException Exceção no filtro
-     * @throws IOException      Exceção de IO
+     * @throws ServletException em caso de erro no filtro
+     * @throws IOException      em caso de erro de entrada/saída
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws ServletException, IOException {
 
-        /// Obtém o header Authorization da requisição
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
 
-        /// Verifica se o header existe e começa com "Bearer "
+        // Verifica se o cabeçalho existe e começa com "Bearer "
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);  // Extrai o token (removendo "Bearer ")
-            username = jwtUtil.extractUsername(token);  // Extrai o username do token
+            token = authHeader.substring(7); // Remove o prefixo "Bearer "
+            username = jwtService.extractUsername(token); // Extrai o nome de usuário do token
         }
 
-        /// Se username existe e ainda não está autenticado no contexto do Spring Security
+        // Se o nome de usuário existe e ainda não está autenticado
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            /// Carrega os detalhes do usuário pelo username
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            /// Verifica se o token é válido para o usuário carregado
-            if (jwtUtil.isTokenValid(token, userDetails)) {
-                /// Cria token de autenticação para o Spring Security
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            if (jwtService.isTokenValid(token, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                /// Define detalhes da autenticação com a requisição atual
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                /// Seta o contexto de segurança com a autenticação criada
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        /// Continua a cadeia de filtros da requisição
         chain.doFilter(request, response);
     }
 }

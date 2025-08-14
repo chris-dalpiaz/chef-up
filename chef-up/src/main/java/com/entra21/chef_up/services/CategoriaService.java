@@ -3,7 +3,6 @@ package com.entra21.chef_up.services;
 import com.entra21.chef_up.dtos.Categoria.CategoriaRequest;
 import com.entra21.chef_up.dtos.Categoria.CategoriaResponse;
 import com.entra21.chef_up.entities.Categoria;
-import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.repositories.CategoriaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -11,75 +10,106 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações de CRUD para Categoria.
+ */
 @Service
 public class CategoriaService {
 
-    private final CategoriaRepository categoriaRepository;
-    private final ModelMapper modelMapper;
+    private static final String ERROR_CATEGORY_NOT_FOUND = "Categoria não encontrada";
+
+    private final CategoriaRepository categoryRepository;
+    private final ModelMapper mapper;
+
+    public CategoriaService(CategoriaRepository categoryRepository, ModelMapper mapper) {
+        this.categoryRepository = categoryRepository;
+        this.mapper = mapper;
+    }
 
     /**
-     * Construtor com injeção de dependência do repositório
-     * Permite a classe usar o categoriaRepository para operações CRUD
+     * Lista todas as categorias cadastradas.
+     *
+     * @return lista de CategoriaResponse
      */
-    public CategoriaService(CategoriaRepository categoriaRepository, ModelMapper modelMapper) {
-        this.categoriaRepository = categoriaRepository;
-        this.modelMapper = modelMapper;
+    public List<CategoriaResponse> listAll() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(category -> mapper.map(category, CategoriaResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public List<CategoriaResponse> listarTodos() {
-        return categoriaRepository.findAll().stream().map(u -> modelMapper.map(u, CategoriaResponse.class)).toList();
+    /**
+     * Busca uma categoria pelo seu ID.
+     *
+     * @param id identificador da categoria
+     * @return DTO da categoria encontrada
+     */
+    public CategoriaResponse getById(Integer id) {
+        Categoria category = findByIdOrThrow(id);
+        return mapper.map(category, CategoriaResponse.class);
     }
 
-    public CategoriaResponse buscar(Integer id) {
-        Categoria categoria = categoriaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-
-        return modelMapper.map(categoria, CategoriaResponse.class);
+    /**
+     * Cria uma nova categoria.
+     *
+     * @param request DTO com os dados da categoria
+     * @return DTO da categoria criada
+     */
+    public CategoriaResponse create(CategoriaRequest request) {
+        Categoria newCategory = mapper.map(request, Categoria.class);
+        Categoria saved = categoryRepository.save(newCategory);
+        return mapper.map(saved, CategoriaResponse.class);
     }
 
-    public CategoriaResponse criar(CategoriaRequest request) {
-        /// Converte o DTO de requisição para a entidade
-        Categoria categoria = modelMapper.map(request, Categoria.class);
+    /**
+     * Atualiza uma categoria existente.
+     *
+     * @param id      identificador da categoria
+     * @param request DTO com os dados atualizados
+     * @return DTO da categoria atualizada
+     */
+    public CategoriaResponse update(Integer id, CategoriaRequest request) {
+        Categoria existing = findByIdOrThrow(id);
 
-        /// Salva a entidade no banco de dados
-        Categoria salvo = categoriaRepository.save(categoria);
+        existing.setNome(request.getNome());
+        existing.setIconeUrl(request.getIconeUrl());
 
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, CategoriaResponse.class);
+        Categoria updated = categoryRepository.save(existing);
+        return mapper.map(updated, CategoriaResponse.class);
     }
 
-    public CategoriaResponse alterar(Integer id, CategoriaRequest request) {
-        /// Busca pelo ID ou lança erro 404
-        Categoria alterar = categoriaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-
-        /// Atualiza o nome com os dados do request
-        alterar.setNome(request.getNome());
-        alterar.setIconeUrl(request.getIconeUrl());
-
-        /// Salva a alteração no banco
-        Categoria salvo = categoriaRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, CategoriaResponse.class);
+    /**
+     * Remove uma categoria pelo ID.
+     *
+     * @param id identificador da categoria
+     * @return DTO da categoria removida
+     */
+    public CategoriaResponse delete(Integer id) {
+        Categoria category = findByIdOrThrow(id);
+        categoryRepository.deleteById(id);
+        return mapper.map(category, CategoriaResponse.class);
     }
 
-    public CategoriaResponse remover(Integer id) {
-        /// Busca pelo ID ou lança 404
-        Categoria categoria = categoriaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-
-        /// Deleta pelo ID
-        categoriaRepository.deleteById(id);
-
-        /// Retorna o DTO do deletado
-        return modelMapper.map(categoria, CategoriaResponse.class);
+    /**
+     * Busca uma entidade Categoria pelo ID ou lança exceção 404.
+     *
+     * @param idCategoria identificador da categoria
+     * @return entidade Categoria
+     */
+    public Categoria findByIdOrThrow(Integer idCategoria) {
+        return categoryRepository.findById(idCategoria)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_CATEGORY_NOT_FOUND));
     }
 
-    public Categoria buscarPorId(Integer idCategoria) {
-        return categoriaRepository.findById(idCategoria).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "Categoria não encontrada"));
-    }
-
-    public CategoriaResponse mapParaResponse(Categoria categoria) {
-        return modelMapper.map(categoria, CategoriaResponse.class);
+    /**
+     * Converte uma entidade Categoria para seu DTO de resposta.
+     *
+     * @param category entidade Categoria
+     * @return DTO CategoriaResponse
+     */
+    public CategoriaResponse toResponse(Categoria category) {
+        return mapper.map(category, CategoriaResponse.class);
     }
 }

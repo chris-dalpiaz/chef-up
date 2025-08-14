@@ -8,31 +8,79 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Serviço responsável pela autenticação do usuário e geração de token JWT.
+ */
 @Service
 public class AuthService {
+
+    private static final String ERROR_INVALID_CREDENTIALS = "Credenciais inválidas";
+
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
 
-    public AuthService(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JWTService jwtService) {
+    public AuthService(UserDetailsService userDetailsService,
+                       PasswordEncoder passwordEncoder,
+                       JWTService jwtService) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
 
-    public LoginResponse login(LoginRequest request) {
-        /// Busca o usuário pelo email (username)
-        UserDetails user = userDetailsService.loadUserByUsername(request.email);
+    /**
+     * Autentica um usuário com base nas credenciais fornecidas e retorna um token JWT.
+     *
+     * @param loginRequest DTO contendo email e senha
+     * @return DTO contendo o token JWT
+     */
+    public LoginResponse authenticate(LoginRequest loginRequest) {
+        UserDetails userDetails = loadUser(loginRequest.getEmail());
+        validateCredentials(loginRequest.getSenha(), userDetails.getPassword());
+        String jwtToken = generateToken(userDetails);
+        return buildResponse(jwtToken);
+    }
 
-        /// Verifica se a senha enviada bate com a senha criptografada no banco
-        if (!passwordEncoder.matches(request.senha, user.getPassword())) {
-            throw new BadCredentialsException("Senha inválida");
+    /**
+     * Carrega o usuário pelo username (email) ou lança exceção caso não exista.
+     *
+     * @param username email do usuário
+     * @return detalhes do usuário
+     */
+    private UserDetails loadUser(String username) {
+        return userDetailsService.loadUserByUsername(username);
+    }
+
+    /**
+     * Verifica se a senha informada corresponde à senha armazenada.
+     *
+     * @param rawPassword     senha em texto plano
+     * @param encodedPassword senha criptografada
+     * @throws BadCredentialsException se as senhas não coincidirem
+     */
+    private void validateCredentials(String rawPassword, String encodedPassword) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            throw new BadCredentialsException(ERROR_INVALID_CREDENTIALS);
         }
+    }
 
-        /// Gera token JWT para o usuário autenticado
-        String token = jwtService.generateToken(user);
+    /**
+     * Gera o token JWT para o usuário autenticado.
+     *
+     * @param userDetails detalhes do usuário
+     * @return token JWT
+     */
+    private String generateToken(UserDetails userDetails) {
+        return jwtService.generateToken(userDetails);
+    }
 
-        /// Retorna o token em resposta
-        return new LoginResponse(token);
+    /**
+     * Constrói o DTO de resposta contendo o token JWT.
+     *
+     * @param jwtToken token gerado
+     * @return DTO de resposta
+     */
+    private LoginResponse buildResponse(String jwtToken) {
+        return new LoginResponse(jwtToken);
     }
 }

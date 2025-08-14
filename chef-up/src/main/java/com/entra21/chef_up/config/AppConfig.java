@@ -13,16 +13,24 @@ import org.springframework.context.annotation.Configuration;
  * No Spring, um bean é um objeto que o próprio Spring gerencia durante o ciclo de vida da aplicação.
  * Ele cria, configura e injeta esse objeto onde for necessário, facilitando o reuso e a organização do código.
  */
-@Configuration
-
+@Configuration // Informa ao Spring que esta classe contém definições de beans
 public class AppConfig {
 
-    @Bean
+    /**
+     * Cria e configura um bean do tipo ModelMapper.
+     * O ModelMapper é usado para converter objetos de um tipo para outro (ex: DTO para entidade).
+     *
+     * @return instância configurada de ModelMapper
+     */
+    @Bean // Indica que este método retorna um bean gerenciado pelo Spring
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
+
+        // Configura o mapeamento entre ColecaoRequest e Colecao
+        // Ignora o campo 'id' ao fazer a conversão, para evitar sobrescrever IDs existentes
         mapper.typeMap(ColecaoRequest.class, Colecao.class)
                 .addMappings(m -> m.skip(Colecao::setId));
+
         return mapper;
     }
-
 }
