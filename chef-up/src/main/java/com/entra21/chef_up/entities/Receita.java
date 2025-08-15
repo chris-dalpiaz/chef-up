@@ -2,21 +2,39 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Receita {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nome;
+
     private String descricao;
+
     private Integer tempoPreparoSegundos;
+
     private String dificuldade;
+
     private Integer xpGanho;
 
     @ManyToOne()
     @JoinColumn(name = "categorias_id")
     private Categoria categoria;
+
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
+    private List<IngredienteReceita> ingredientes;
+
+    public List<IngredienteReceita> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteReceita> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
 
     public Integer getId() {
         return id;

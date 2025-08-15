@@ -7,11 +7,13 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Avatar {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nome;
+
     private String imagemUrl;
 
     public Integer getId() {

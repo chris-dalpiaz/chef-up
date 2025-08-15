@@ -1,0 +1,20 @@
+meta {
+  name: criar_usuario
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "João Silvas",
+    "email": "joaoss@email.com",
+    "idPronome": 1,
+    "senhaHash": "hash1"
+  }
+}

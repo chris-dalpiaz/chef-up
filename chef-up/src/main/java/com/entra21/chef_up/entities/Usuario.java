@@ -6,18 +6,33 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nome;
+
     private String email;
+
     private String senhaHash;
+
     private LocalDateTime dataCadastro;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private ProgressoUsuario progressoUsuario;
 
     @ManyToOne()
     @JoinColumn(name = "pronomes_id")
     private Pronome pronome;
+
+    public ProgressoUsuario getProgressoUsuario() {
+        return progressoUsuario;
+    }
+
+    public void setProgressoUsuario(ProgressoUsuario progressoUsuario) {
+        this.progressoUsuario = progressoUsuario;
+    }
 
     public Integer getId() {
         return id;
@@ -65,8 +80,5 @@ public class Usuario {
 
     public void setPronome(Pronome pronome) {
         this.pronome = pronome;
-    }
-
-    public String getPassword() {
     }
 }

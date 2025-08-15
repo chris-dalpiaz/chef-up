@@ -22,18 +22,16 @@ label{
     justify-content: left;
 }
 
-button{
-    font-weight:700;
-}
-
 .botao{
-  display: flex;
-  justify-content: center; 
-  align-items: center;     
-  position: absolute;
-  top: 93%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    display: flex;
+    
+    align-items: center;     
+    position: absolute;
+    top: 93%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 414px;
+    width: 90%;
 }
 
 

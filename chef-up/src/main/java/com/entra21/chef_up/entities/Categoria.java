@@ -7,11 +7,13 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Categoria {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nome;
+
     private String iconeUrl;
 
     public Integer getId() {

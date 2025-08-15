@@ -7,13 +7,17 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Ingrediente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String nome;
+
     private String categoria;
+
     private Integer estimativaValidade;
+
     private String dicaConservacao;
 
     public Integer getId() {

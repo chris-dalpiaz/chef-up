@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class IngredienteReceita {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -12,12 +13,12 @@ public class IngredienteReceita {
     @JoinColumn(name = "ingredientes_id")
     private Ingrediente ingrediente;
 
-
     @ManyToOne()
     @JoinColumn(name = "receitas_id")
     private Receita receita;
 
     private String unidadeMedida;
+
     private Double quantidade;
 
     public Integer getId() {

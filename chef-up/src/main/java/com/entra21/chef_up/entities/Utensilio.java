@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Utensilio {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
