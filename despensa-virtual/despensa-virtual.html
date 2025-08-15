@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despensa Virtual</title>
+    <script src="despensa-virtual.js"></script>
+    <link rel="stylesheet" href="despensa-virtual.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../default.css">
+</head>
+<body>
+    <header>
+        <h1 id="despensavirtual">Despensa Virtual</h1>
+    </header>
+        <section class="barra_progresso">
+            <div class="nivel"><span>10</span></div>
+            <div class="barra_container">
+                <div class="barra_bg">
+                    <div class="barra_xp" style="width: 97%;"></div>
+                </div>
+                <p class="pontos_xp">97 / 100</p>
+            </div>
+        </section>
+
+        <section class="ingredientes">
+            <div class="card">
+                <img src="frango.jpg" alt="Carne de Frango">
+                <div class="info">
+                    <h3>Carne de Frango</h3>
+                    <p>Disponível: 1kg</p>
+                </div>
+                <a href="#" class="seta">→</a>
+            </div>
+            <div class="card">
+                <img src="carne_moida.jpg" alt="Carne Moída">
+                <div class="info">
+                    <h3>Carne Moída</h3>
+                    <p>Disponível: 500g</p>
+                </div>
+                <a href="#" class="seta">→</a>
+            </div>
+            <div class="card">
+                <img src="contrafile.jpg" alt="Contrafilé">
+                <div class="info">
+                    <h3>Contrafilé</h3>
+                    <p>Disponível: 800g</p>
+                </div>
+                <a href="#" class="seta">→</a>
+            </div>
+        </section>
+
+        <div id="barraNavegacao">
+            <a href="#perfil" id="perfil-item" class="nav-item">
+                <span class="icon"><img src="circle-user-round.svg" alt=""></span>
+                <span class="text">Perfil</span>
+            </a>
+            <a href="#despensa" id="despensa-item" class="nav-item">
+                <span class="icon"><img src="package.svg" alt=""></span>
+                <span class="text">Despensa</span>
+            </a>
+            <a href="#receitas" id="receitas-item" class="nav-item">
+                <span class="icon"><img src="utensils.svg" alt=""></span>
+                <span class="text">Receitas</span>
+            </a>
+            <a href="#favoritos" id="favoritos-item" class="nav-item">
+                <span class="icon"><img src="heart.svg" alt=""></span>
+                <span class="text">Favoritos</span>
+            </a>
+            <a href="#configuracoes" id="configuracoes-item" class="nav-item">
+                <span class="icon"><img src="settings.svg" alt=""></span>
+                <span class="text">Configurações</span>
+            </a>
+        </div>
+</body>
+</html>
