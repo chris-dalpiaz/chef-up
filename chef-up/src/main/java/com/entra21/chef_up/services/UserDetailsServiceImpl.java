@@ -38,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return User.builder()
                 .username(user.getEmail())           // Define o e-mail como nome de usuário
-                .password(user.getSenhaHash())       // Define a senha criptografada
+                .password(user.getSenha())       // Define a senha criptografada
                 .authorities("USER")                 // Autoridade padrão (não utilizada)
                 .build();
     }

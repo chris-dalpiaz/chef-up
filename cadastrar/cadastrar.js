@@ -10,7 +10,7 @@ function realizarRegistro() {
 
     console.log(nome, email, senha)
 
-    if (!email || !senha || !nome) {
+    if (!email.trim() || !senha.trim() || !nome.trim()) {
         alert("Preencha todos os campos!");
         return;
     }
@@ -29,12 +29,14 @@ function realizarRegistro() {
         .then((data) => data.json()) // converte a resposta da API para JSON
         .then((response) => {
             console.log(response); // exibe a resposta no console
+            alert("Cadastro realizado com sucesso!");
+            window.location.href = "../Entrar/entrar.html";
         });
-    }
+}
 
-    function configurarEventos() {
-        const botaoRegistrar = document.getElementById("registrar");
-        botaoRegistrar.addEventListener("click", realizarRegistro);
-    }
+function configurarEventos() {
+    const botaoRegistrar = document.getElementById("registrar");
+    botaoRegistrar.addEventListener("click", realizarRegistro);
+}
 
-    window.addEventListener("load", configurarEventos);
+window.addEventListener("load", configurarEventos);

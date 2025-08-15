@@ -15,7 +15,7 @@ public class Usuario {
 
     private String email;
 
-    private String senhaHash;
+    private String senha;
 
     private LocalDateTime dataCadastro;
 
@@ -69,12 +69,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getSenhaHash() {
-        return senhaHash;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setSenhaHash(String senhaHash) {
-        this.senhaHash = senhaHash;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public LocalDateTime getDataCadastro() {

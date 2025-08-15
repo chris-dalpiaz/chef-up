@@ -1,6 +1,5 @@
 package com.entra21.chef_up.services;
 
-import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.ProgressoUsuario;
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
+    private static final String ERROR_RAW_PASSWORD = "Senha não pode ser nula";
 
     private final UsuarioRepository userRepository;
     private final ModelMapper modelMapper;
@@ -77,7 +77,13 @@ public class UsuarioService {
         Usuario user = new Usuario();
         user.setNome(request.getNome());
         user.setEmail(request.getEmail());
-        user.setSenhaHash(passwordEncoder.encode(request.getSenhaHash()));
+
+        if (request.getSenha() == null) {
+            throw new IllegalArgumentException(ERROR_RAW_PASSWORD);
+        }
+        String password = passwordEncoder.encode(request.getSenha());
+
+        user.setSenha(password);
         user.setDataCadastro(LocalDateTime.now());
 
         ProgressoUsuario progress = new ProgressoUsuario();

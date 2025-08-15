@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `chef_up`.`usuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` TEXT NOT NULL,
   `email` TEXT NOT NULL,
-  `senha_hash` TEXT NOT NULL,
+  `senha` TEXT NOT NULL,
   `data_cadastro` DATETIME NOT NULL,
   `pronomes_id` INT NULL,
   `version` INT NOT NULL,
