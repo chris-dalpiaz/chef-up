@@ -47,12 +47,21 @@ header {
     width: 100%;
     background-color: #fff;
     padding: 8px 12px;
-    margin-left: -1.9vh;
+    margin-left: -1.9vh;  
+    /*-1.9vh*/ 
 }
+
+.bg{
+    z-index: -1;
+    background-color: #fff ;
+    width: 100%;
+}
+
 
 /* layout lado a lado (foto) + (nome em cima / barra embaixo) */
 .Usuario {
     height: 13vh;
+    
     display: grid;
     grid-template-columns: 70px 1fr;
     grid-template-rows: auto auto;
