@@ -4,11 +4,28 @@ body {
 }
 
 .box {
-    
+    padding-bottom: 12%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    width: 380px;
 }
 
-input, select {
+#salvar {
+    padding-top: 32px;
+}
+
+input {
     width: 90%;
+    margin: 10px;
+}
+
+p {
+    margin: 10px;
+}
+
+select {
+    width: 96%;
+    margin: 10px;
 }
 
 .adicionar {
@@ -21,6 +38,17 @@ input, select {
     width: 90%;
 }
 
+.title {
+    display: flex;
+    justify-content: center;
+}
+
+.salvar {
+    display: flex;
+    justify-content: center;
+}
+
 .botao {
     font-weight: bold;
+    width: 95%;
 }
