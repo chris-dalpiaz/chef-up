@@ -78,7 +78,7 @@ header {
 .linha-superior {
     grid-area: nome;
     margin-left: 3vh;
-    margin-bottom: -2vh;
+    margin-bottom: -4.5vh;
 }
 
 .nome_usuario {
