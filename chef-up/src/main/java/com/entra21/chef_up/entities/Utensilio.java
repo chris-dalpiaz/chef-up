@@ -1,9 +1,6 @@
 package com.entra21.chef_up.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Utensilio {
@@ -13,6 +10,17 @@ public class Utensilio {
     private Integer id;
 
     private String nome;
+
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     public Integer getId() {
         return id;

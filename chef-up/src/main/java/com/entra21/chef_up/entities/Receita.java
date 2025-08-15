@@ -28,6 +28,17 @@ public class Receita {
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
     private List<IngredienteReceita> ingredientes;
 
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public List<IngredienteReceita> getIngredientes() {
         return ingredientes;
     }

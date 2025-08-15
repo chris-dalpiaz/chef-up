@@ -15,16 +15,27 @@ public class Usuario {
 
     private String email;
 
-    private String senhaHash;
+    private String senha;
 
     private LocalDateTime dataCadastro;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProgressoUsuario progressoUsuario;
 
     @ManyToOne()
     @JoinColumn(name = "pronomes_id")
     private Pronome pronome;
+
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     public ProgressoUsuario getProgressoUsuario() {
         return progressoUsuario;
@@ -58,12 +69,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getSenhaHash() {
-        return senhaHash;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setSenhaHash(String senhaHash) {
-        this.senhaHash = senhaHash;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public LocalDateTime getDataCadastro() {

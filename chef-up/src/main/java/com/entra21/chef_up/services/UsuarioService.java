@@ -1,6 +1,5 @@
 package com.entra21.chef_up.services;
 
-import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.ProgressoUsuario;
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
+    private static final String ERROR_RAW_PASSWORD = "Senha não pode ser nula";
 
     private final UsuarioRepository userRepository;
     private final ModelMapper modelMapper;
@@ -71,11 +71,20 @@ public class UsuarioService {
      * @param request DTO contendo os dados de criação
      * @return DTO do usuário criado
      */
+
     @Transactional
     public UsuarioResponse create(UsuarioRequest request) {
-        Usuario user = toEntity(request);
+        Usuario user = new Usuario();
+        user.setNome(request.getNome());
+        user.setEmail(request.getEmail());
+
+        if (request.getSenha() == null) {
+            throw new IllegalArgumentException(ERROR_RAW_PASSWORD);
+        }
+        String password = passwordEncoder.encode(request.getSenha());
+
+        user.setSenha(password);
         user.setDataCadastro(LocalDateTime.now());
-        user.setSenhaHash(passwordEncoder.encode(user.getSenhaHash()));
 
         ProgressoUsuario progress = new ProgressoUsuario();
         progress.setNivel(1);
@@ -88,6 +97,7 @@ public class UsuarioService {
         Usuario saved = userRepository.save(user);
         return toResponse(saved);
     }
+
 
     /**
      * Atualiza nome e pronome de um usuário existente.
@@ -132,14 +142,18 @@ public class UsuarioService {
     }
 
     /**
-     * Converte entidade Usuario em DTO de resposta, incluindo pronome.
+     * Converte entidade Usuario em DTO de resposta, incluindo pronome se existir.
      *
      * @param user entidade persistida
      * @return DTO de resposta
      */
     private UsuarioResponse toResponse(Usuario user) {
         UsuarioResponse response = modelMapper.map(user, UsuarioResponse.class);
-        response.setPronome(pronounService.toResponse(user.getPronome()));
+
+        if (user.getPronome() != null) {
+            response.setPronome(pronounService.toResponse(user.getPronome()));
+        }
+
         return response;
     }
 

@@ -1,6 +1,7 @@
 package com.entra21.chef_up.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -12,6 +13,7 @@ import java.util.Arrays;
  * O CORS permite que aplicações frontend (como React, Angular, etc.) façam requisições para o backend
  * mesmo estando em domínios diferentes.
  */
+@Configuration
 public class CorsConfig {
 
     /**

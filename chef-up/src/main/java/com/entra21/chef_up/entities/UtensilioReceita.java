@@ -17,6 +17,17 @@ public class UtensilioReceita {
     @JoinColumn(name = "receitas_id")
     private Receita receita;
 
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public Integer getId() {
         return id;
     }

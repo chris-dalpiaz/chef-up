@@ -6,16 +6,16 @@ public class UsuarioRequest {
 
     private String email;
 
-    private String senhaHash;
+    private String senha;
 
     private Integer idPronome;
 
-    public String getSenhaHash() {
-        return senhaHash;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setSenhaHash(String senhaHash) {
-        this.senhaHash = senhaHash;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getNome() {
