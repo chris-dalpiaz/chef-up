@@ -14,11 +14,6 @@ body {
     padding-top: 32px;
 }
 
-input {
-    width: 90%;
-    margin: 10px;
-}
-
 p {
     margin: 10px;
 }
@@ -26,6 +21,9 @@ p {
 select {
     width: 96%;
     margin: 10px;
+    padding: 10px;
+    border-radius: 1vh;
+    border: 1px solid #ccc;
 }
 
 .adicionar {
@@ -46,9 +44,11 @@ select {
 .salvar {
     display: flex;
     justify-content: center;
+    padding-top: 12px;
 }
 
 .botao {
     font-weight: bold;
     width: 95%;
+    padding: 22px 0px !important;
 }
