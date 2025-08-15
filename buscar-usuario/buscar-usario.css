@@ -7,6 +7,7 @@ header {
     margin-top: 1vh;
     display: flex;
     justify-content: center;
+   
 }
 
 .input {
@@ -20,6 +21,7 @@ header {
 .buscar {
     margin-top: -1vh;
     width: 100%;
+   
 
 }
 
@@ -45,17 +47,12 @@ header {
 /* bloco do topo */
 .user {
     width: 100%;
-    background-color: #fff;
+   
     padding: 8px 12px;
     margin-left: -1.9vh;  
     /*-1.9vh*/ 
 }
 
-.bg{
-    z-index: -1;
-    background-color: #fff ;
-    width: 100%;
-}
 
 
 /* layout lado a lado (foto) + (nome em cima / barra embaixo) */
