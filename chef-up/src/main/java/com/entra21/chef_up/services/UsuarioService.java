@@ -71,11 +71,14 @@ public class UsuarioService {
      * @param request DTO contendo os dados de criação
      * @return DTO do usuário criado
      */
+
     @Transactional
     public UsuarioResponse create(UsuarioRequest request) {
-        Usuario user = toEntity(request);
+        Usuario user = new Usuario();
+        user.setNome(request.getNome());
+        user.setEmail(request.getEmail());
+        user.setSenhaHash(passwordEncoder.encode(request.getSenhaHash()));
         user.setDataCadastro(LocalDateTime.now());
-        user.setSenhaHash(passwordEncoder.encode(user.getSenhaHash()));
 
         ProgressoUsuario progress = new ProgressoUsuario();
         progress.setNivel(1);
@@ -88,6 +91,7 @@ public class UsuarioService {
         Usuario saved = userRepository.save(user);
         return toResponse(saved);
     }
+
 
     /**
      * Atualiza nome e pronome de um usuário existente.
@@ -132,14 +136,18 @@ public class UsuarioService {
     }
 
     /**
-     * Converte entidade Usuario em DTO de resposta, incluindo pronome.
+     * Converte entidade Usuario em DTO de resposta, incluindo pronome se existir.
      *
      * @param user entidade persistida
      * @return DTO de resposta
      */
     private UsuarioResponse toResponse(Usuario user) {
         UsuarioResponse response = modelMapper.map(user, UsuarioResponse.class);
-        response.setPronome(pronounService.toResponse(user.getPronome()));
+
+        if (user.getPronome() != null) {
+            response.setPronome(pronounService.toResponse(user.getPronome()));
+        }
+
         return response;
     }
 
