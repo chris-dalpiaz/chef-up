@@ -30,7 +30,7 @@ function realizarRegistro() {
         .then((response) => {
             console.log(response); // exibe a resposta no console
             alert("Cadastro realizado com sucesso!");
-            window.location.href = "../Entrar/entrar.html";
+            window.location.href = "../entrar/entrar.html";
         });
 }
 

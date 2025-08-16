@@ -1,8 +1,11 @@
 package com.entra21.chef_up.entities;
 
+import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -28,6 +31,61 @@ public class Usuario {
 
     @Version
     private Integer version;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<TituloUsuario> titulos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<AdjetivoUsuario> adjetivos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<ReceitaUsuario> receitasConcluidas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<IngredienteUsuario> ingredientes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<AvatarUsuario> avatares = new ArrayList<>();
+
+    public List<TituloUsuario> getTitulos() {
+        return titulos;
+    }
+
+    public void setTitulos(List<TituloUsuario> titulos) {
+        this.titulos = titulos;
+    }
+
+    public List<AdjetivoUsuario> getAdjetivos() {
+        return adjetivos;
+    }
+
+    public void setAdjetivos(List<AdjetivoUsuario> adjetivos) {
+        this.adjetivos = adjetivos;
+    }
+
+    public List<ReceitaUsuario> getReceitasConcluidas() {
+        return receitasConcluidas;
+    }
+
+    public void setReceitasConcluidas(List<ReceitaUsuario> receitasConcluidas) {
+        this.receitasConcluidas = receitasConcluidas;
+    }
+
+    public List<IngredienteUsuario> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteUsuario> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+
+    public List<AvatarUsuario> getAvatares() {
+        return avatares;
+    }
+
+    public void setAvatares(List<AvatarUsuario> avatares) {
+        this.avatares = avatares;
+    }
 
     public Integer getVersion() {
         return version;

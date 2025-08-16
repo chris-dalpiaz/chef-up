@@ -2,6 +2,10 @@ package com.entra21.chef_up.services;
 
 import com.entra21.chef_up.dtos.Login.LoginRequest;
 import com.entra21.chef_up.dtos.Login.LoginResponse;
+import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
+import com.entra21.chef_up.entities.Usuario;
+import com.entra21.chef_up.repositories.UsuarioRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,13 +23,22 @@ public class AuthService {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
+    private final UsuarioRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final UsuarioService userService;
 
     public AuthService(UserDetailsService userDetailsService,
                        PasswordEncoder passwordEncoder,
-                       JWTService jwtService) {
+                       JWTService jwtService,
+                       UsuarioRepository usuarioRepository,
+                       ModelMapper modelMapper,
+                       UsuarioService userService) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.userRepository = usuarioRepository;
+        this.modelMapper = modelMapper;
+        this.userService = userService;
     }
 
     /**
@@ -38,7 +51,11 @@ public class AuthService {
         UserDetails userDetails = loadUser(loginRequest.getEmail());
         validateCredentials(loginRequest.getSenha(), userDetails.getPassword());
         String jwtToken = generateToken(userDetails);
-        return buildResponse(jwtToken);
+
+        // Obtenha o usuário completo e converta para DTO
+        Usuario user = userService.findByEmail(loginRequest.getEmail());
+
+        return buildResponse(jwtToken, modelMapper.map(user, UsuarioResponse.class));
     }
 
     /**
@@ -80,7 +97,7 @@ public class AuthService {
      * @param jwtToken token gerado
      * @return DTO de resposta
      */
-    private LoginResponse buildResponse(String jwtToken) {
-        return new LoginResponse(jwtToken);
+    private LoginResponse buildResponse(String jwtToken, UsuarioResponse user) {
+        return new LoginResponse(jwtToken, user);
     }
 }
