@@ -1,7 +1,10 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
+import com.entra21.chef_up.dtos.Titulo.TituloResponse;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioRequest;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
+import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.entities.Titulo;
 import com.entra21.chef_up.entities.TituloUsuario;
 import com.entra21.chef_up.entities.Usuario;
@@ -150,5 +153,16 @@ public class TituloUsuarioService {
     private TituloUsuario findByIdOrThrow(Integer id) {
         return titleUserRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
+    }
+
+    /**
+     * Converte a entidade Pronome em DTO de resposta.
+     *
+     * @param title entidade persistida
+     * @return DTO de resposta
+     */
+
+    public TituloResponse toResponse(Titulo title) {
+        return mapper.map(title, TituloResponse.class);
     }
 }

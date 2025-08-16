@@ -30,6 +30,9 @@ function realizarLogin() {
     .then((data) => data.json()) // Converte a resposta da API para JSON
     .then((response) => {
         localStorage.setItem("token", response.token); // Salva o token no armazenamento local
+        localStorage.setItem("email", response.usuario.email); // salva o e-mail no armazenamento local
+        localStorage.setItem("pronome", response.usuario.pronome); // salva o pronome
+        
         carregarUsuario(); // Chama a função para carregar os usuários
         console.log(response); // Exibe a resposta no console
         alert("Login realizado com sucesso!"); // Exibe mensagem de sucesso
@@ -44,7 +47,6 @@ function realizarLogin() {
 function configurarEventos() {
     const botaoEntrar = document.getElementById("botao_entrar"); // Obtém o botão de login
     botaoEntrar.addEventListener("click", realizarLogin); // Adiciona o evento de clique para chamar a função de login
-    carregarUsuario();
 }
 
 // Quando a página carregar, configura os eventos

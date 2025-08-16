@@ -16,6 +16,7 @@ import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.repositories.*;
 import com.entra21.chef_up.services.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

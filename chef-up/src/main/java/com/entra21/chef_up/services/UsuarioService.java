@@ -1,5 +1,6 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.ProgressoUsuario;
@@ -9,6 +10,7 @@ import com.entra21.chef_up.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +27,7 @@ public class UsuarioService {
 
     private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
     private static final String ERROR_RAW_PASSWORD = "Senha não pode ser nula";
+    private static final String ERROR_USER_NOT_FOUND_EMAIL = "Usuário não encontrado com o email: ";
 
     private final UsuarioRepository userRepository;
     private final ModelMapper modelMapper;
@@ -169,5 +172,31 @@ public class UsuarioService {
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND)
                 );
+    }
+
+    public Usuario findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND_EMAIL + email));
+    }
+
+    public String getLoggedUserEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public UsuarioResponse getUsuarioResponseById(Integer id) {
+        Usuario usuario = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
+
+        UsuarioResponse response = new UsuarioResponse();
+        response.setNome(usuario.getNome());
+        response.setEmail(usuario.getEmail());
+        response.setPronome(pronounService.toResponse(usuario.getPronome()));
+        response.setTitulos(());
+        response.setAdjetivos(adjetivoMapper.toResponseList(usuario.getAdjetivos()));
+        response.setReceitasConcluidas(receitaMapper.toResponseList(usuario.getReceitasConcluidas()));
+        response.setProgresso(progressoMapper.toResponse(usuario.getProgressoUsuario()));
+        response.setIngredientes(ingredienteMapper.toResponseList(usuario.getIngredientes()));
+        response.setAvatares(avatarMapper.toResponseList(usuario.getAvatares()));
+        return response;
     }
 }

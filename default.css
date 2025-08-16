@@ -1,3 +1,9 @@
+a {
+  color: inherit; /* Herda a cor do elemento pai */
+  text-decoration: none; /* Remove o sublinhado */
+  font: inherit; /* Herda a fonte do elemento pai */
+}
+
 body {
   font-family: 'DM Sans';
   background-color: #fffaf5;
