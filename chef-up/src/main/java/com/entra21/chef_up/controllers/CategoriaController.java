@@ -1,79 +1,83 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.Categoria;
-import com.entra21.chef_up.repository.CategoriaRepository;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.Categoria.CategoriaRequest;
+import com.entra21.chef_up.dtos.Categoria.CategoriaResponse;
+import com.entra21.chef_up.services.CategoriaService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Categoria.
+ */
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    private final CategoriaRepository categoriasRepository;
+    private final CategoriaService categoriaService;
 
-    // Construtor com injeção de dependência
-    public CategoriaController(CategoriaRepository categoriasRepository) {
-        this.categoriasRepository = categoriasRepository;
+    public CategoriaController(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
     }
 
     /**
-     * Lista todas as categorias cadastradas.
+     * Lista todas as categorias cadastradas no sistema.
+     *
+     * @return lista de objetos CategoriaResponse
      */
     @GetMapping
-    public List<Categoria> listar() {
-        return categoriasRepository.findAll();
+    public List<CategoriaResponse> listCategories() {
+        return categoriaService.listAll();
     }
 
     /**
-     * Busca uma categoria específica pelo ID.
-     * Retorna 404 se não for encontrada.
+     * Busca uma categoria pelo ID.
+     * Retorna erro 404 se não encontrada.
+     *
+     * @param idCategoria ID da categoria a ser buscada (na URL)
+     * @return objeto CategoriaResponse encontrado
      */
     @GetMapping("/{idCategoria}")
-    public Categoria buscarCategoria(@PathVariable Integer idCategoria) {
-        return categoriasRepository.findById(idCategoria)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
+    public CategoriaResponse getCategory(@PathVariable Integer idCategoria) {
+        return categoriaService.getById(idCategoria);
     }
 
     /**
      * Cria uma nova categoria.
+     * Recebe os dados da categoria no corpo da requisição (JSON).
+     *
+     * @param request objeto CategoriaRequest a ser criado
+     * @return categoria criada com ID gerado pelo banco
      */
     @PostMapping
-    public Categoria criarCategoria(@RequestBody Categoria categoria) {
-        return categoriasRepository.save(categoria);
+    public CategoriaResponse createCategory(@RequestBody CategoriaRequest request) {
+        return categoriaService.create(request);
     }
 
     /**
-     * Atualiza os dados de uma categoria existente.
-     * Retorna 404 se a categoria não existir.
+     * Atualiza uma categoria existente.
+     * Se não encontrar pelo ID, retorna erro 404.
+     *
+     * @param idCategoria ID da categoria que será atualizada (URL)
+     * @param request     novo conteúdo para atualizar a categoria (JSON no corpo)
+     * @return categoria atualizada
      */
     @PutMapping("/{idCategoria}")
-    public Categoria alterarCategoria(
-            @PathVariable Integer idCategoria,
-            @RequestBody Categoria categoria
-    ) {
-        Categoria alterar = categoriasRepository.findById(idCategoria)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-
-        alterar.setNome(categoria.getNome());
-        alterar.setIconeUrl(categoria.getIconeUrl());
-
-        return categoriasRepository.save(alterar);
+    public CategoriaResponse updateCategory(@PathVariable Integer idCategoria,
+                                            @RequestBody CategoriaRequest request) {
+        return categoriaService.update(idCategoria, request);
     }
 
     /**
      * Remove uma categoria pelo ID.
-     * Retorna a categoria removida ou 404 se não existir.
+     * Retorna a categoria removida para confirmação.
+     * Se não encontrar, retorna erro 404.
+     *
+     * @param idCategoria ID da categoria a ser removida (URL)
+     * @return categoria removida
      */
     @DeleteMapping("/{idCategoria}")
-    public Categoria removerCategoria(@PathVariable Integer idCategoria) {
-        Categoria categoria = categoriasRepository.findById(idCategoria)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoria não encontrada"));
-
-        categoriasRepository.deleteById(idCategoria);
-
-        return categoria;
+    public CategoriaResponse deleteCategory(@PathVariable Integer idCategoria) {
+        return categoriaService.delete(idCategoria);
     }
 }

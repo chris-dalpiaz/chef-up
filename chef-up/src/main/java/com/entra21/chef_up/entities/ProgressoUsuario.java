@@ -2,10 +2,11 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class ProgressoUsuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -15,8 +16,10 @@ public class ProgressoUsuario {
     private Usuario usuario;
 
     private Integer nivel;
+
     private Integer xp;
-    private Date atualizadoEm;
+
+    private LocalDateTime atualizadoEm;
 
     public Integer getId() {
         return id;
@@ -50,11 +53,11 @@ public class ProgressoUsuario {
         this.xp = xp;
     }
 
-    public Date getAtualizadoEm() {
+    public LocalDateTime getAtualizadoEm() {
         return atualizadoEm;
     }
 
-    public void setAtualizadoEm(Date atualizadoEm) {
+    public void setAtualizadoEm(LocalDateTime atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
     }
 }

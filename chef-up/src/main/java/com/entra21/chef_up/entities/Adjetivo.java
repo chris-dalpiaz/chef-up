@@ -7,10 +7,10 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Adjetivo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String nome;
 
     public Integer getId() {
@@ -28,5 +28,4 @@ public class Adjetivo {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
 }

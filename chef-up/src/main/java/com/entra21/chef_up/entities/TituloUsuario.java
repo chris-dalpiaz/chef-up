@@ -2,10 +2,12 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 public class TituloUsuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,7 +20,7 @@ public class TituloUsuario {
     @JoinColumn(name = "usuarios_id")
     private Usuario usuario;
 
-    private Date desbloqueadoEm;
+    private LocalDateTime desbloqueadoEm;
 
     public Integer getId() {
         return id;
@@ -44,11 +46,11 @@ public class TituloUsuario {
         this.usuario = usuario;
     }
 
-    public Date getDesbloqueadoEm() {
+    public LocalDateTime getDesbloqueadoEm() {
         return desbloqueadoEm;
     }
 
-    public void setDesbloqueadoEm(Date desbloqueadoEm) {
+    public void setDesbloqueadoEm(LocalDateTime desbloqueadoEm) {
         this.desbloqueadoEm = desbloqueadoEm;
     }
 }

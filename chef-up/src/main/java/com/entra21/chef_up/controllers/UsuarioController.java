@@ -1,219 +1,277 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.AdjetivoUsuario;
-import com.entra21.chef_up.entities.AvatarUsuario;
-import com.entra21.chef_up.entities.Usuario;
-import com.entra21.chef_up.repository.*;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioRequest;
+import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
+import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioRequest;
+import com.entra21.chef_up.dtos.AvatarUsuario.AvatarUsuarioResponse;
+import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioRequest;
+import com.entra21.chef_up.dtos.IngredienteUsuario.IngredienteUsuarioResponse;
+import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
+import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioResponse;
+import com.entra21.chef_up.dtos.ReceitaUsuario.ReceitaUsuarioRequest;
+import com.entra21.chef_up.dtos.ReceitaUsuario.ReceitaUsuarioResponse;
+import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioRequest;
+import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
+import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
+import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
+import com.entra21.chef_up.repositories.*;
+import com.entra21.chef_up.services.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Controlador REST para operações relacionadas a usuários e seus adjetivos.
+ * Injeção de dependência dos repositórios.
+ * Cada repositório é responsável por gerenciar uma entidade específica no banco de dados.
+ * Isso permite que possamos fazer consultas, salvamentos e exclusões de forma simples.
  */
 @RestController
 @RequestMapping("/usuarios")
+
 public class UsuarioController {
 
-    // Repositórios para acesso ao banco de dados
-    private final UsuarioRepository usuariosRepository;
-    private final AdjetivoRepository adjetivosRepository;
+    private final ProgressoUsuarioService progressoUsuarioService;
+    private final UsuarioRepository usuarioRepository;
     private final AdjetivoUsuarioRepository adjetivoUsuarioRepository;
-    private final AvatarRepository avataresRepository;
     private final AvatarUsuarioRepository avatarUsuarioRepository;
+    private final IngredienteUsuarioRepository ingredienteUsuarioRepository;
+    private final ReceitaUsuarioRepository receitaUsuarioRepository;
+    private final ReceitaRepository receitaRepository;
+    private final TituloUsuarioRepository tituloUsuarioRepository;
+    private final UsuarioService usuarioService;
+    private final AdjetivoUsuarioService adjetivoUsuarioService;
+    private final AvatarUsuarioService avatarUsuarioService;
+    private final IngredienteUsuarioService ingredienteUsuarioService;
+    private final TituloUsuarioService tituloUsuarioService;
+    private final ReceitaUsuarioService receitaUsuarioService;
 
-    // Construtor com injeção de dependência
-    public UsuarioController(UsuarioRepository usuariosRepository,
-                             AdjetivoRepository adjetivosRepository,
+    public UsuarioController(ProgressoUsuarioService progressoUsuarioService,
+                             UsuarioRepository usuarioRepository,
                              AdjetivoUsuarioRepository adjetivoUsuarioRepository,
-                             AvatarRepository avataresRepository,
-                             AvatarUsuarioRepository avatarUsuarioRepository) {
-        this.usuariosRepository = usuariosRepository;
-        this.adjetivosRepository = adjetivosRepository;
+                             AvatarUsuarioRepository avatarUsuarioRepository,
+                             IngredienteUsuarioRepository ingredienteUsuarioRepository,
+                             ReceitaUsuarioRepository receitaUsuarioRepository,
+                             ReceitaRepository receitaRepository,
+                             TituloUsuarioRepository tituloUsuarioRepository,
+                             UsuarioService usuarioService,
+                             AdjetivoUsuarioService adjetivoUsuarioService,
+                             AvatarUsuarioService avatarUsuarioService,
+                             IngredienteUsuarioService ingredienteUsuarioService,
+                             TituloUsuarioService tituloUsuarioService,
+                             ReceitaUsuarioService receitaUsuarioService) {
+        this.progressoUsuarioService = progressoUsuarioService;
+        this.usuarioRepository = usuarioRepository;
         this.adjetivoUsuarioRepository = adjetivoUsuarioRepository;
-        this.avataresRepository = avataresRepository;
         this.avatarUsuarioRepository = avatarUsuarioRepository;
+        this.ingredienteUsuarioRepository = ingredienteUsuarioRepository;
+        this.receitaUsuarioRepository = receitaUsuarioRepository;
+        this.receitaRepository = receitaRepository;
+        this.tituloUsuarioRepository = tituloUsuarioRepository;
+        this.usuarioService = usuarioService;
+        this.adjetivoUsuarioService = adjetivoUsuarioService;
+        this.avatarUsuarioService = avatarUsuarioService;
+        this.ingredienteUsuarioService = ingredienteUsuarioService;
+        this.tituloUsuarioService = tituloUsuarioService;
+        this.receitaUsuarioService = receitaUsuarioService;
     }
 
-    // Lista todos os usuários cadastrados
+    /**
+     * Lista todos os usuários cadastrados.
+     */
     @GetMapping
-    public List<Usuario> listar() {
-        return usuariosRepository.findAll();
+    public List<UsuarioResponse> listUsers() {
+        return usuarioService.listAll();
     }
 
-    // Busca um usuário pelo ID
+    /**
+     * Busca um usuário pelo ID.
+     */
     @GetMapping("/{idUsuario}")
-    public Usuario buscarUsuario(@PathVariable Integer idUsuario) {
-        return usuariosRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+    public UsuarioResponse getUser(@PathVariable Integer idUsuario) {
+        return usuarioService.getById(idUsuario);
     }
 
-    // Cria um novo usuário
-    @PostMapping
-    public Usuario criarUsuario(@RequestBody Usuario usuario) {
-        usuario.setDataCadastro(LocalDateTime.now());
-        //usuario.setSenhaHash(passwordEncoder.encode(usuario.getSenhaHash()));
-        return usuariosRepository.save(usuario);
-    }
-
-    // Atualiza os dados de um usuário existente
+    /**
+     * Atualiza os dados de um usuário existente.
+     */
     @PutMapping("/{idUsuario}")
-    public Usuario alterarUsuario(@PathVariable Integer idUsuario,
-                                  @RequestBody Usuario usuario) {
-        Usuario alterar = usuariosRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        alterar.setNome(usuario.getNome());
-        alterar.setEmail(usuario.getEmail());
-        alterar.setSenhaHash(usuario.getSenhaHash());
-        alterar.setPronome(usuario.getPronome());
-
-        return usuariosRepository.save(alterar);
+    public UsuarioResponse updateUser(@PathVariable Integer idUsuario,
+                                      @RequestBody UsuarioRequest request) {
+        return usuarioService.update(idUsuario, request);
     }
 
-    // Remove um usuário pelo ID
+    /**
+     * Remove um usuário pelo ID.
+     */
     @DeleteMapping("/{idUsuario}")
-    public Usuario removerUsuario(@PathVariable Integer idUsuario) {
-        Usuario usuario = usuariosRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        usuariosRepository.delete(usuario);
-        return usuario;
+    public UsuarioResponse deleteUser(@PathVariable Integer idUsuario) {
+        return usuarioService.delete(idUsuario);
     }
 
-    // Adjetivos do Usuário
+    /* ---------- Adjetivos do Usuário ---------- */
 
-    // Lista todos os adjetivos associados a um usuário
     @GetMapping("/{idUsuario}/adjetivos")
-    public List<AdjetivoUsuario> listarAdjetivos(@PathVariable Integer idUsuario) {
-        return adjetivoUsuarioRepository.findByUsuarioId(idUsuario);
+    public List<AdjetivoUsuarioResponse> listUserAdjectives(@PathVariable Integer idUsuario) {
+        return adjetivoUsuarioService.listByUser(idUsuario);
     }
 
-    // Busca um adjetivo específico de um usuário
-    @GetMapping("/{idUsuario}/adjetivos/{idAdjetivo}")
-    public AdjetivoUsuario buscarAdjetivo(@PathVariable Integer idUsuario,
-                                          @PathVariable Integer idAdjetivo) {
-        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        if (!adjetivo.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adjetivo não pertence ao usuário");
-        }
-
-        return adjetivo;
+    @GetMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
+    public AdjetivoUsuarioResponse getUserAdjective(@PathVariable Integer idUsuario,
+                                                    @PathVariable Integer idAdjetivoUsuario) {
+        return adjetivoUsuarioService.getById(idUsuario, idAdjetivoUsuario);
     }
 
-    // Cria um novo adjetivo associado a um usuário
     @PostMapping("/{idUsuario}/adjetivos")
-    public AdjetivoUsuario criarAdjetivoUsuario(@PathVariable Integer idUsuario,
-                                                @RequestBody AdjetivoUsuario adjetivoUsuario) {
-        Usuario usuario = usuariosRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        adjetivoUsuario.setUsuario(usuario);
-        return adjetivoUsuarioRepository.save(adjetivoUsuario);
+    public AdjetivoUsuarioResponse createUserAdjective(@PathVariable Integer idUsuario,
+                                                       @RequestBody AdjetivoUsuarioRequest request) {
+        return adjetivoUsuarioService.create(idUsuario, request);
     }
 
-    // Edita um adjetivo associado a um usuário
-    @PutMapping("/{idUsuario}/adjetivos/{idAdjetivo}")
-    public AdjetivoUsuario editarAdjetivoUsuario(@PathVariable Integer idUsuario,
-                                                 @PathVariable Integer idAdjetivo,
-                                                 @RequestBody AdjetivoUsuario adjetivoUsuario) {
-        AdjetivoUsuario alterar = adjetivoUsuarioRepository.findById(idAdjetivo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        if (!alterar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adjetivo não pertence ao usuário");
-        }
-
-        alterar.setAdjetivo(adjetivoUsuario.getAdjetivo());
-        return adjetivoUsuarioRepository.save(alterar);
+    @PutMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
+    public AdjetivoUsuarioResponse updateUserAdjective(@PathVariable Integer idUsuario,
+                                                       @PathVariable Integer idAdjetivoUsuario,
+                                                       @RequestBody AdjetivoUsuarioRequest request) {
+        return adjetivoUsuarioService.update(idUsuario, idAdjetivoUsuario, request);
     }
 
-    // Remove um adjetivo associado a um usuário
-    @DeleteMapping("/{idUsuario}/adjetivos/{idAdjetivo}")
-    public AdjetivoUsuario removerAdjetivoUsuario(@PathVariable Integer idUsuario,
-                                                  @PathVariable Integer idAdjetivo) {
-        AdjetivoUsuario adjetivo = adjetivoUsuarioRepository.findById(idAdjetivo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        if (!adjetivo.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Adjetivo não pertence ao usuário");
-        }
-
-        adjetivoUsuarioRepository.delete(adjetivo);
-        return adjetivo;
+    @DeleteMapping("/{idUsuario}/adjetivos/{idAdjetivoUsuario}")
+    public AdjetivoUsuarioResponse deleteUserAdjective(@PathVariable Integer idUsuario,
+                                                       @PathVariable Integer idAdjetivoUsuario) {
+        return adjetivoUsuarioService.delete(idUsuario, idAdjetivoUsuario);
     }
 
-    // Avatares do Usuário
+    /* ---------- Avatares do Usuário ---------- */
 
-    // Lista todos os avatares associados a um usuário
     @GetMapping("/{idUsuario}/avatares")
-    public List<AvatarUsuario> listarAvatares(@PathVariable Integer idUsuario) {
-        return avatarUsuarioRepository.findByUsuarioId(idUsuario);
+    public List<AvatarUsuarioResponse> listUserAvatars(@PathVariable Integer idUsuario) {
+        return avatarUsuarioService.listByUser(idUsuario);
     }
 
-    // Busca um avatar específico de um usuário
-    @GetMapping("/{idUsuario}/avatares/{idAvatar}")
-    public AvatarUsuario buscarAvatar(@PathVariable Integer idUsuario,
-                                          @PathVariable Integer idAvatar) {
-        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatar)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        if (!avatar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
-        }
-
-        return avatar;
+    @GetMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
+    public AvatarUsuarioResponse getUserAvatar(@PathVariable Integer idUsuario,
+                                               @PathVariable Integer idAvatarUsuario) {
+        return avatarUsuarioService.getById(idUsuario, idAvatarUsuario);
     }
 
-    // Cria um novo avatar associado a um usuário
     @PostMapping("/{idUsuario}/avatares")
-    public AvatarUsuario criarAvatarUsuario(@PathVariable Integer idUsuario,
-                                                @RequestBody AvatarUsuario avatarUsuario) {
-
-        Usuario usuario = usuariosRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-
-        avatarUsuario.setDesbloqueadoEm(LocalDateTime.now());
-
-        avatarUsuario.setUsuario(usuario);
-
-        return avatarUsuarioRepository.save(avatarUsuario);
+    public AvatarUsuarioResponse createUserAvatar(@PathVariable Integer idUsuario,
+                                                  @RequestBody AvatarUsuarioRequest request) {
+        return avatarUsuarioService.create(idUsuario, request);
     }
 
-    // Edita um avatar associado a um usuário
-    @PutMapping("/{idUsuario}/avatares/{idAvatar}")
-    public AvatarUsuario editarAvatarUsuario(@PathVariable Integer idUsuario,
-                                                 @PathVariable Integer idAvatar,
-                                                 @RequestBody AvatarUsuario avatarUsuario) {
-
-        AvatarUsuario alterar = avatarUsuarioRepository.findById(idAvatar)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        if (!alterar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
-        }
-
-        alterar.setAvatar(avatarUsuario.getAvatar());
-        return avatarUsuarioRepository.save(alterar);
+    @PutMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
+    public AvatarUsuarioResponse updateUserAvatar(@PathVariable Integer idUsuario,
+                                                  @PathVariable Integer idAvatarUsuario,
+                                                  @RequestBody AvatarUsuarioRequest request) {
+        return avatarUsuarioService.update(idUsuario, idAvatarUsuario, request);
     }
 
-    // Remove um avatar associado a um usuário
-    @DeleteMapping("/{idUsuario}/avatares/{idAvatar}")
-    public AvatarUsuario removerAvatarUsuario(@PathVariable Integer idUsuario,
-                                                  @PathVariable Integer idAvatar) {
-        AvatarUsuario avatar = avatarUsuarioRepository.findById(idAvatar)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar não encontrado"));
-
-        if (!avatar.getUsuario().getId().equals(idUsuario)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avatar não pertence ao usuário");
-        }
-
-        avatarUsuarioRepository.delete(avatar);
-        return avatar;
+    @DeleteMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
+    public AvatarUsuarioResponse deleteUserAvatar(@PathVariable Integer idUsuario,
+                                                  @PathVariable Integer idAvatarUsuario) {
+        return avatarUsuarioService.delete(idUsuario, idAvatarUsuario);
     }
+
+    /* ---------- Estoque Virtual do Usuário ---------- */
+
+    @GetMapping("/{idUsuario}/estoque-virtual")
+    public List<IngredienteUsuarioResponse> listUserIngredients(@PathVariable Integer idUsuario) {
+        return ingredienteUsuarioService.listByUser(idUsuario);
+    }
+
+    @GetMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
+    public IngredienteUsuarioResponse getUserIngredient(@PathVariable Integer idUsuario,
+                                                        @PathVariable Integer idIngredienteUsuario) {
+        return ingredienteUsuarioService.getById(idUsuario, idIngredienteUsuario);
+    }
+
+    @PostMapping("/{idUsuario}/estoque-virtual")
+    public IngredienteUsuarioResponse createUserIngredient(@PathVariable Integer idUsuario,
+                                                           @RequestBody IngredienteUsuarioRequest request) {
+        return ingredienteUsuarioService.create(idUsuario, request);
+    }
+
+    @PutMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
+    public IngredienteUsuarioResponse updateUserIngredient(@PathVariable Integer idUsuario,
+                                                           @PathVariable Integer idIngredienteUsuario,
+                                                           @RequestBody IngredienteUsuarioRequest request) {
+        return ingredienteUsuarioService.update(idUsuario, idIngredienteUsuario, request);
+    }
+
+    @DeleteMapping("/{idUsuario}/estoque-virtual/{idIngredienteUsuario}")
+    public IngredienteUsuarioResponse deleteUserIngredient(@PathVariable Integer idUsuario,
+                                                           @PathVariable Integer idIngredienteUsuario) {
+        return ingredienteUsuarioService.delete(idUsuario, idIngredienteUsuario);
+    }
+
+    /* ---------- Progresso do Usuário ---------- */
+
+    @GetMapping("/{idUsuario}/progresso")
+    public ProgressoUsuarioResponse getUserProgress(@PathVariable Integer idUsuario) {
+        return progressoUsuarioService.getByUserId(idUsuario);
+    }
+
+    @PutMapping("/{idUsuario}/progresso")
+    public ProgressoUsuarioResponse updateUserProgress(@PathVariable Integer idUsuario,
+                                                       @RequestBody ProgressoUsuarioRequest request) {
+        return progressoUsuarioService.update(idUsuario, request);
+    }
+
+    /* ---------- Receitas Concluídas pelo Usuário ---------- */
+
+    @GetMapping("/{idUsuario}/receitas")
+    public List<ReceitaUsuarioResponse> listUserRecipes(@PathVariable Integer idUsuario) {
+        return receitaUsuarioService.listByUser(idUsuario);
+    }
+
+    @GetMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
+    public ReceitaUsuarioResponse getUserRecipe(@PathVariable Integer idUsuario,
+                                                @PathVariable Integer idReceitaUsuario) {
+        return receitaUsuarioService.getById(idUsuario, idReceitaUsuario);
+    }
+
+    @PostMapping("/{idUsuario}/receitas")
+    public ReceitaUsuarioResponse createUserRecipe(@PathVariable Integer idUsuario,
+                                                   @RequestBody ReceitaUsuarioRequest request) {
+        return receitaUsuarioService.create(idUsuario, request);
+    }
+
+    @DeleteMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
+    public ReceitaUsuarioResponse deleteUserRecipe(@PathVariable Integer idUsuario,
+                                                   @PathVariable Integer idReceitaUsuario) {
+        return receitaUsuarioService.delete(idUsuario, idReceitaUsuario);
+    }
+
+    /* ---------- Títulos do Usuário ---------- */
+
+    @GetMapping("/{idUsuario}/titulos")
+    public List<TituloUsuarioResponse> listUserTitles(@PathVariable Integer idUsuario) {
+        return tituloUsuarioService.listAll(idUsuario);
+    }
+
+    @GetMapping("/{idUsuario}/titulos/{idTituloUsuario}")
+    public TituloUsuarioResponse getUserTitle(@PathVariable Integer idUsuario,
+                                              @PathVariable Integer idTituloUsuario) {
+        return tituloUsuarioService.getById(idUsuario, idTituloUsuario);
+    }
+
+    @PostMapping("/{idUsuario}/titulos")
+    public TituloUsuarioResponse createUserTitle(@PathVariable Integer idUsuario,
+                                                 @RequestBody TituloUsuarioRequest request) {
+        return tituloUsuarioService.create(idUsuario, request);
+    }
+
+    @PutMapping("/{idUsuario}/titulos/{idTituloUsuario}")
+    public TituloUsuarioResponse updateUserTitle(@PathVariable Integer idUsuario,
+                                                 @PathVariable Integer idTituloUsuario,
+                                                 @RequestBody TituloUsuarioRequest request) {
+        return tituloUsuarioService.update(idUsuario, idTituloUsuario, request);
+    }
+
+    @DeleteMapping("/{idUsuario}/titulos/{idTituloUsuario}")
+    public TituloUsuarioResponse deleteUserTitle(@PathVariable Integer idUsuario,
+                                                 @PathVariable Integer idTituloUsuario) {
+        return tituloUsuarioService.delete(idUsuario, idTituloUsuario);
+    }
+
 }

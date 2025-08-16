@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class UtensilioReceita {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

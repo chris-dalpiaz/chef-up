@@ -1,78 +1,84 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.Adjetivo;
-import com.entra21.chef_up.repository.AdjetivoRepository;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.Adjetivo.AdjetivoRequest;
+import com.entra21.chef_up.dtos.Adjetivo.AdjetivoResponse;
+import com.entra21.chef_up.services.AdjetivoService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Adjetivo.
+ */
 @RestController
 @RequestMapping("/adjetivos")
 public class AdjetivoController {
 
-    private final AdjetivoRepository adjetivoRepository;
+    private final AdjetivoService adjetivoService;
 
-    // Construtor com injeção de dependência
-    public AdjetivoController(AdjetivoRepository adjetivoRepository) {
-        this.adjetivoRepository = adjetivoRepository;
+    /**
+     * Construtor com injeção do serviço de adjetivo.
+     */
+    public AdjetivoController(AdjetivoService adjetivoService) {
+        this.adjetivoService = adjetivoService;
     }
 
     /**
      * Lista todos os adjetivos cadastrados.
+     *
+     * @return lista com todos os adjetivos encontrados no banco
      */
     @GetMapping
-    public List<Adjetivo> listar() {
-        return adjetivoRepository.findAll();
+    public List<AdjetivoResponse> listAdjectives() {
+        return adjetivoService.listAll();
     }
 
     /**
      * Busca um adjetivo específico pelo ID.
-     * Retorna 404 se não for encontrado.
+     *
+     * @param idAdjetivo id do adjetivo a ser buscado
+     * @return o adjetivo encontrado
+     * @throws ResponseStatusException 404 se não encontrar o adjetivo
      */
     @GetMapping("/{idAdjetivo}")
-    public Adjetivo buscarAdjetivo(@PathVariable Integer idAdjetivo) {
-        return adjetivoRepository.findById(idAdjetivo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
+    public AdjetivoResponse getAdjective(@PathVariable Integer idAdjetivo) {
+        return adjetivoService.getById(idAdjetivo);
     }
 
     /**
-     * Cria um novo adjetivo.
+     * Cria um novo adjetivo no banco.
+     *
+     * @param request dados do novo adjetivo
+     * @return adjetivo criado
      */
     @PostMapping
-    public Adjetivo criarAdjetivo(@RequestBody Adjetivo adjetivo) {
-        return adjetivoRepository.save(adjetivo);
+    public AdjetivoResponse createAdjective(@RequestBody AdjetivoRequest request) {
+        return adjetivoService.create(request);
     }
 
     /**
-     * Atualiza os dados de um adjetivo existente.
-     * Retorna 404 se o adjetivo não existir.
+     * Atualiza os dados de um adjetivo existente pelo ID.
+     *
+     * @param idAdjetivo id do adjetivo a ser alterado
+     * @param request    novos dados do adjetivo
+     * @return adjetivo atualizado
      */
     @PutMapping("/{idAdjetivo}")
-    public Adjetivo alterarAdjetivo(
-            @PathVariable Integer idAdjetivo,
-            @RequestBody Adjetivo adjetivo
-    ) {
-        Adjetivo alterar = adjetivoRepository.findById(idAdjetivo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        alterar.setNome(adjetivo.getNome());
-
-        return adjetivoRepository.save(alterar);
+    public AdjetivoResponse updateAdjective(@PathVariable Integer idAdjetivo,
+                                            @RequestBody AdjetivoRequest request) {
+        return adjetivoService.update(idAdjetivo, request);
     }
 
     /**
      * Remove um adjetivo pelo ID.
-     * Retorna o adjetivo removido ou 404 se não existir.
+     *
+     * @param idAdjetivo id do adjetivo a ser removido
+     * @return o adjetivo removido
+     * @throws ResponseStatusException 404 se não encontrar o adjetivo
      */
     @DeleteMapping("/{idAdjetivo}")
-    public Adjetivo removerAdjetivo(@PathVariable Integer idAdjetivo) {
-        Adjetivo adjetivo = adjetivoRepository.findById(idAdjetivo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Adjetivo não encontrado"));
-
-        adjetivoRepository.deleteById(idAdjetivo);
-
-        return adjetivo;
+    public AdjetivoResponse deleteAdjective(@PathVariable Integer idAdjetivo) {
+        return adjetivoService.delete(idAdjetivo);
     }
 }

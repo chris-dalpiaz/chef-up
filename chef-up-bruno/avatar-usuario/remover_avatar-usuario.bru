@@ -5,9 +5,13 @@ meta {
 }
 
 delete {
-  url: http://localhost:8080/usuarios/1/avatares/1
+  url: http://localhost:8080/usuarios/1/avatares/3
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2Fvc0BlbWFpbC5jb20iLCJpYXQiOjE3NTUxNDI0MjUsImV4cCI6MTc1NTE0NjAyNX0.hEovVfRSk466xSHlVjn1uwAeQfDyBPkA7U82db8dIao
 }
 
 settings {

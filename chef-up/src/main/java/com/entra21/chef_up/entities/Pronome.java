@@ -1,5 +1,6 @@
 package com.entra21.chef_up.entities;
 
+import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,6 +8,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Pronome {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

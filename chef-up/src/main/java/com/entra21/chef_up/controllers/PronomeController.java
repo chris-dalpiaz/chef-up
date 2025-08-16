@@ -1,78 +1,84 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.Pronome;
-import com.entra21.chef_up.repository.PronomeRepository;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.Pronome.PronomeRequest;
+import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
+import com.entra21.chef_up.services.PronomeService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Pronome.
+ */
 @RestController
 @RequestMapping("/pronomes")
 public class PronomeController {
 
-    private final PronomeRepository pronomesRepository;
+    private final PronomeService pronomeService;
 
-    // Construtor com injeção de dependência
-    public PronomeController(PronomeRepository pronomesRepository) {
-        this.pronomesRepository = pronomesRepository;
+    /**
+     * Construtor com injeção de dependência do serviço de pronome.
+     */
+    public PronomeController(PronomeService pronomeService) {
+        this.pronomeService = pronomeService;
     }
 
     /**
      * Lista todos os pronomes cadastrados.
+     *
+     * @return lista com todos os pronomes do banco
      */
     @GetMapping
-    public List<Pronome> listar() {
-        return pronomesRepository.findAll();
+    public List<PronomeResponse> listPronouns() {
+        return pronomeService.listAll();
     }
 
     /**
-     * Busca um pronome específico pelo ID.
-     * Retorna 404 se não for encontrado.
+     * Busca um pronome pelo ID.
+     * Retorna erro 404 se não encontrado.
+     *
+     * @param idPronome ID do pronome na URL
+     * @return pronome encontrado
      */
     @GetMapping("/{idPronome}")
-    public Pronome buscarPronome(@PathVariable Integer idPronome) {
-        return pronomesRepository.findById(idPronome)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pronome não encontrado"));
+    public PronomeResponse getPronoun(@PathVariable Integer idPronome) {
+        return pronomeService.getById(idPronome);
     }
 
     /**
      * Cria um novo pronome.
+     *
+     * @param request dados do novo pronome
+     * @return pronome criado com ID gerado
      */
     @PostMapping
-    public Pronome criarPronome(@RequestBody Pronome pronome) {
-        return pronomesRepository.save(pronome);
+    public PronomeResponse createPronoun(@RequestBody PronomeRequest request) {
+        return pronomeService.create(request);
     }
 
     /**
-     * Atualiza os dados de um pronome existente.
-     * Retorna 404 se o pronome não existir.
+     * Atualiza um pronome existente.
+     * Retorna erro 404 se o pronome não existir.
+     *
+     * @param idPronome ID do pronome a ser atualizado
+     * @param request   novos dados do pronome
+     * @return pronome atualizado
      */
     @PutMapping("/{idPronome}")
-    public Pronome alterarPronome(
-            @PathVariable Integer idPronome,
-            @RequestBody Pronome pronome
-    ) {
-        Pronome alterar = pronomesRepository.findById(idPronome)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pronome não encontrado"));
-
-        alterar.setNome(pronome.getNome());
-
-        return pronomesRepository.save(alterar);
+    public PronomeResponse updatePronoun(@PathVariable Integer idPronome,
+                                         @RequestBody PronomeRequest request) {
+        return pronomeService.update(idPronome, request);
     }
 
     /**
      * Remove um pronome pelo ID.
-     * Retorna o pronome removido ou 404 se não existir.
+     * Retorna o pronome removido ou erro 404 se não existir.
+     *
+     * @param idPronome ID do pronome a ser removido
+     * @return pronome removido
      */
     @DeleteMapping("/{idPronome}")
-    public Pronome removerPronome(@PathVariable Integer idPronome) {
-        Pronome pronome = pronomesRepository.findById(idPronome)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pronome não encontrado"));
-
-        pronomesRepository.deleteById(idPronome);
-
-        return pronome;
+    public PronomeResponse deletePronoun(@PathVariable Integer idPronome) {
+        return pronomeService.delete(idPronome);
     }
 }

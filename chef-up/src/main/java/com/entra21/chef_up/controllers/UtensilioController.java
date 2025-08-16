@@ -1,78 +1,82 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.Utensilio;
-import com.entra21.chef_up.repository.UtensilioRepository;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.Utensilio.UtensilioRequest;
+import com.entra21.chef_up.dtos.Utensilio.UtensilioResponse;
+import com.entra21.chef_up.services.UtensilioService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Utensilio.
+ */
 @RestController
 @RequestMapping("/utensilios")
 public class UtensilioController {
 
-    private final UtensilioRepository utensiliosRepository;
+    private final UtensilioService utensilioService;
 
-    // Construtor com injeção de dependência
-    public UtensilioController(UtensilioRepository utensiliosRepository) {
-        this.utensiliosRepository = utensiliosRepository;
+    /// Construtor para injetar a dependência do serviço
+    public UtensilioController(UtensilioService utensilioService) {
+        this.utensilioService = utensilioService;
     }
 
     /**
      * Lista todos os utensílios cadastrados.
+     *
+     * @return lista de utensílios
      */
     @GetMapping
-    public List<Utensilio> listar() {
-        return utensiliosRepository.findAll();
+    public List<UtensilioResponse> listUtensils() {
+        return utensilioService.listAll();
     }
 
     /**
      * Busca um utensílio específico pelo ID.
-     * Retorna 404 se não for encontrado.
+     * Retorna erro 404 se o utensílio não for encontrado.
+     *
+     * @param idUtensilio ID do utensílio
+     * @return utensílio encontrado
      */
     @GetMapping("/{idUtensilio}")
-    public Utensilio buscarUtensilio(@PathVariable Integer idUtensilio) {
-        return utensiliosRepository.findById(idUtensilio)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
+    public UtensilioResponse getUtensil(@PathVariable Integer idUtensilio) {
+        return utensilioService.getById(idUtensilio);
     }
 
     /**
-     * Cria um novo utensílio.
+     * Cria um novo utensílio com os dados enviados no corpo da requisição.
+     *
+     * @param request dados do novo utensílio
+     * @return utensílio criado
      */
     @PostMapping
-    public Utensilio criarUtensilio(@RequestBody Utensilio utensilio) {
-        return utensiliosRepository.save(utensilio);
+    public UtensilioResponse createUtensil(@RequestBody UtensilioRequest request) {
+        return utensilioService.create(request);
     }
 
     /**
-     * Atualiza os dados de um utensílio existente.
-     * Retorna 404 se o utensílio não existir.
+     * Atualiza os dados de um utensílio existente pelo ID.
+     * Retorna erro 404 se o utensílio não existir.
+     *
+     * @param idUtensilio ID do utensílio
+     * @param request     novos dados do utensílio
+     * @return utensílio atualizado
      */
     @PutMapping("/{idUtensilio}")
-    public Utensilio alterarUtensilio(
-            @PathVariable Integer idUtensilio,
-            @RequestBody Utensilio utensilio
-    ) {
-        Utensilio alterar = utensiliosRepository.findById(idUtensilio)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
-
-        alterar.setNome(utensilio.getNome());
-
-        return utensiliosRepository.save(alterar);
+    public UtensilioResponse updateUtensil(@PathVariable Integer idUtensilio,
+                                           @RequestBody UtensilioRequest request) {
+        return utensilioService.update(idUtensilio, request);
     }
 
     /**
      * Remove um utensílio pelo ID.
-     * Retorna o utensílio removido ou 404 se não existir.
+     * Retorna o utensílio removido ou erro 404 se não existir.
+     *
+     * @param idUtensilio ID do utensílio
+     * @return utensílio removido
      */
     @DeleteMapping("/{idUtensilio}")
-    public Utensilio removerUtensilio(@PathVariable Integer idUtensilio) {
-        Utensilio utensilio = utensiliosRepository.findById(idUtensilio)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
-
-        utensiliosRepository.deleteById(idUtensilio);
-
-        return utensilio;
+    public UtensilioResponse deleteUtensil(@PathVariable Integer idUtensilio) {
+        return utensilioService.delete(idUtensilio);
     }
 }

@@ -2,10 +2,12 @@ package com.entra21.chef_up.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 public class ReceitaUsuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,8 +20,10 @@ public class ReceitaUsuario {
     @JoinColumn(name = "receitas_id")
     private Receita receita;
 
-    private Date dataCricacao;
+    private LocalDateTime dataConclusao;
+
     private String fotoPrato;
+
     private Integer pontuacaoPrato;
 
     public Integer getId() {
@@ -46,12 +50,12 @@ public class ReceitaUsuario {
         this.receita = receita;
     }
 
-    public Date getDataCricacao() {
-        return dataCricacao;
+    public LocalDateTime getDataConclusao() {
+        return dataConclusao;
     }
 
-    public void setDataCricacao(Date dataCricacao) {
-        this.dataCricacao = dataCricacao;
+    public void setDataConclusao(LocalDateTime dataConclusao) {
+        this.dataConclusao = dataConclusao;
     }
 
     public String getFotoPrato() {

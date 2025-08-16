@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 public class AvatarUsuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

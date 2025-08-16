@@ -1,79 +1,82 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.Titulo;
-import com.entra21.chef_up.repository.TituloRepository;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.Titulo.TituloRequest;
+import com.entra21.chef_up.dtos.Titulo.TituloResponse;
+import com.entra21.chef_up.services.TituloService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Titulo.
+ */
 @RestController
 @RequestMapping("/titulos")
 public class TituloController {
 
-    private final TituloRepository titulosRepository;
+    private final TituloService tituloService;
 
-    // Construtor com injeção de dependência
-    public TituloController(TituloRepository titulosRepository) {
-        this.titulosRepository = titulosRepository;
+    /// Construtor com injeção de dependência do serviço
+    public TituloController(TituloService tituloService) {
+        this.tituloService = tituloService;
     }
 
     /**
-     * Lista todos os títulos cadastrados.
+     * Lista todos os títulos cadastrados no banco.
+     *
+     * @return lista de títulos
      */
     @GetMapping
-    public List<Titulo> listar() {
-        return titulosRepository.findAll();
+    public List<TituloResponse> listTitles() {
+        return tituloService.listAll();
     }
 
     /**
-     * Busca um título específico pelo ID.
-     * Retorna 404 se não for encontrado.
+     * Busca um título pelo ID.
+     * Retorna erro 404 se não encontrar.
+     *
+     * @param idTitulo ID do título
+     * @return título encontrado
      */
     @GetMapping("/{idTitulo}")
-    public Titulo buscarTitulo(@PathVariable Integer idTitulo) {
-        return titulosRepository.findById(idTitulo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
+    public TituloResponse getTitle(@PathVariable Integer idTitulo) {
+        return tituloService.getById(idTitulo);
     }
 
     /**
-     * Cria um novo título.
+     * Cria um novo título com os dados enviados no corpo da requisição.
+     *
+     * @param request dados do novo título
+     * @return título criado
      */
     @PostMapping
-    public Titulo criarTitulo(@RequestBody Titulo titulo) {
-        return titulosRepository.save(titulo);
+    public TituloResponse createTitle(@RequestBody TituloRequest request) {
+        return tituloService.create(request);
     }
 
     /**
-     * Atualiza os dados de um título existente.
-     * Retorna 404 se o título não existir.
+     * Atualiza um título existente pelo ID.
+     * Se não existir, retorna erro 404.
+     *
+     * @param idTitulo ID do título
+     * @param request  novos dados do título
+     * @return título atualizado
      */
     @PutMapping("/{idTitulo}")
-    public Titulo alterarTitulo(
-            @PathVariable Integer idTitulo,
-            @RequestBody Titulo titulo
-    ) {
-        Titulo alterar = titulosRepository.findById(idTitulo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
-
-        alterar.setNome(titulo.getNome());
-        alterar.setCondicaoDesbloqueio(titulo.getCondicaoDesbloqueio());
-
-        return titulosRepository.save(alterar);
+    public TituloResponse updateTitle(@PathVariable Integer idTitulo,
+                                      @RequestBody TituloRequest request) {
+        return tituloService.update(idTitulo, request);
     }
 
     /**
      * Remove um título pelo ID.
-     * Retorna o título removido ou 404 se não existir.
+     * Retorna erro 404 se não existir.
+     *
+     * @param idTitulo ID do título
+     * @return título removido
      */
     @DeleteMapping("/{idTitulo}")
-    public Titulo removerTitulo(@PathVariable Integer idTitulo) {
-        Titulo titulo = titulosRepository.findById(idTitulo)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Título não encontrado"));
-
-        titulosRepository.deleteById(idTitulo);
-
-        return titulo;
+    public TituloResponse deleteTitle(@PathVariable Integer idTitulo) {
+        return tituloService.delete(idTitulo);
     }
 }

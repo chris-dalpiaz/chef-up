@@ -1,0 +1,25 @@
+meta {
+  name: editar_receita-colecao
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/colecoes/2/receitas/6
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2FvQGVtYWlsLmNvbSIsImlhdCI6MTc1NTEyMjg2NywiZXhwIjoxNzU1MTI2NDY3fQ.-YGm2-l9LEnv7Y2oFbN9MlL2L62VGDGXH0V7St2nCk0
+}
+
+body:json {
+  {
+    "idReceita": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+}
