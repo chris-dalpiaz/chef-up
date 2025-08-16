@@ -145,3 +145,22 @@ body {
     color: #fcb347;
     text-decoration: none;
 }
+
+#botaoadicionar {
+    display: flex;
+    position: fixed;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    width: 8vh;
+    height: 8vh;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    font-weight: bold;
+    bottom: 10vh;
+    right: 2vh;
+}
+
+#simbolo {
+    font-size: 5vh;
+    background-color: transparent;
+}
