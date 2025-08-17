@@ -6,10 +6,19 @@ import java.time.LocalDateTime;
 
 public class IngredienteUsuarioResponse {
 
+    private Integer id;
+
     private IngredienteResponse ingrediente;
 
     private LocalDateTime dataAdicionada;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public LocalDateTime getDataAdicionada() {
         return dataAdicionada;
     }

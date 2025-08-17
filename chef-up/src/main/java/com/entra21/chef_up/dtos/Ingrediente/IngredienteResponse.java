@@ -2,6 +2,8 @@ package com.entra21.chef_up.dtos.Ingrediente;
 
 public class IngredienteResponse {
 
+    private Integer id;
+
     private String nome;
 
     private String categoria;
@@ -10,6 +12,13 @@ public class IngredienteResponse {
 
     private String dicaConservacao;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getNome() {
         return nome;
     }

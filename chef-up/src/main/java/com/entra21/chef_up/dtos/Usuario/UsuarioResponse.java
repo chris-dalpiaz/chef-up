@@ -12,6 +12,8 @@ import java.util.List;
 
 public class UsuarioResponse {
 
+    private Integer id;
+
     private String nome;
 
     private String email;
@@ -30,6 +32,13 @@ public class UsuarioResponse {
 
     private List<AvatarUsuarioResponse> avatares;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getNome() {
         return nome;
     }
