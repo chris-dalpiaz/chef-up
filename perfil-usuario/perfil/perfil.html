@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -9,11 +9,8 @@
     <script src="../../default.js"></script>
     <link rel="stylesheet" href="../../default.css">
     <link rel="stylesheet" href="perfil.css">
-    <link rel="stylesheet" href="../../default.css">
-    <!-- CSS PADRÃO E FONTE -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <!-- Fonte padrão -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -24,30 +21,27 @@
     <!-- Seção de Perfil -->
     <section class="perfil">
         <div class="foto_usuario">
-            <img src="../../img/placeholder_usuario1.jfif" alt="Foto do usuário">
+            <img id="foto_usuario" src="../../img/placeholder_usuario1.jfif" alt="Avatar do usuário">
         </div>
 
         <div class="dados_usuario">
-            <p class="nome_usuario"><b>tomatinho_</b></p>
-            <p class="titulo_usuario"><i>rainha da cocada</i></p>
+            <p class="nome_usuario"><b></b></p> <!-- JS insere nome -->
+            <p class="titulo_usuario"><i></i></p> <!-- JS insere título -->
 
             <div class="adjetivos_usuario">
-                <span class="adjetivo">extrovertida</span>
-                <span class="adjetivo">fofa</span>
-                <span class="adjetivo">simpática</span>
-                <button type="button" class="botao_pequeno"><b>Configurações</b></button>
+                <!-- JS insere adjetivos e botão -->
             </div>
         </div>
     </section>
 
     <!-- Barra de Progresso -->
     <section class="barra_progresso">
-        <div class="nivel"><span>10</span></div>
+        <div class="nivel"><span>0</span></div> <!-- JS insere nível -->
         <div class="barra_container">
             <div class="barra_bg">
-                <div class="barra_xp" style="width: 97%;"></div>
+                <div class="barra_xp" style="width: 0%;"></div> <!-- JS insere XP -->
             </div>
-            <p class="pontos_xp">97 / 100</p>
+            <p class="pontos_xp">0 / 100</p> <!-- JS insere texto XP -->
         </div>
     </section>
 
@@ -55,41 +49,28 @@
     <section class="pratos_feitos">
         <h2>Pratos Feitos</h2>
         <div class="grid_pratos">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
-            <img src="../../img/comida-placeholder.jpg" alt="prato de comida do usuario">
+            <!-- JS insere imagens dos pratos -->
         </div>
     </section>
-    <section class="">
-        <div class="footer">
-            <div class="footer-item selected" data-icon="👤">
-                <span>Perfil</span>
-            </div>
-            <div class="footer-item" data-icon="🛒">
-                <span>Despensa</span>
-            </div>
-            <div class="footer-item" data-icon="🍽️">
-                <span>Receitas</span>
-            </div>
-            <div class="footer-item" data-icon="⭐">
-                <span>Favoritos</span>
-            </div>
-            <div class="footer-item" data-icon="⚙️">
-                <span>Configurações</span>
-            </div>
-      </div>
+
+    <!-- Rodapé -->
+    <section class="footer">
+        <div class="footer-item selected" data-icon="👤">
+            <span>Perfil</span>
+        </div>
+        <div class="footer-item" data-icon="🛒">
+            <span>Despensa</span>
+        </div>
+        <div class="footer-item" data-icon="🍽️">
+            <span>Receitas</span>
+        </div>
+        <div class="footer-item" data-icon="⭐">
+            <span>Favoritos</span>
+        </div>
+        <div class="footer-item" data-icon="⚙️">
+            <span>Configurações</span>
+        </div>
+    </section>
 </body>
 
 </html>
