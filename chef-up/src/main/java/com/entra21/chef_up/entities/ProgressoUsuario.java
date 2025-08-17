@@ -12,7 +12,7 @@ public class ProgressoUsuario {
     private Integer id;
 
     @OneToOne()
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     private Integer nivel;

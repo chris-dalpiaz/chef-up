@@ -124,9 +124,18 @@ public class UsuarioService {
     public UsuarioResponse update(Integer id, UsuarioRequest request) {
         Usuario user = findEntityById(id);
 
-        user.setNome(request.getNome());
-        Pronome pronoun = pronounService.findEntityById(request.getIdPronome());
-        user.setPronome(pronoun);
+        if (request.getNome() != null && !request.getNome().isBlank()) {
+            user.setNome(request.getNome());
+        }
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            user.setEmail(request.getEmail());
+        }
+
+        if (request.getIdPronome() != null) {
+            Pronome pronoun = pronounService.findEntityById(request.getIdPronome());
+            user.setPronome(pronoun);
+        }
 
         Usuario updated = userRepository.save(user);
         return toResponse(updated);

@@ -14,7 +14,7 @@ public class EtapaReceita {
     private String conteudo;
 
     @ManyToOne()
-    @JoinColumn(name = "receitas_id")
+    @JoinColumn(name = "receita_id")
     private Receita receita;
 
     @Version

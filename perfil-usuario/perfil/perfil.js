@@ -27,35 +27,32 @@ function carregarTitulo() {
     }
 }
 
-// Função que carrega os adjetivos do usuário e os exibe como tags na interface
 function carregarAdjetivos() {
-    // Recupera os adjetivos armazenados no localStorage e converte de JSON para objeto JavaScript
-    const adjetivos = JSON.parse(localStorage.getItem("adjetivos"));
+  const adjetivos = JSON.parse(localStorage.getItem("adjetivos"));
+  const adjetivosContainer = document.querySelector(".adjetivos_usuario");
+  adjetivosContainer.innerHTML = "";
 
-    // Seleciona o elemento HTML onde os adjetivos serão exibidos
-    const adjetivosContainer = document.querySelector(".adjetivos_usuario");
+  if (Array.isArray(adjetivos)) {
+    const nomesUnicos = new Set();
 
-    // Limpa qualquer conteúdo anterior dentro do contêiner (evita duplicações)
-    adjetivosContainer.innerHTML = "";
+    adjetivos.forEach(function (item) {
+      const nomeAdj = item?.adjetivo?.nome?.trim();
+      if (nomeAdj && !nomesUnicos.has(nomeAdj)) {
+        nomesUnicos.add(nomeAdj);
+        const span = document.createElement("span");
+        span.className = "adjetivo";
+        span.textContent = nomeAdj;
+        adjetivosContainer.appendChild(span);
+      }
+    });
+  }
 
-    // Verifica se o conteúdo recuperado é um array válido
-    if (Array.isArray(adjetivos)) {
-
-        // Percorre cada item do array de adjetivos
-        adjetivos.forEach(function (item) {
-
-            // Tenta acessar o nome do adjetivo dentro da estrutura do objeto
-            const nomeAdj = item?.adjetivo?.nome;
-
-            // Se o nome do adjetivo existir, cria uma tag <span> com a classe 'adjetivo' e insere no contêiner
-            if (nomeAdj) {
-                adjetivosContainer.innerHTML += `<span class="adjetivo">${nomeAdj}</span>`;
-            }
-        });
-    }
-
-    // Ao final, adiciona um botão de configurações para que o usuário possa editar seus adjetivos
-    adjetivosContainer.innerHTML += `<button type="button" class="botao_pequeno"><b>Configurações</b></button>`;
+  // Botão de configurações
+  const botao = document.createElement("button");
+  botao.type = "button";
+  botao.className = "botao_pequeno";
+  botao.innerHTML = `<a href="../editar-perfil/editar_perfil.html"><b>Configurações</b></a>`;
+  adjetivosContainer.appendChild(botao);
 }
 
 

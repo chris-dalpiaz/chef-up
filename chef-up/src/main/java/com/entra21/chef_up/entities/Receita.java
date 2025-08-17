@@ -25,7 +25,7 @@ public class Receita {
     private Integer version;
 
     @ManyToOne()
-    @JoinColumn(name = "categorias_id")
+    @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)

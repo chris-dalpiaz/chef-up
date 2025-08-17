@@ -12,11 +12,11 @@ public class AvatarUsuario {
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @ManyToOne()
-    @JoinColumn(name = "avatares_id")
+    @JoinColumn(name = "avatar_id")
     private Avatar avatar;
 
     private LocalDateTime desbloqueadoEm;

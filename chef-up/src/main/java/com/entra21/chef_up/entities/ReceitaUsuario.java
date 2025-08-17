@@ -13,11 +13,11 @@ public class ReceitaUsuario {
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @ManyToOne()
-    @JoinColumn(name = "receitas_id")
+    @JoinColumn(name = "receita_id")
     private Receita receita;
 
     private LocalDateTime dataConclusao;

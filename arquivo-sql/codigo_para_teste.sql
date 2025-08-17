@@ -23,7 +23,7 @@ INSERT INTO categoria (nome, icone_url, version) VALUES
 ('Bebidas', 'icone5.png', 0);
 
 -- 5. receita (depende de categoria)
-INSERT INTO receita (nome, descricao, tempo_preparo_segundos, dificuldade, xp_ganho, categorias_id, version) VALUES
+INSERT INTO receita (nome, descricao, tempo_preparo_segundos, dificuldade, xp_ganho, categoria_id, version) VALUES
 ('Macarrão à Bolonhesa', 'Macarrão com molho de carne', 1800, 'Médio', 50, 1, 0),
 ('Bife Acebolado', 'Carne grelhada com cebola', 1200, 'Fácil', 40, 2, 0),
 ('Salada Colorida', 'Mix de vegetais frescos', 600, 'Fácil', 30, 3, 0),
@@ -31,7 +31,7 @@ INSERT INTO receita (nome, descricao, tempo_preparo_segundos, dificuldade, xp_ga
 ('Suco Natural', 'Suco de frutas frescas', 300, 'Fácil', 20, 5, 0);
 
 -- 6. ingrediente_receita (depende de ingrediente e receita)
-INSERT INTO ingrediente_receita (ingredientes_id, receitas_id, unidade_medida, quantidade, version) VALUES
+INSERT INTO ingrediente_receita (ingrediente_id, receita_id, unidade_medida, quantidade, version) VALUES
 (1, 1, 'g', 200, 0),
 (4, 2, 'g', 150, 0),
 (3, 3, 'un', 2, 0),
@@ -55,7 +55,7 @@ INSERT INTO titulo (nome, condicao_desbloqueio, version) VALUES
 ('Colecionador de Receitas', 'Ter 20 receitas salvas', 0);
 
 -- 9. etapa_receita (depende de receita)
-INSERT INTO etapa_receita (ordem, conteudo, receitas_id, version) VALUES
+INSERT INTO etapa_receita (ordem, conteudo, receita_id, version) VALUES
 (1, 'Cozinhar o macarrão', 1, 0),
 (2, 'Preparar o molho', 1, 0),
 (1, 'Grelhar o bife', 2, 0),
@@ -63,11 +63,9 @@ INSERT INTO etapa_receita (ordem, conteudo, receitas_id, version) VALUES
 
 -- 10. avatar
 INSERT INTO avatar (nome, imagem_url, version) VALUES
-('Chef Pão de Queijo', 'avatar1.png', 0),
-('Chef Sorvete', 'avatar2.png', 0),
-('Chef Pizza', 'avatar3.png', 0),
-('Chef Sushi', 'avatar4.png', 0),
-('Chef Café', 'avatar5.png', 0);
+('Chef Pão de Queijo', 'upload/avatares/paozinho.png', 0),
+('Chef Brócolis', 'upload/avatares/brocolinho.png', 0),
+('Chef Tomate', 'upload/avatares/tomatinho.png', 0);
 
 -- 16. utensilio
 INSERT INTO utensilio (nome, version) VALUES
@@ -76,26 +74,27 @@ INSERT INTO utensilio (nome, version) VALUES
 ('Colher de Pau', 0),
 ('Batedeira', 0),
 ('Liquidificador', 0);
+
 -- DEPOIS DE GERAR USUÁRIO
 
 -- 11. titulo_usuario (depende de titulo e usuario)
-INSERT INTO titulo_usuario (titulos_id, usuarios_id, desbloqueado_em, version) VALUES
+INSERT INTO titulo_usuario (titulo_id, usuario_id, desbloqueado_em, version) VALUES
 (1, 1, NOW(), 0);
 
 -- 12. adjetivo_usuario (depende de adjetivo e usuario)
-INSERT INTO adjetivo_usuario (adjetivos_id, usuarios_id, version) VALUES
+INSERT INTO adjetivo_usuario (adjetivo_id, usuario_id, version) VALUES
 (1, 1, 0);
 
 -- 13. avatar_usuario (depende de avatar e usuario)
-INSERT INTO avatar_usuario (usuarios_id, avatares_id, desbloqueado_em, version) VALUES
+INSERT INTO avatar_usuario (usuario_id, avatar_id, desbloqueado_em, version) VALUES
 (1, 1, NOW(), 0);
 
 -- 14. receita_usuario (depende de usuario e receita)
-INSERT INTO receita_usuario (usuarios_id, receitas_id, data_conclusao, foto_prato, pontuacao_prato, version) VALUES
+INSERT INTO receita_usuario (usuario_id, receita_id, data_conclusao, foto_prato, pontuacao_prato, version) VALUES
 (1, 1, NOW(), 'foto1.png', 5, 0);
 
 -- 17. utensilio_receita (depende de utensilio e receita)
-INSERT INTO utensilio_receita (utensilios_id, receitas_id, version) VALUES
+INSERT INTO utensilio_receita (utensilio_id, receita_id, version) VALUES
 (1, 1, 0),
 (2, 2, 0),
 (3, 3, 0),
@@ -103,9 +102,9 @@ INSERT INTO utensilio_receita (utensilios_id, receitas_id, version) VALUES
 (5, 5, 0);
 
 -- 18. colecao (depende de usuario)
-INSERT INTO colecao (nome, usuarios_id, version) VALUES
+INSERT INTO colecao (nome, usuario_id, version) VALUES
 ('Favoritas', 1, 0);
 
 -- 19. receita_colecao (depende de receita e colecao)
-INSERT INTO receita_colecao (receitas_id, colecoes_id, version) VALUES
+INSERT INTO receita_colecao (receita_id, colecao_id, version) VALUES
 (1, 1, 0);

@@ -13,11 +13,11 @@ public class TituloUsuario {
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name = "titulos_id")
+    @JoinColumn(name = "titulo_id")
     private Titulo titulo;
 
     @ManyToOne()
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     private LocalDateTime desbloqueadoEm;

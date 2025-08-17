@@ -1,5 +1,6 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.Adjetivo.AdjetivoResponse;
 import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioRequest;
 import com.entra21.chef_up.dtos.AdjetivoUsuario.AdjetivoUsuarioResponse;
 import com.entra21.chef_up.entities.Adjetivo;
@@ -27,6 +28,7 @@ public class AdjetivoUsuarioService {
     private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
     private static final String ERROR_ADJECTIVE_NOT_FOUND = "Adjetivo não encontrado";
     private static final String ERROR_ADJECTIVE_NOT_BELONGS_TO_USER = "Adjetivo não pertence ao usuário";
+    private static final String ERROR_ADJECTIVE_ALREADY_ASSOCIATED_WITH_THE_USER = "Adjetivo já associado ao usuário";
 
     private final UsuarioRepository userRepository;
     private final AdjetivoUsuarioRepository adjectiveUserRepository;
@@ -79,6 +81,12 @@ public class AdjetivoUsuarioService {
         Usuario user = findUser(userId);
         Adjetivo adjective = findAdjective(request.getIdAdjetivo());
 
+        // Verifica se já existe associação
+        boolean hasExists = adjectiveUserRepository.existsByUsuarioIdAndAdjetivoId(userId, adjective.getId());
+        if (hasExists) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ERROR_ADJECTIVE_ALREADY_ASSOCIATED_WITH_THE_USER);
+        }
+
         AdjetivoUsuario association = new AdjetivoUsuario();
         association.setUsuario(user);
         association.setAdjetivo(adjective);
@@ -118,12 +126,20 @@ public class AdjetivoUsuarioService {
     @Transactional
     public AdjetivoUsuarioResponse delete(Integer userId, Integer associationId) {
         AdjetivoUsuario association = findAssociationByIdAndValidateUser(userId, associationId);
-        adjectiveUserRepository.deleteById(associationId);
+        adjectiveUserRepository.delete(association);
         return toResponse(association);
     }
 
     public AdjetivoUsuarioResponse toResponse(AdjetivoUsuario userAdjective) {
-        return mapper.map(userAdjective, AdjetivoUsuarioResponse.class);
+        AdjetivoResponse adjResponse = new AdjetivoResponse();
+        adjResponse.setId(userAdjective.getAdjetivo().getId());
+        adjResponse.setNome(userAdjective.getAdjetivo().getNome());
+
+        AdjetivoUsuarioResponse response = new AdjetivoUsuarioResponse();
+        response.setId(userAdjective.getId()); // ID da associação
+        response.setAdjetivo(adjResponse);     // Adjetivo real
+
+        return response;
     }
 
     public List<AdjetivoUsuarioResponse> toResponseList(List<AdjetivoUsuario> adjectives) {
