@@ -16,7 +16,6 @@ import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.repositories.*;
 import com.entra21.chef_up.services.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -229,6 +228,13 @@ public class UsuarioController {
     public ReceitaUsuarioResponse getUserRecipe(@PathVariable Integer idUsuario,
                                                 @PathVariable Integer idReceitaUsuario) {
         return receitaUsuarioService.getById(idUsuario, idReceitaUsuario);
+    }
+
+    @PutMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
+    public ReceitaUsuarioResponse updateUserRecipe(@PathVariable Integer idUsuario,
+                                                 @PathVariable Integer idReceitaUsuario,
+                                                 @RequestBody ReceitaUsuarioRequest request) {
+        return receitaUsuarioService.update(idUsuario, idReceitaUsuario, request);
     }
 
     @PostMapping("/{idUsuario}/receitas")

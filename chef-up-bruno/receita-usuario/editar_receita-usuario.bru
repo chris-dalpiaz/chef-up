@@ -5,13 +5,19 @@ meta {
 }
 
 put {
-  url: http://localhost:8080/usuarios/1/receitas/1
-  body: none
+  url: http://localhost:8080/usuarios/1/receitas/3
+  body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTUzODY1ODAsImV4cCI6MTc1NTM5MDE4MH0.8GBpW_b9G43QLHq1PrIXb6t1YnrodaP0z-QJ4mOL0mE
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTUzOTczMzQsImV4cCI6MTc1NTQwMDkzNH0.y-QdePfY6mnfuwoWzKpnJdOQ65-Q53gBdDV_-s-3qnY
+}
+
+body:json {
+  {
+    "fotoPrato": "upload/foto-receitas/bife-acebolado.jpg"
+  }
 }
 
 settings {

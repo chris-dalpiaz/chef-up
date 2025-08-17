@@ -84,10 +84,21 @@ public class ReceitaUsuarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_RECIPE_NOT_OWNED);
         }
 
+        // Atualiza a receita associada, se necessário
         if (request.getIdReceita() != null && !request.getIdReceita().equals(association.getReceita().getId())) {
             Receita newRecipe = recipeRepository.findById(request.getIdReceita())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nova receita não encontrada"));
             association.setReceita(newRecipe);
+        }
+
+        // Atualiza a foto do prato, se fornecida
+        if (request.getFotoPrato() != null && !request.getFotoPrato().isBlank()) {
+            association.setFotoPrato(request.getFotoPrato());
+        }
+
+        // Atualiza a pontuação do prato, se fornecida
+        if (request.getPontuacaoPrato() != null) {
+            association.setPontuacaoPrato(request.getPontuacaoPrato());
         }
 
         ReceitaUsuario updated = recipeUserRepository.save(association);

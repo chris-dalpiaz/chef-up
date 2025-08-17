@@ -16,31 +16,56 @@ function realizarLogin() {
         return; // Encerra a função se algum campo estiver vazio
     }
 
-    // Envia os dados para a API de login
     fetch("http://localhost:8080/auth/login", {
-        method: "POST", // Método HTTP POST
-        body: JSON.stringify({ // Converte os dados para JSON
-            email,
-            senha
-        }),
+        method: "POST",
+        body: JSON.stringify({ email, senha }),
         headers: {
-            "Content-Type": "application/json", // Informa que o corpo da requisição é JSON
+            "Content-Type": "application/json",
         },
     })
-    .then((data) => data.json()) // Converte a resposta da API para JSON
-    .then((response) => {
-        localStorage.setItem("token", response.token); // Salva o token no armazenamento local
-        localStorage.setItem("email", response.usuario.email); // salva o e-mail no armazenamento local
-        localStorage.setItem("pronome", response.usuario.pronome); // salva o pronome
-        
-        carregarUsuario(); // Chama a função para carregar os usuários
-        console.log(response); // Exibe a resposta no console
-        alert("Login realizado com sucesso!"); // Exibe mensagem de sucesso
-    })
-    .catch((error) => {
-        console.log(error); // Exibe o erro no console
-        alert("Usuário ou senha incorretos"); // Exibe mensagem de erro
-    });
+        .then((data) => data.json())
+        .then((response) => {
+            const usuario = response.usuario;
+
+            // Dados básicos
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("email", usuario.email);
+            localStorage.setItem("nome", usuario.nome);
+            localStorage.setItem("pronome", JSON.stringify(usuario.pronome));
+
+            // Titulos
+            localStorage.setItem("titulos", JSON.stringify(usuario.titulos));
+
+            // Adjetivos
+            localStorage.setItem("adjetivos", JSON.stringify(usuario.adjetivos));
+
+            // Receitas concluídas
+            localStorage.setItem("receitasConcluidas", JSON.stringify(usuario.receitasConcluidas));
+
+            // Progresso
+            localStorage.setItem("progresso", JSON.stringify(usuario.progresso));
+
+            // Ingredientes
+            localStorage.setItem("ingredientes", JSON.stringify(usuario.ingredientes));
+
+            // Avatares
+            localStorage.setItem("avatares", JSON.stringify(usuario.avatares));
+
+            // Chamada de função e feedback
+            carregarUsuario();
+            console.log(response);
+            alert("Login realizado com sucesso!");
+            redirecionarUsuario();
+        })
+        .catch((error) => {
+            console.log(error);
+            alert("Usuário ou senha incorretos");
+        });
+}
+
+function redirecionarUsuario() {
+    console.log("Redirecionando...");
+    window.location.href = "../perfil-usuario/perfil/perfil.html";
 }
 
 // Função que configura os eventos da página

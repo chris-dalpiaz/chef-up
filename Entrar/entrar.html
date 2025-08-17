@@ -18,19 +18,18 @@
 <body>
     <h1>Entrar</h1>
     <div class="formulario">
-        <label for="email">E-mail</label>
-        <input placeholder="emailexemplo@email.com" type="text" name="email" id="input_email">
+        <label for="input_email">E-mail</label>
+        <input placeholder="email@exemplo.com" type="email" name="email" id="input_email" autocomplete="email">
 
-        <label for="senha">Senha</label>
-        <input placeholder="senhaexemplo" type="password" name="senha" id="input_senha">
-        <label for="senha" id="senha"> Esqueceu a Senha?</label>
+        <label for="input_senha">Senha</label>
+        <input placeholder="senhaexemplo" type="password" name="senha" id="input_senha" autocomplete="current-password">
+        Esqueceu a Senha?
     </div>
     <div>
         <div class="botao" id="botao_entrar">
             <button type="button"><b>Entrar</b></button>
         </div>
         <p id="aviso">Não possui conta? <a href="../cadastrar/cadastrar.html"><b>Cadastrar-se</b></a></p>
-
     </div>
 
 </body>
