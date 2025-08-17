@@ -4,10 +4,19 @@ import com.entra21.chef_up.dtos.Avatar.AvatarResponse;
 
 public class AvatarUsuarioResponse {
 
+    private Integer id;
+
     private AvatarResponse avatar;
 
     private Boolean estaAtivo;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public Boolean getEstaAtivo() {
         return estaAtivo;
     }

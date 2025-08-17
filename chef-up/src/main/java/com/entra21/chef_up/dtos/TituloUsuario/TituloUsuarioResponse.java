@@ -7,12 +7,21 @@ import java.time.LocalDateTime;
 
 public class TituloUsuarioResponse {
 
+    private Integer id;
+
     private TituloResponse titulo;
 
     private LocalDateTime desbloqueadoEm;
 
     private Boolean estaAtivo;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public Boolean getEstaAtivo() {
         return estaAtivo;
     }

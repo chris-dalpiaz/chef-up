@@ -4,12 +4,21 @@ import com.entra21.chef_up.dtos.Ingrediente.IngredienteResponse;
 
 public class IngredienteReceitaResponse {
 
+    private Integer id;
+
     private IngredienteResponse ingrediente;
 
     private String unidadeMedida;
 
     private Double quantidade;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public IngredienteResponse getIngrediente() {
         return ingrediente;
     }

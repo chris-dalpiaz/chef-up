@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 public class ReceitaUsuarioResponse {
 
+    private Integer id;
+
     private ReceitaResponse receita;
 
     private LocalDateTime dataConclusao;
@@ -14,6 +16,13 @@ public class ReceitaUsuarioResponse {
 
     private Integer pontuacaoPrato;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public ReceitaResponse getReceita() {
         return receita;
     }

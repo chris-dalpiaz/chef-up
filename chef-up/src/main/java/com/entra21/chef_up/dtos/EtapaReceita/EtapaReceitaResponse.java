@@ -2,10 +2,19 @@ package com.entra21.chef_up.dtos.EtapaReceita;
 
 public class EtapaReceitaResponse {
 
+    private Integer id;
+
     private Integer ordem;
 
     private String conteudo;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public Integer getOrdem() {
         return ordem;
     }

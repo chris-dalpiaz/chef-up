@@ -11,6 +11,8 @@ import java.util.List;
 
 public class ReceitaResponse {
 
+    private Integer id;
+
     private String nome;
 
     private String descricao;
@@ -29,6 +31,13 @@ public class ReceitaResponse {
 
     private List<EtapaReceitaResponse> etapas;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public List<EtapaReceitaResponse> getEtapas() {
         return etapas;
     }
