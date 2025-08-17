@@ -23,12 +23,12 @@ INSERT INTO categoria (nome, icone_url, version) VALUES
 ('Bebidas', 'icone5.png', 0);
 
 -- 5. receita (depende de categoria)
-INSERT INTO receita (nome, descricao, tempo_preparo_segundos, dificuldade, xp_ganho, categoria_id, version) VALUES
-('Macarrão à Bolonhesa', 'Macarrão com molho de carne', 1800, 'Médio', 50, 1, 0),
-('Bife Acebolado', 'Carne grelhada com cebola', 1200, 'Fácil', 40, 2, 0),
-('Salada Colorida', 'Mix de vegetais frescos', 600, 'Fácil', 30, 3, 0),
-('Bolo de Chocolate', 'Bolo fofinho de chocolate', 3600, 'Médio', 60, 4, 0),
-('Suco Natural', 'Suco de frutas frescas', 300, 'Fácil', 20, 5, 0);
+INSERT INTO receita (nome, descricao, tempo_preparo_segundos, dificuldade, xp_ganho, categoria_id, imagem_receita, version) VALUES
+('Macarrão à Bolonhesa', 'Macarrão com molho de carne', 1800, 'Médio', 50, 1, "../upload/receitas-do-sistema/macarrao-a-bolonhesa.png", 0),
+('Bife Acebolado', 'Carne grelhada com cebola', 1200, 'Fácil', 40, 2, "../upload/receitas-do-sistema/bife-acebolado.png", 0),
+('Salada Colorida', 'Mix de vegetais frescos', 600, 'Fácil', 30, 3, "../upload/receitas-do-sistema/salada-colorida.jpg", 0),
+('Bolo de Chocolate', 'Bolo fofinho de chocolate', 3600, 'Médio', 60, 4, "../upload/receitas-do-sistema/bolo-de-chocolate.png", 0),
+('Suco Natural', 'Suco de frutas frescas', 300, 'Fácil', 20, 5, "../upload/receitas-do-sistema/suco-natural.png", 0);
 
 -- 6. ingrediente_receita (depende de ingrediente e receita)
 INSERT INTO ingrediente_receita (ingrediente_id, receita_id, unidade_medida, quantidade, version) VALUES

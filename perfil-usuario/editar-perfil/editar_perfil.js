@@ -132,6 +132,10 @@ async function carregarTitulos() {
 }
 
 async function salvarAlteracoes() {
+  const userId = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
+  const emailAntigo = localStorage.getItem("email");
+
   const nome = document.getElementById("input_cadastro").value.trim();
   const email = document.getElementById("input_email").value.trim();
   const pronomeBtn = document.querySelector(".container_pronomes .ativo");
@@ -178,7 +182,6 @@ async function salvarAlteracoes() {
   // Atualiza adjetivos
   let adjetivoSuccess = true;
   try {
-    // 1. Buscar adjetivos atuais
     const atuaisRes = await fetch(`http://localhost:8080/usuarios/${userId}/adjetivos`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -186,19 +189,16 @@ async function salvarAlteracoes() {
     if (atuaisRes.ok) {
       const atuais = await atuaisRes.json();
 
-      // 2. Excluir todos os anteriores
       const deletePromises = atuais.map(item =>
         fetch(`http://localhost:8080/usuarios/${userId}/adjetivos/${item.id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` }
         })
       );
-      await Promise.all(deletePromises); // aguarda exclusão completa
+      await Promise.all(deletePromises);
 
-      // 3. Pausa rápida para garantir consistência
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // 4. Criar os novos (sem duplicatas)
       const idsUnicos = [...new Set(adjetivosSelecionados)];
       const postPromises = idsUnicos.map(idAdjetivo =>
         fetch(`http://localhost:8080/usuarios/${userId}/adjetivos`, {
@@ -219,24 +219,51 @@ async function salvarAlteracoes() {
   }
 
   if (updateSuccess && adjetivoSuccess) {
-    alert("Perfil atualizado com sucesso!");
-    await carregarAdjetivos(); // 🔄 recarrega lista limpa
-    window.location.href = "../perfil/perfil.html";
+    // Atualiza localStorage com nome, email e pronome
+    if (payload.nome) localStorage.setItem("nome", payload.nome);
+    if (payload.email) localStorage.setItem("email", payload.email);
+    if (payload.idPronome) {
+      const pronomeSelecionado = document.querySelector(`.container_pronomes button[data-id="${payload.idPronome}"]`);
+      if (pronomeSelecionado) {
+        localStorage.setItem("pronome", JSON.stringify({ id: payload.idPronome, nome: pronomeSelecionado.textContent }));
+      }
+    }
+
+    // Atualiza localStorage com título ativo
+    if (tituloSelecionadoId) {
+      const tituloSelecionado = document.querySelector(`.container_titulos button[data-id="${tituloSelecionadoId}"]`);
+      if (tituloSelecionado) {
+        localStorage.setItem("titulos", JSON.stringify([
+          { id: tituloSelecionadoId, titulo: { nome: tituloSelecionado.textContent }, estaAtivo: true }
+        ]));
+      }
+    }
+
+    // Atualiza localStorage com os novos adjetivos
+    const novosAdjetivosRes = await fetch(`http://localhost:8080/usuarios/${userId}/adjetivos`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (novosAdjetivosRes.ok) {
+      const novosAdjetivos = await novosAdjetivosRes.json();
+      localStorage.setItem("adjetivos", JSON.stringify(novosAdjetivos));
+    }
+
+    // 🚨 Verifica se o email foi alterado
+    if (payload.email && payload.email !== emailAntigo) {
+      alert("Email alterado. Por segurança, faça login novamente.");
+      localStorage.clear();
+      window.location.href = "../../entrar/entrar.html";
+    } else {
+      alert("Perfil atualizado com sucesso!");
+      window.location.href = "../perfil/perfil.html";
+    }
+
   } else {
     alert("Erro ao salvar alterações");
   }
-
-  // Atualiza localStorage com os novos adjetivos
-  const novosAdjetivosRes = await fetch(`http://localhost:8080/usuarios/${userId}/adjetivos`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  if (novosAdjetivosRes.ok) {
-    const novosAdjetivos = await novosAdjetivosRes.json();
-    localStorage.setItem("adjetivos", JSON.stringify(novosAdjetivos));
-  }
 }
 
-function redirecionarAlterarAvatar(){
+function redirecionarAlterarAvatar() {
   window.location.href = "../editar_imagem/editar_imagem.html"
 }
 
@@ -246,7 +273,7 @@ function carregarEventos() {
   document.querySelector(".botao_comum").addEventListener("click", salvarAlteracoes);
 
   const alterarAvatar = document.getElementById("btn_avatar");
-  alterarAvatar.addEventListener("click", redirecionarAlterarAvatar); 
+  alterarAvatar.addEventListener("click", redirecionarAlterarAvatar);
 }
 
 window.addEventListener("load", carregarEventos);

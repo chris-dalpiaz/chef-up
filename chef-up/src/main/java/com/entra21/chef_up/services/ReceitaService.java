@@ -100,14 +100,34 @@ public class ReceitaService {
     public ReceitaResponse update(Integer id, ReceitaRequest request) {
         Receita entity = findEntityById(id);
 
-        entity.setNome(request.getNome());
-        entity.setDificuldade(request.getDificuldade());
-        entity.setDescricao(request.getDescricao());
-        entity.setXpGanho(request.getXpGanho());
-        entity.setTempoPreparoSegundos(request.getTempoPreparoSegundos());
+        if (request.getNome() != null) {
+            entity.setNome(request.getNome());
+        }
 
-        Categoria category = categoryService.findByIdOrThrow(request.getIdCategoria());
-        entity.setCategoria(category);
+        if (request.getDificuldade() != null) {
+            entity.setDificuldade(request.getDificuldade());
+        }
+
+        if (request.getDescricao() != null) {
+            entity.setDescricao(request.getDescricao());
+        }
+
+        if (request.getXpGanho() != null) {
+            entity.setXpGanho(request.getXpGanho());
+        }
+
+        if (request.getTempoPreparoSegundos() != null) {
+            entity.setTempoPreparoSegundos(request.getTempoPreparoSegundos());
+        }
+
+        if (request.getImagemReceita() != null) {
+            entity.setImagemReceita(request.getImagemReceita());
+        }
+
+        if (request.getIdCategoria() != null) {
+            Categoria category = categoryService.findByIdOrThrow(request.getIdCategoria());
+            entity.setCategoria(category);
+        }
 
         Receita updated = recipeRepository.save(entity);
         return mapper.map(updated, ReceitaResponse.class);

@@ -209,3 +209,44 @@ body {
 .footer-item.selected {
   color: #FFA336; /* muda a cor do texto para laranja quando o item está selecionado */
 }
+
+/* Container de receitas em grid */
+.receitas_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  padding: 20px 0;
+}
+
+/* Card individual da receita */
+.receita_card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+/* Efeito ao passar o mouse */
+.receita_card:hover {
+  transform: scale(1.03);
+}
+
+/* Imagem da receita */
+.receita_card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Nome da receita */
+.receita_card h2 {
+  font-size: 14px;
+  margin-top: 8px;
+  color: #333;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+}

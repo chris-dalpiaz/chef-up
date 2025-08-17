@@ -46,13 +46,6 @@ function carregarAdjetivos() {
       }
     });
   }
-
-  // Botão de configurações
-  const botao = document.createElement("button");
-  botao.type = "button";
-  botao.className = "botao_pequeno";
-  botao.innerHTML = `<a href="../editar-perfil/editar_perfil.html"><b>Configurações</b></a>`;
-  adjetivosContainer.appendChild(botao);
 }
 
 

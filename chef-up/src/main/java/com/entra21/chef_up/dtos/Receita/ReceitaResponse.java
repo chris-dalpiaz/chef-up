@@ -15,6 +15,8 @@ public class ReceitaResponse {
 
     private String nome;
 
+    private String imagemReceita;
+
     private String descricao;
 
     private Integer tempoPreparoSegundos;
@@ -60,6 +62,14 @@ public class ReceitaResponse {
 
     public void setUtensilios(List<UtensilioReceitaResponse> utensilios) {
         this.utensilios = utensilios;
+    }
+
+    public String getImagemReceita() {
+        return imagemReceita;
+    }
+
+    public void setImagemReceita(String imagemReceita) {
+        this.imagemReceita = imagemReceita;
     }
 
     public String getNome() {

@@ -4,7 +4,7 @@ function carregarUsuario() {
 
     if (!token) { // Se não houver token, o usuário não está autenticado
         console.log("Usuário não autenticado");
-        window.location.href = "../../entrar/entrar.html"; 
+        window.location.href = "../../splash/splash.html"; 
         return; // Encerra a função
     } else {
         console.log("Usuário carregado")

@@ -79,12 +79,23 @@ async function salvarAvatar() {
       body: JSON.stringify({ estaAtivo: true })
     });
 
-    if (res.ok) {
-      alert("Avatar atualizado com sucesso!");
-      window.location.href = "../perfil/perfil.html";
-    } else {
+    if (!res.ok) {
       alert("Erro ao salvar avatar");
+      return;
     }
+
+    // Atualiza localStorage: marca o novo avatar como ativo
+    const avatares = JSON.parse(localStorage.getItem("avatares")) || [];
+
+    const novosAvatares = avatares.map(a => ({
+      ...a,
+      estaAtivo: a.avatar.id === avatarSelecionadoId
+    }));
+
+    localStorage.setItem("avatares", JSON.stringify(novosAvatares));
+
+    alert("Avatar atualizado com sucesso!");
+    window.location.href = "../perfil/perfil.html";
   } catch (error) {
     console.error("Erro ao salvar avatar:", error);
     alert("Erro inesperado ao salvar avatar");
