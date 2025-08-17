@@ -15,6 +15,16 @@ public class ReceitaRequest {
 
     private Integer idCategoria;
 
+    private String imagemReceita;
+
+    public String getImagemReceita() {
+        return imagemReceita;
+    }
+
+    public void setImagemReceita(String imagemReceita) {
+        this.imagemReceita = imagemReceita;
+    }
+
     public String getNome() {
         return nome;
     }

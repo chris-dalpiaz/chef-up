@@ -26,7 +26,7 @@ public class Usuario {
     private ProgressoUsuario progressoUsuario;
 
     @ManyToOne()
-    @JoinColumn(name = "pronomes_id")
+    @JoinColumn(name = "pronome_id")
     private Pronome pronome;
 
     @Version

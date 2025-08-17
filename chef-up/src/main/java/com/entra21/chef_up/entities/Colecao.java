@@ -12,7 +12,7 @@ public class Colecao {
     private String nome;
 
     @ManyToOne()
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @Version

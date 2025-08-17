@@ -1,63 +1,90 @@
 body {
-    margin: 0;
-    padding: 2vh 4vw;
-
+  margin: 0;
+  padding: 2vh 4vw;
+  font-family: 'DM Sans', 'Roboto', sans-serif;
 }
 
 header {
-    display: flex;
-    justify-content: center;
-    margin-bottom: -3vh;
+  display: flex;
+  justify-content: center;
+  margin-bottom: -3vh;
 }
 
 .subtittle {
-    display: flex;
-    align-items: center;
-    background-color: #47B3A899;
-    border-radius: 2vh;
-    height: 4vh;
+  display: flex;
+  align-items: center;
+  background-color: #47B3A899;
+  border-radius: 2vh;
+  height: 4vh;
 }
 
 .subtittle h2 {
-    font-weight: 300;
-    margin-left: 1vh;
-    font-size: 15px;
+  font-weight: 300;
+  margin-left: 1vh;
+  font-size: 15px;
 }
 
-.avatar_inicial{
-    margin-top: 5vh;
-
+.avatar_inicial {
+  margin-top: 5vh;
 }
+
 .grid_avatar {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5vw;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5vw;
 }
 
 .grid_avatar img {
-    margin-top: 1.5vh;
-    display: flex;
-    border-radius: 50%;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    /* mantém proporção quadrada */
-    object-fit: cover;
-    margin-bottom: 1.5vh;
-    border-width: 4px;
-    border-style: solid;
-    border-color: #fffaf5;
+  margin-top: 1.5vh;
+  display: flex;
+  border-radius: 50%;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin-bottom: 1.5vh;
+  border-width: 4px;
+  border-style: solid;
+  border-color: #fffaf5;
+  transition: transform 0.3s, border-color 0.3s;
+  cursor: pointer;
 }
 
 .grid_avatar img:hover {
+  transform: scale(1.05);
+  border-color: #F58700;
+}
 
-    border-width: 4px;
-    transform: scale(1.05);
-    transition: 0.3s; 
-    border-style: solid;
-    border-color: #F58700;
+/* Avatar selecionado */
+.grid_avatar img.ativo {
+  border-color: #47B3A8;
+  box-shadow: 0 0 0 3px #47B3A855;
+}
 
+/* Avatar bloqueado */
+.grid_avatar img.bloqueado {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(100%);
 }
 
 .botao {
-    margin-top: 1vh;
+  margin-top: 1vh;
+  display: flex;
+  justify-content: center;
+}
+
+.botao button {
+  padding: 1vh 3vw;
+  background-color: #47B3A8;
+  color: white;
+  border: none;
+  border-radius: 2vh;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.botao button:hover {
+  background-color: #3a9c91;
 }

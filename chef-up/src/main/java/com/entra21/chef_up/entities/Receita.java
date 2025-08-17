@@ -24,8 +24,10 @@ public class Receita {
     @Version
     private Integer version;
 
+    private String imagemReceita;
+
     @ManyToOne()
-    @JoinColumn(name = "categorias_id")
+    @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
@@ -36,6 +38,14 @@ public class Receita {
 
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
     private List<EtapaReceita> etapas;
+
+    public String getImagemReceita() {
+        return imagemReceita;
+    }
+
+    public void setImagemReceita(String imagemReceita) {
+        this.imagemReceita = imagemReceita;
+    }
 
     public List<EtapaReceita> getEtapas() {
         return etapas;

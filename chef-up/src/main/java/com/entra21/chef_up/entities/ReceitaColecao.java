@@ -10,11 +10,11 @@ public class ReceitaColecao {
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name = "receitas_id")
+    @JoinColumn(name = "receita_id")
     private Receita receita;
 
     @ManyToOne()
-    @JoinColumn(name = "colecoes_id")
+    @JoinColumn(name = "colecao_id")
     private Colecao colecao;
 
     @Version

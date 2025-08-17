@@ -28,6 +28,7 @@ public class IngredienteUsuarioService {
     private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
     private static final String ERROR_INGREDIENT_NOT_FOUND = "Ingrediente não encontrado";
     private static final String ERROR_INGREDIENT_NOT_OWNED = "Ingrediente não pertence ao usuário";
+    private static final String ERROR_INGREDIENTE_ALREADY_EXISTS = "Ingrediente já está na despensa do usuário";
 
     private final IngredienteRepository ingredientRepository;
     private final UsuarioRepository userRepository;
@@ -88,6 +89,12 @@ public class IngredienteUsuarioService {
         Ingrediente ingredient = ingredientRepository.findById(request.getIdIngrediente())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_INGREDIENT_NOT_FOUND));
 
+        // Verifica se já existe esse ingrediente para o usuário
+        boolean jaExiste = ingredientUserRepository.existsByUsuarioAndIngrediente(user, ingredient);
+        if (jaExiste) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ERROR_INGREDIENTE_ALREADY_EXISTS);
+        }
+
         IngredienteUsuario newAssociation = new IngredienteUsuario();
         newAssociation.setUsuario(user);
         newAssociation.setIngrediente(ingredient);
@@ -96,6 +103,7 @@ public class IngredienteUsuarioService {
         IngredienteUsuario saved = ingredientUserRepository.save(newAssociation);
         return mapper.map(saved, IngredienteUsuarioResponse.class);
     }
+
 
     /**
      * Atualiza uma associação existente entre ingrediente e usuário.

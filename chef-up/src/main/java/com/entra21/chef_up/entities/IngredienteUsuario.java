@@ -12,11 +12,11 @@ public class IngredienteUsuario {
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @ManyToOne()
-    @JoinColumn(name = "ingredientes_id")
+    @JoinColumn(name = "ingrediente_id")
     private Ingrediente ingrediente;
 
     private LocalDateTime dataAdicionada;

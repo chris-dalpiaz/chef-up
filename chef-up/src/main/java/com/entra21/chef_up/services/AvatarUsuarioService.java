@@ -17,9 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Serviço responsável por gerenciar a relação entre Avatar e Usuario.
- */
 @Service
 public class AvatarUsuarioService {
 
@@ -43,26 +40,13 @@ public class AvatarUsuarioService {
         this.mapper = mapper;
     }
 
-    /**
-     * Lista todas as associações entre avatar e usuário para um determinado usuário.
-     *
-     * @param userId identificador do usuário
-     * @return lista de AvatarUsuarioResponse
-     */
     public List<AvatarUsuarioResponse> listByUser(Integer userId) {
         return avatarUserRepository.findByUsuarioId(userId)
                 .stream()
-                .map(association -> mapper.map(association, AvatarUsuarioResponse.class))
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Recupera uma associação específica entre avatar e usuário.
-     *
-     * @param userId        identificador do usuário
-     * @param associationId identificador da associação
-     * @return DTO da associação encontrada
-     */
     public AvatarUsuarioResponse getById(Integer userId, Integer associationId) {
         AvatarUsuario association = findByIdOrThrow(associationId);
 
@@ -70,16 +54,9 @@ public class AvatarUsuarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_AVATAR_NOT_OWNED);
         }
 
-        return mapper.map(association, AvatarUsuarioResponse.class);
+        return toResponse(association);
     }
 
-    /**
-     * Cria uma nova associação entre avatar e usuário.
-     *
-     * @param userId  identificador do usuário
-     * @param request DTO com o ID do avatar
-     * @return DTO da associação criada
-     */
     public AvatarUsuarioResponse create(Integer userId, AvatarUsuarioRequest request) {
         Usuario user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
@@ -93,46 +70,29 @@ public class AvatarUsuarioService {
         newAssociation.setEstaAtivo(false);
 
         AvatarUsuario saved = avatarUserRepository.save(newAssociation);
-        return mapper.map(saved, AvatarUsuarioResponse.class);
+        return toResponse(saved);
     }
 
     /**
-     * Atualiza uma associação existente entre avatar e usuário.
-     *
-     * @param userId        identificador do usuário
-     * @param associationId identificador da associação
-     * @param request       DTO com o novo ID do avatar
-     * @return DTO da associação atualizada
+     * Atualiza o avatar ativo do usuário com base no ID do avatar.
+     * Este método assume que o avatar já está desbloqueado para o usuário.
      */
-    public AvatarUsuarioResponse update(Integer userId, Integer associationId, AvatarUsuarioRequest request) {
-        AvatarUsuario association = findByIdOrThrow(associationId);
+    public AvatarUsuarioResponse update(Integer userId, Integer avatarId, AvatarUsuarioRequest request) {
+        AvatarUsuario association = findByUsuarioIdAndAvatarIdOrThrow(userId, avatarId);
 
-        if (!association.getUsuario().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_AVATAR_NOT_OWNED);
-        }
-
-        if (request.getIdAvatar() != null && !request.getIdAvatar().equals(association.getAvatar().getId())) {
-            Avatar newAvatar = avatarRepository.findById(request.getIdAvatar())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Novo avatar não encontrado"));
-            association.setAvatar(newAvatar);
-        }
-
-        // Verifica se o campo estaAtivo foi informado e atualiza
         if (request.getEstaAtivo() != null) {
-            association.setEstaAtivo(request.getEstaAtivo());
+            // Desativa todos os outros avatares do usuário
+            List<AvatarUsuario> todos = avatarUserRepository.findByUsuarioId(userId);
+            todos.forEach(a -> a.setEstaAtivo(false));
+            association.setEstaAtivo(true);
+            todos.add(association); // garante que o avatar selecionado está na lista
+
+            avatarUserRepository.saveAll(todos);
         }
 
-        AvatarUsuario updated = avatarUserRepository.save(association);
-        return mapper.map(updated, AvatarUsuarioResponse.class);
+        return toResponse(association);
     }
 
-    /**
-     * Remove uma associação entre avatar e usuário.
-     *
-     * @param userId        identificador do usuário
-     * @param associationId identificador da associação
-     * @return DTO da associação removida
-     */
     @Transactional
     public AvatarUsuarioResponse delete(Integer userId, Integer associationId) {
         AvatarUsuario association = findByIdOrThrow(associationId);
@@ -142,17 +102,16 @@ public class AvatarUsuarioService {
         }
 
         avatarUserRepository.deleteById(associationId);
-        return mapper.map(association, AvatarUsuarioResponse.class);
+        return toResponse(association);
     }
 
-    /**
-     * Busca uma associação entre avatar e usuário ou lança exceção 404.
-     *
-     * @param id identificador da associação
-     * @return entidade AvatarUsuario
-     */
     private AvatarUsuario findByIdOrThrow(Integer id) {
         return avatarUserRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
+    }
+
+    private AvatarUsuario findByUsuarioIdAndAvatarIdOrThrow(Integer usuarioId, Integer avatarId) {
+        return avatarUserRepository.findByUsuarioIdAndAvatarId(usuarioId, avatarId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
     }
 

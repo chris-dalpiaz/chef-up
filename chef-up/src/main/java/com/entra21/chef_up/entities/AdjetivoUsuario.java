@@ -3,6 +3,12 @@ package com.entra21.chef_up.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(
+        name = "adjetivo_usuario",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"usuario_id", "adjetivo_id"})
+        }
+)
 public class AdjetivoUsuario {
 
     @Id
@@ -10,11 +16,11 @@ public class AdjetivoUsuario {
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name = "adjetivos_id")
+    @JoinColumn(name = "adjetivo_id")
     private Adjetivo adjetivo;
 
     @ManyToOne()
-    @JoinColumn(name = "usuarios_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @Version

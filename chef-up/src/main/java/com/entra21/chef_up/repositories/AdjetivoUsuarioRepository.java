@@ -8,5 +8,6 @@ import java.util.List;
 public interface AdjetivoUsuarioRepository extends JpaRepository<AdjetivoUsuario, Integer> {
 
     List<AdjetivoUsuario> findByUsuarioId(Integer idUsuario);
+    boolean existsByUsuarioIdAndAdjetivoId(Integer usuarioId, Integer adjetivoId);
 
 }

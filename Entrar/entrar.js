@@ -33,6 +33,9 @@ function realizarLogin() {
             localStorage.setItem("nome", usuario.nome);
             localStorage.setItem("pronome", JSON.stringify(usuario.pronome));
 
+            // Id do usuário
+            localStorage.setItem("id", JSON.stringify(usuario.id));
+
             // Titulos
             localStorage.setItem("titulos", JSON.stringify(usuario.titulos));
 
@@ -50,6 +53,7 @@ function realizarLogin() {
 
             // Avatares
             localStorage.setItem("avatares", JSON.stringify(usuario.avatares));
+
 
             // Chamada de função e feedback
             carregarUsuario();
