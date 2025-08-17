@@ -4,7 +4,15 @@ public class TituloUsuarioRequest {
 
     private Integer idTitulo;
 
+    private Boolean estaAtivo;
 
+    public Boolean getEstaAtivo() {
+        return estaAtivo;
+    }
+
+    public void setEstaAtivo(Boolean estaAtivo) {
+        this.estaAtivo = estaAtivo;
+    }
     public Integer getIdTitulo() {
         return idTitulo;
     }

@@ -1,5 +1,6 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.Receita.ReceitaResponse;
 import com.entra21.chef_up.dtos.ReceitaUsuario.ReceitaUsuarioRequest;
 import com.entra21.chef_up.dtos.ReceitaUsuario.ReceitaUsuarioResponse;
 import com.entra21.chef_up.entities.Receita;
@@ -18,9 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Serviço responsável por gerenciar a relação entre Receita e Usuario.
- */
 @Service
 public class ReceitaUsuarioService {
 
@@ -44,26 +42,13 @@ public class ReceitaUsuarioService {
         this.mapper = mapper;
     }
 
-    /**
-     * Lista todas as associações entre receita e usuário para um determinado usuário.
-     *
-     * @param userId identificador do usuário
-     * @return lista de ReceitaUsuarioResponse
-     */
     public List<ReceitaUsuarioResponse> listByUser(Integer userId) {
         return recipeUserRepository.findByUsuarioId(userId)
                 .stream()
-                .map(association -> mapper.map(association, ReceitaUsuarioResponse.class))
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Recupera uma associação específica entre receita e usuário.
-     *
-     * @param userId        identificador do usuário
-     * @param associationId identificador da associação
-     * @return DTO da associação encontrada
-     */
     public ReceitaUsuarioResponse getById(Integer userId, Integer associationId) {
         ReceitaUsuario association = findByIdOrThrow(associationId);
 
@@ -71,16 +56,9 @@ public class ReceitaUsuarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_RECIPE_NOT_OWNED);
         }
 
-        return mapper.map(association, ReceitaUsuarioResponse.class);
+        return toResponse(association);
     }
 
-    /**
-     * Cria uma nova associação entre receita e usuário.
-     *
-     * @param userId  identificador do usuário
-     * @param request DTO com o ID da receita e foto do prato
-     * @return DTO da associação criada
-     */
     public ReceitaUsuarioResponse create(Integer userId, ReceitaUsuarioRequest request) {
         Usuario user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
@@ -93,19 +71,12 @@ public class ReceitaUsuarioService {
         newAssociation.setReceita(recipe);
         newAssociation.setDataConclusao(LocalDateTime.now());
         newAssociation.setFotoPrato(request.getFotoPrato());
+        newAssociation.setPontuacaoPrato(request.getPontuacaoPrato());
 
         ReceitaUsuario saved = recipeUserRepository.save(newAssociation);
-        return mapper.map(saved, ReceitaUsuarioResponse.class);
+        return toResponse(saved);
     }
 
-    /**
-     * Atualiza uma associação existente entre receita e usuário.
-     *
-     * @param userId        identificador do usuário
-     * @param associationId identificador da associação
-     * @param request       DTO com o novo ID da receita
-     * @return DTO da associação atualizada
-     */
     public ReceitaUsuarioResponse update(Integer userId, Integer associationId, ReceitaUsuarioRequest request) {
         ReceitaUsuario association = findByIdOrThrow(associationId);
 
@@ -120,16 +91,9 @@ public class ReceitaUsuarioService {
         }
 
         ReceitaUsuario updated = recipeUserRepository.save(association);
-        return mapper.map(updated, ReceitaUsuarioResponse.class);
+        return toResponse(updated);
     }
 
-    /**
-     * Remove uma associação entre receita e usuário.
-     *
-     * @param userId        identificador do usuário
-     * @param associationId identificador da associação
-     * @return DTO da associação removida
-     */
     @Transactional
     public ReceitaUsuarioResponse delete(Integer userId, Integer associationId) {
         ReceitaUsuario association = findByIdOrThrow(associationId);
@@ -139,15 +103,25 @@ public class ReceitaUsuarioService {
         }
 
         recipeUserRepository.deleteById(associationId);
-        return mapper.map(association, ReceitaUsuarioResponse.class);
+        return toResponse(association);
     }
 
-    /**
-     * Busca uma associação entre receita e usuário ou lança exceção 404.
-     *
-     * @param id identificador da associação
-     * @return entidade ReceitaUsuario
-     */
+    public ReceitaUsuarioResponse toResponse(ReceitaUsuario userRecipe) {
+        ReceitaUsuarioResponse response = mapper.map(userRecipe, ReceitaUsuarioResponse.class);
+
+        if (userRecipe.getReceita() != null) {
+            response.setReceita(mapper.map(userRecipe.getReceita(), ReceitaResponse.class));
+        }
+
+        return response;
+    }
+
+    public List<ReceitaUsuarioResponse> toResponseList(List<ReceitaUsuario> recipes) {
+        return recipes.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
     private ReceitaUsuario findByIdOrThrow(Integer id) {
         return recipeUserRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));

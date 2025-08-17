@@ -59,8 +59,7 @@ INSERT INTO etapa_receita (ordem, conteudo, receitas_id, version) VALUES
 (1, 'Cozinhar o macarrão', 1, 0),
 (2, 'Preparar o molho', 1, 0),
 (1, 'Grelhar o bife', 2, 0),
-(1, 'Misturar vegetais', 3, 0),
-(1, 'Bater a massa do bolo', 4, 0, 0);
+(1, 'Misturar vegetais', 3, 0);
 
 -- 10. avatar
 INSERT INTO avatar (nome, imagem_url, version) VALUES
@@ -70,6 +69,13 @@ INSERT INTO avatar (nome, imagem_url, version) VALUES
 ('Chef Sushi', 'avatar4.png', 0),
 ('Chef Café', 'avatar5.png', 0);
 
+-- 16. utensilio
+INSERT INTO utensilio (nome, version) VALUES
+('Panela', 0),
+('Faca', 0),
+('Colher de Pau', 0),
+('Batedeira', 0),
+('Liquidificador', 0);
 -- DEPOIS DE GERAR USUÁRIO
 
 -- 11. titulo_usuario (depende de titulo e usuario)
@@ -87,14 +93,6 @@ INSERT INTO avatar_usuario (usuarios_id, avatares_id, desbloqueado_em, version) 
 -- 14. receita_usuario (depende de usuario e receita)
 INSERT INTO receita_usuario (usuarios_id, receitas_id, data_conclusao, foto_prato, pontuacao_prato, version) VALUES
 (1, 1, NOW(), 'foto1.png', 5, 0);
-
--- 16. utensilio
-INSERT INTO utensilio (nome, version) VALUES
-('Panela', 0),
-('Faca', 0),
-('Colher de Pau', 0),
-('Batedeira', 0),
-('Liquidificador', 0);
 
 -- 17. utensilio_receita (depende de utensilio e receita)
 INSERT INTO utensilio_receita (utensilios_id, receitas_id, version) VALUES

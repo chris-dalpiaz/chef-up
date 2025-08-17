@@ -6,6 +6,16 @@ public class AvatarUsuarioResponse {
 
     private AvatarResponse avatar;
 
+    private Boolean estaAtivo;
+
+    public Boolean getEstaAtivo() {
+        return estaAtivo;
+    }
+
+    public void setEstaAtivo(Boolean estaAtivo) {
+        this.estaAtivo = estaAtivo;
+    }
+
     public AvatarResponse getAvatar() {
         return avatar;
     }

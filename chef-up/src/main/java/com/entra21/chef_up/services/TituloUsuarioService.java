@@ -1,10 +1,7 @@
 package com.entra21.chef_up.services;
 
-import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
-import com.entra21.chef_up.dtos.Titulo.TituloResponse;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioRequest;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
-import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.entities.Titulo;
 import com.entra21.chef_up.entities.TituloUsuario;
 import com.entra21.chef_up.entities.Usuario;
@@ -95,6 +92,7 @@ public class TituloUsuarioService {
         newAssociation.setUsuario(user);
         newAssociation.setTitulo(title);
         newAssociation.setDesbloqueadoEm(LocalDateTime.now());
+        newAssociation.setEstaAtivo(false);
 
         TituloUsuario saved = titleUserRepository.save(newAssociation);
         return mapper.map(saved, TituloUsuarioResponse.class);
@@ -119,6 +117,11 @@ public class TituloUsuarioService {
             Titulo newTitle = titleRepository.findById(request.getIdTitulo())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Novo título não encontrado"));
             association.setTitulo(newTitle);
+        }
+
+        // Verifica se o campo estaAtivo foi informado e atualiza
+        if (request.getEstaAtivo() != null) {
+            association.setEstaAtivo(request.getEstaAtivo());
         }
 
         TituloUsuario updated = titleUserRepository.save(association);
@@ -155,14 +158,13 @@ public class TituloUsuarioService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
     }
 
-    /**
-     * Converte a entidade Pronome em DTO de resposta.
-     *
-     * @param title entidade persistida
-     * @return DTO de resposta
-     */
+    public TituloUsuarioResponse toResponse(TituloUsuario userTitle) {
+        return mapper.map(userTitle, TituloUsuarioResponse.class);
+    }
 
-    public TituloResponse toResponse(Titulo title) {
-        return mapper.map(title, TituloResponse.class);
+    public List<TituloUsuarioResponse> toResponseList(List<TituloUsuario> titles) {
+        return titles.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 }

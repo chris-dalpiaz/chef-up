@@ -1,8 +1,12 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
 import com.entra21.chef_up.dtos.Titulo.TituloRequest;
 import com.entra21.chef_up.dtos.Titulo.TituloResponse;
+import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
+import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.entities.Titulo;
+import com.entra21.chef_up.entities.TituloUsuario;
 import com.entra21.chef_up.repositories.TituloRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -99,7 +103,7 @@ public class TituloService {
      * @param request objeto de requisição
      * @return entidade Titulo mapeada
      */
-    private Titulo toEntity(TituloRequest request) {
+    public Titulo toEntity(TituloRequest request) {
         return mapper.map(request, Titulo.class);
     }
 
@@ -109,7 +113,7 @@ public class TituloService {
      * @param titulo entidade persistida
      * @return DTO de resposta
      */
-    private TituloResponse toResponse(Titulo titulo) {
+    public TituloResponse toResponse(Titulo titulo) {
         return mapper.map(titulo, TituloResponse.class);
     }
 
@@ -120,7 +124,7 @@ public class TituloService {
      * @return entidade encontrada
      * @throws ResponseStatusException se não encontrar a entidade
      */
-    private Titulo findEntityById(Integer id) {
+    public Titulo findEntityById(Integer id) {
         return titleRepository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_TITLE_NOT_FOUND)

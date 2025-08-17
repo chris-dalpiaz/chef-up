@@ -123,7 +123,6 @@ public class PronomeService {
      * @param pronoun entidade persistida
      * @return DTO de resposta
      */
-
     public PronomeResponse toResponse(Pronome pronoun) {
         return mapper.map(pronoun, PronomeResponse.class);
     }

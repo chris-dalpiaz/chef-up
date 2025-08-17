@@ -31,16 +31,16 @@ public class AdjetivoUsuarioService {
     private final UsuarioRepository userRepository;
     private final AdjetivoUsuarioRepository adjectiveUserRepository;
     private final AdjetivoRepository adjectiveRepository;
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
     public AdjetivoUsuarioService(UsuarioRepository userRepository,
                                   AdjetivoUsuarioRepository adjectiveUserRepository,
                                   AdjetivoRepository adjectiveRepository,
-                                  ModelMapper modelMapper) {
+                                  ModelMapper mapper) {
         this.userRepository = userRepository;
         this.adjectiveUserRepository = adjectiveUserRepository;
         this.adjectiveRepository = adjectiveRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     /**
@@ -122,14 +122,14 @@ public class AdjetivoUsuarioService {
         return toResponse(association);
     }
 
-    /**
-     * Converte a entidade de associação em DTO de resposta.
-     *
-     * @param association entidade persistida
-     * @return DTO de resposta
-     */
-    private AdjetivoUsuarioResponse toResponse(AdjetivoUsuario association) {
-        return modelMapper.map(association, AdjetivoUsuarioResponse.class);
+    public AdjetivoUsuarioResponse toResponse(AdjetivoUsuario userAdjective) {
+        return mapper.map(userAdjective, AdjetivoUsuarioResponse.class);
+    }
+
+    public List<AdjetivoUsuarioResponse> toResponseList(List<AdjetivoUsuario> adjectives) {
+        return adjectives.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -138,7 +138,7 @@ public class AdjetivoUsuarioService {
      * @param userId identificador do usuário
      * @return entidade Usuario
      */
-    private Usuario findUser(Integer userId) {
+    public Usuario findUser(Integer userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
@@ -150,7 +150,7 @@ public class AdjetivoUsuarioService {
      * @param adjectiveId identificador do adjetivo
      * @return entidade Adjetivo
      */
-    private Adjetivo findAdjective(Integer adjectiveId) {
+    public Adjetivo findAdjective(Integer adjectiveId) {
         return adjectiveRepository.findById(adjectiveId)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ADJECTIVE_NOT_FOUND));
@@ -163,7 +163,7 @@ public class AdjetivoUsuarioService {
      * @param associationId identificador da associação
      * @return entidade AdjetivoUsuario
      */
-    private AdjetivoUsuario findAssociationByIdAndValidateUser(Integer userId, Integer associationId) {
+    public AdjetivoUsuario findAssociationByIdAndValidateUser(Integer userId, Integer associationId) {
         AdjetivoUsuario association = adjectiveUserRepository.findById(associationId)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));

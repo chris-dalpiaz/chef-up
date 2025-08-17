@@ -11,6 +11,16 @@ public class TituloUsuarioResponse {
 
     private LocalDateTime desbloqueadoEm;
 
+    private Boolean estaAtivo;
+
+    public Boolean getEstaAtivo() {
+        return estaAtivo;
+    }
+
+    public void setEstaAtivo(Boolean estaAtivo) {
+        this.estaAtivo = estaAtivo;
+    }
+
     public TituloResponse getTitulo() {
         return titulo;
     }

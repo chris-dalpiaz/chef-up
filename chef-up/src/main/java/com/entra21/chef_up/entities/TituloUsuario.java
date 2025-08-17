@@ -25,6 +25,16 @@ public class TituloUsuario {
     @Version
     private Integer version;
 
+    private Boolean estaAtivo;
+
+    public Boolean getEstaAtivo() {
+        return estaAtivo;
+    }
+
+    public void setEstaAtivo(Boolean estaAtivo) {
+        this.estaAtivo = estaAtivo;
+    }
+
     public Integer getVersion() {
         return version;
     }

@@ -22,8 +22,7 @@ public class ProgressoUsuarioService {
     private final ProgressoUsuarioRepository progressRepository;
     private final ModelMapper mapper;
 
-    public ProgressoUsuarioService(UsuarioService usuarioService,
-                                   ProgressoUsuarioRepository progressRepository,
+    public ProgressoUsuarioService(ProgressoUsuarioRepository progressRepository,
                                    ModelMapper mapper) {
         this.progressRepository = progressRepository;
         this.mapper = mapper;
@@ -67,5 +66,9 @@ public class ProgressoUsuarioService {
     private ProgressoUsuario findByUserIdOrThrow(Integer userId) {
         return progressRepository.findByUsuarioId(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_PROGRESS_NOT_FOUND));
+    }
+
+    public ProgressoUsuarioResponse toResponse(ProgressoUsuario userProgress) {
+        return mapper.map(userProgress, ProgressoUsuarioResponse.class);
     }
 }

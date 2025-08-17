@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class ReceitaUsuarioResponse {
 
-    private ReceitaResponse receitaResponse;
+    private ReceitaResponse receita;
 
     private LocalDateTime dataConclusao;
 
@@ -14,12 +14,12 @@ public class ReceitaUsuarioResponse {
 
     private Integer pontuacaoPrato;
 
-    public ReceitaResponse getReceitaResponse() {
-        return receitaResponse;
+    public ReceitaResponse getReceita() {
+        return receita;
     }
 
-    public void setReceitaResponse(ReceitaResponse receitaResponse) {
-        this.receitaResponse = receitaResponse;
+    public void setReceita(ReceitaResponse receita) {
+        this.receita = receita;
     }
 
     public LocalDateTime getDataConclusao() {

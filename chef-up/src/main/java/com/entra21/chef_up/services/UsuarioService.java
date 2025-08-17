@@ -1,6 +1,5 @@
 package com.entra21.chef_up.services;
 
-import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.ProgressoUsuario;
@@ -33,15 +32,27 @@ public class UsuarioService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final PronomeService pronounService;
+    private final TituloUsuarioService userTitleService;
+    private final AdjetivoUsuarioService userAdjectiveService;
+    private final ReceitaUsuarioService userRecipeService;
+    private final ProgressoUsuarioService userProgressService;
+    private final IngredienteUsuarioService userIngredientService;
+    private final AvatarUsuarioService userAvatarService;
 
     public UsuarioService(UsuarioRepository userRepository,
                           ModelMapper modelMapper,
                           PasswordEncoder passwordEncoder,
-                          PronomeService pronounService) {
+                          PronomeService pronounService, TituloUsuarioService userTitleService, AdjetivoUsuarioService userAdjectiveService, ReceitaUsuarioService userRecipeService, ProgressoUsuarioService userProgressService, IngredienteUsuarioService userIngredientService, AvatarUsuarioService userAvatarService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.pronounService = pronounService;
+        this.userTitleService = userTitleService;
+        this.userAdjectiveService = userAdjectiveService;
+        this.userRecipeService = userRecipeService;
+        this.userProgressService = userProgressService;
+        this.userIngredientService = userIngredientService;
+        this.userAvatarService = userAvatarService;
     }
 
     /**
@@ -184,19 +195,19 @@ public class UsuarioService {
     }
 
     public UsuarioResponse getUsuarioResponseById(Integer id) {
-        Usuario usuario = userRepository.findById(id)
+        Usuario user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
 
         UsuarioResponse response = new UsuarioResponse();
-        response.setNome(usuario.getNome());
-        response.setEmail(usuario.getEmail());
-        response.setPronome(pronounService.toResponse(usuario.getPronome()));
-        response.setTitulos(());
-        response.setAdjetivos(adjetivoMapper.toResponseList(usuario.getAdjetivos()));
-        response.setReceitasConcluidas(receitaMapper.toResponseList(usuario.getReceitasConcluidas()));
-        response.setProgresso(progressoMapper.toResponse(usuario.getProgressoUsuario()));
-        response.setIngredientes(ingredienteMapper.toResponseList(usuario.getIngredientes()));
-        response.setAvatares(avatarMapper.toResponseList(usuario.getAvatares()));
+        response.setNome(user.getNome());
+        response.setEmail(user.getEmail());
+        response.setPronome(pronounService.toResponse(user.getPronome()));
+        response.setTitulos((userTitleService.toResponseList(user.getTitulos())));
+        response.setAdjetivos(userAdjectiveService.toResponseList(user.getAdjetivos()));
+        response.setReceitasConcluidas(userRecipeService.toResponseList(user.getReceitasConcluidas()));
+        response.setProgresso(userProgressService.toResponse(user.getProgressoUsuario()));
+        response.setIngredientes(userIngredientService.toResponseList(user.getIngredientes()));
+        response.setAvatares(userAvatarService.toResponseList(user.getAvatares()));
         return response;
     }
 }

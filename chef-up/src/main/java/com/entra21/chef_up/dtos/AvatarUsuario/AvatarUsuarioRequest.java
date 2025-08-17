@@ -4,6 +4,16 @@ public class AvatarUsuarioRequest {
 
     private Integer idAvatar;
 
+    private Boolean estaAtivo;
+
+    public Boolean getEstaAtivo() {
+        return estaAtivo;
+    }
+
+    public void setEstaAtivo(Boolean estaAtivo) {
+        this.estaAtivo = estaAtivo;
+    }
+
     public Integer getIdAvatar() {
         return idAvatar;
     }

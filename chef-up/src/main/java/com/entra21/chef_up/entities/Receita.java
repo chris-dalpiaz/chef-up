@@ -21,6 +21,9 @@ public class Receita {
 
     private Integer xpGanho;
 
+    @Version
+    private Integer version;
+
     @ManyToOne()
     @JoinColumn(name = "categorias_id")
     private Categoria categoria;
@@ -28,8 +31,27 @@ public class Receita {
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
     private List<IngredienteReceita> ingredientes;
 
-    @Version
-    private Integer version;
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
+    private List<UtensilioReceita> utensilios;
+
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL)
+    private List<EtapaReceita> etapas;
+
+    public List<EtapaReceita> getEtapas() {
+        return etapas;
+    }
+
+    public void setEtapas(List<EtapaReceita> etapas) {
+        this.etapas = etapas;
+    }
+
+    public List<UtensilioReceita> getUtensilios() {
+        return utensilios;
+    }
+
+    public void setUtensilios(List<UtensilioReceita> utensilios) {
+        this.utensilios = utensilios;
+    }
 
     public Integer getVersion() {
         return version;

@@ -1,6 +1,13 @@
 package com.entra21.chef_up.dtos.Receita;
 
 import com.entra21.chef_up.dtos.Categoria.CategoriaResponse;
+import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaResponse;
+import com.entra21.chef_up.dtos.IngredienteReceita.IngredienteReceitaResponse;
+import com.entra21.chef_up.dtos.UtensilioReceita.UtensilioReceitaResponse;
+import com.entra21.chef_up.entities.EtapaReceita;
+import com.entra21.chef_up.entities.IngredienteReceita;
+
+import java.util.List;
 
 public class ReceitaResponse {
 
@@ -15,6 +22,36 @@ public class ReceitaResponse {
     private Integer xpGanho;
 
     private CategoriaResponse categoria;
+
+    private List<IngredienteReceitaResponse> ingredientes;
+
+    private List<UtensilioReceitaResponse> utensilios;
+
+    private List<EtapaReceitaResponse> etapas;
+
+    public List<EtapaReceitaResponse> getEtapas() {
+        return etapas;
+    }
+
+    public void setEtapas(List<EtapaReceitaResponse> etapas) {
+        this.etapas = etapas;
+    }
+
+    public List<IngredienteReceitaResponse> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteReceitaResponse> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+
+    public List<UtensilioReceitaResponse> getUtensilios() {
+        return utensilios;
+    }
+
+    public void setUtensilios(List<UtensilioReceitaResponse> utensilios) {
+        this.utensilios = utensilios;
+    }
 
     public String getNome() {
         return nome;

@@ -90,6 +90,7 @@ public class AvatarUsuarioService {
         AvatarUsuario newAssociation = new AvatarUsuario();
         newAssociation.setUsuario(user);
         newAssociation.setAvatar(avatar);
+        newAssociation.setEstaAtivo(false);
 
         AvatarUsuario saved = avatarUserRepository.save(newAssociation);
         return mapper.map(saved, AvatarUsuarioResponse.class);
@@ -114,6 +115,11 @@ public class AvatarUsuarioService {
             Avatar newAvatar = avatarRepository.findById(request.getIdAvatar())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Novo avatar não encontrado"));
             association.setAvatar(newAvatar);
+        }
+
+        // Verifica se o campo estaAtivo foi informado e atualiza
+        if (request.getEstaAtivo() != null) {
+            association.setEstaAtivo(request.getEstaAtivo());
         }
 
         AvatarUsuario updated = avatarUserRepository.save(association);
@@ -148,5 +154,15 @@ public class AvatarUsuarioService {
     private AvatarUsuario findByIdOrThrow(Integer id) {
         return avatarUserRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
+    }
+
+    public AvatarUsuarioResponse toResponse(AvatarUsuario userAvatar) {
+        return mapper.map(userAvatar, AvatarUsuarioResponse.class);
+    }
+
+    public List<AvatarUsuarioResponse> toResponseList(List<AvatarUsuario> avatars) {
+        return avatars.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 }

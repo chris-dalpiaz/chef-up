@@ -151,4 +151,14 @@ public class IngredienteUsuarioService {
         return ingredientUserRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ASSOCIATION_NOT_FOUND));
     }
+
+    public IngredienteUsuarioResponse toResponse(IngredienteUsuario userIngredient) {
+        return mapper.map(userIngredient, IngredienteUsuarioResponse.class);
+    }
+
+    public List<IngredienteUsuarioResponse> toResponseList(List<IngredienteUsuario> ingredients) {
+        return ingredients.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 }
