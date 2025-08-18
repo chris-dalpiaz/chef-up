@@ -10,77 +10,99 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações de CRUD para Ingrediente.
+ */
 @Service
 public class IngredienteService {
-    /** Repositório para acesso aos dados dos ingredientes */
-    private final IngredienteRepository ingredienteRepository;
-    private final ModelMapper modelMapper;
+
+    private static final String ERROR_INGREDIENT_NOT_FOUND = "Ingrediente não encontrado";
+
+    private final IngredienteRepository ingredientRepository;
+    private final ModelMapper mapper;
+
+    public IngredienteService(IngredienteRepository ingredientRepository,
+                              ModelMapper mapper) {
+        this.ingredientRepository = ingredientRepository;
+        this.mapper = mapper;
+    }
 
     /**
-     * Construtor com injeção de dependência.
-     * Recebe o repositório para manipular ingredientes.
+     * Lista todos os ingredientes cadastrados.
+     *
+     * @return lista de IngredienteResponse
      */
-    public IngredienteService(IngredienteRepository ingredienteRepository,
-                              ModelMapper modelMapper) {
-        this.ingredienteRepository = ingredienteRepository;
-        this.modelMapper = modelMapper;
+    public List<IngredienteResponse> listAll() {
+        return ingredientRepository.findAll()
+                .stream()
+                .map(ingredient -> mapper.map(ingredient, IngredienteResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public List<IngredienteResponse> listarTodos() {
-        return ingredienteRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, IngredienteResponse.class))
-                .toList();
+    /**
+     * Busca um ingrediente pelo seu ID.
+     *
+     * @param id identificador do ingrediente
+     * @return DTO do ingrediente encontrado
+     */
+    public IngredienteResponse getById(Integer id) {
+        Ingrediente ingredient = findByIdOrThrow(id);
+        return mapper.map(ingredient, IngredienteResponse.class);
     }
 
-    public IngredienteResponse buscar(Integer id) {
-        Ingrediente ingrediente = ingredienteRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Ingrediente não encontrado"));
-
-        return modelMapper.map(ingrediente, IngredienteResponse.class);
+    /**
+     * Cria um novo ingrediente.
+     *
+     * @param request DTO com os dados do ingrediente
+     * @return DTO do ingrediente criado
+     */
+    public IngredienteResponse create(IngredienteRequest request) {
+        Ingrediente newIngredient = mapper.map(request, Ingrediente.class);
+        Ingrediente saved = ingredientRepository.save(newIngredient);
+        return mapper.map(saved, IngredienteResponse.class);
     }
 
-    public IngredienteResponse criar(IngredienteRequest request) {
-        /// Converte o DTO de requisição para a entidade
-        Ingrediente ingrediente = modelMapper.map(request, Ingrediente.class);
+    /**
+     * Atualiza um ingrediente existente.
+     *
+     * @param id      identificador do ingrediente
+     * @param request DTO com os dados atualizados
+     * @return DTO do ingrediente atualizado
+     */
+    public IngredienteResponse update(Integer id, IngredienteRequest request) {
+        Ingrediente existing = findByIdOrThrow(id);
 
-        /// Salva a entidade no banco de dados
-        Ingrediente salvo = ingredienteRepository.save(ingrediente);
+        existing.setNome(request.getNome());
+        existing.setCategoria(request.getCategoria());
+        existing.setDicaConservacao(request.getDicaConservacao());
+        existing.setEstimativaValidade(request.getEstimativaValidade());
 
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, IngredienteResponse.class);
+        Ingrediente updated = ingredientRepository.save(existing);
+        return mapper.map(updated, IngredienteResponse.class);
     }
 
-    public IngredienteResponse alterar(Integer id, IngredienteRequest request) {
-        /// Busca pelo ID ou lança erro 404
-        Ingrediente alterar = ingredienteRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Ingrediente não encontrado"));
-
-        /// Atualiza o nome com os dados do request
-        alterar.setCategoria(request.getCategoria());
-        alterar.setNome(request.getNome());
-        alterar.setDicaConservacao(request.getDicaConservacao());
-        alterar.setEstimativaValidade(request.getEstimativaValidade());
-
-        /// Salva a alteração no banco
-        Ingrediente salvo = ingredienteRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, IngredienteResponse.class);
+    /**
+     * Remove um ingrediente pelo ID.
+     *
+     * @param id identificador do ingrediente
+     * @return DTO do ingrediente removido
+     */
+    public IngredienteResponse delete(Integer id) {
+        Ingrediente ingredient = findByIdOrThrow(id);
+        ingredientRepository.deleteById(id);
+        return mapper.map(ingredient, IngredienteResponse.class);
     }
 
-    public IngredienteResponse remover(Integer id) {
-        /// Busca pelo ID ou lança 404
-        Ingrediente ingrediente = ingredienteRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Ingrediente não encontrado"));
-
-        /// Deleta pelo ID
-        ingredienteRepository.deleteById(id);
-
-        /// Retorna o DTO do deletado
-        return modelMapper.map(ingrediente, IngredienteResponse.class);
+    /**
+     * Busca o ingrediente ou lança exceção 404.
+     *
+     * @param id identificador
+     * @return entidade Ingrediente
+     */
+    private Ingrediente findByIdOrThrow(Integer id) {
+        return ingredientRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_INGREDIENT_NOT_FOUND));
     }
 }

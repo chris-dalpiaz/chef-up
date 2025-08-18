@@ -10,69 +10,96 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações de CRUD para Avatar.
+ */
 @Service
 public class AvatarService {
+
+    private static final String ERROR_AVATAR_NOT_FOUND = "Avatar não encontrado";
+
     private final AvatarRepository avatarRepository;
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
-    public AvatarService(AvatarRepository avatarRepository, ModelMapper modelMapper) {
+    public AvatarService(AvatarRepository avatarRepository, ModelMapper mapper) {
         this.avatarRepository = avatarRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
-    public List<AvatarResponse> listarTodos() {
-        return avatarRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, AvatarResponse.class))
-                .toList();
+    /**
+     * Lista todos os avatares cadastrados.
+     *
+     * @return lista de AvatarResponse
+     */
+    public List<AvatarResponse> listAll() {
+        return avatarRepository.findAll()
+                .stream()
+                .map(avatar -> mapper.map(avatar, AvatarResponse.class))
+                .collect(Collectors.toList());
     }
 
-    public AvatarResponse buscar(Integer id) {
-        Avatar avatar = avatarRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Avatar não encontrado"));
-
-        return modelMapper.map(avatar, AvatarResponse.class);
+    /**
+     * Busca um avatar pelo seu ID.
+     *
+     * @param id identificador do avatar
+     * @return DTO do avatar encontrado
+     */
+    public AvatarResponse getById(Integer id) {
+        Avatar avatar = findByIdOrThrow(id);
+        return mapper.map(avatar, AvatarResponse.class);
     }
 
-    public AvatarResponse criar(AvatarRequest request) {
-        /// Converte o DTO de requisição para a entidade
-        Avatar avatar = modelMapper.map(request, Avatar.class);
-
-        /// Salva a entidade no banco de dados
-        Avatar salvo = avatarRepository.save(avatar);
-
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, AvatarResponse.class);
+    /**
+     * Cria um novo avatar.
+     *
+     * @param request DTO com os dados do avatar
+     * @return DTO do avatar criado
+     */
+    public AvatarResponse create(AvatarRequest request) {
+        Avatar newAvatar = mapper.map(request, Avatar.class);
+        Avatar saved = avatarRepository.save(newAvatar);
+        return mapper.map(saved, AvatarResponse.class);
     }
 
-    public AvatarResponse alterar(Integer id, AvatarRequest request) {
-        /// Busca pelo ID ou lança erro 404
-        Avatar alterar = avatarRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Avatar não encontrado"));
+    /**
+     * Atualiza um avatar existente.
+     *
+     * @param id      identificador do avatar
+     * @param request DTO com os dados atualizados
+     * @return DTO do avatar atualizado
+     */
+    public AvatarResponse update(Integer id, AvatarRequest request) {
+        Avatar existing = findByIdOrThrow(id);
 
-        /// Atualiza o nome com os dados do request
-        alterar.setNome(request.getNome());
-        alterar.setImagemUrl(request.getImagemUrl());
+        existing.setNome(request.getNome());
+        existing.setImagemUrl(request.getImagemUrl());
 
-        /// Salva a alteração no banco
-        Avatar salvo = avatarRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, AvatarResponse.class);
+        Avatar updated = avatarRepository.save(existing);
+        return mapper.map(updated, AvatarResponse.class);
     }
 
-    public AvatarResponse remover(Integer id) {
-        /// Busca pelo ID ou lança 404
-        Avatar avatar = avatarRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Avatar não encontrado"));
-
-        /// Deleta pelo ID
+    /**
+     * Remove um avatar pelo ID.
+     *
+     * @param id identificador do avatar
+     * @return DTO do avatar removido
+     */
+    public AvatarResponse delete(Integer id) {
+        Avatar avatar = findByIdOrThrow(id);
         avatarRepository.deleteById(id);
+        return mapper.map(avatar, AvatarResponse.class);
+    }
 
-        /// Retorna o DTO do deletado
-        return modelMapper.map(avatar, AvatarResponse.class);
+    /**
+     * Busca o avatar ou lança exceção 404.
+     *
+     * @param id identificador
+     * @return entidade Avatar
+     */
+    private Avatar findByIdOrThrow(Integer id) {
+        return avatarRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_AVATAR_NOT_FOUND));
     }
 }

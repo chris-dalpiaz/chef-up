@@ -1,6 +1,7 @@
 package com.entra21.chef_up.repositories;
 
 import com.entra21.chef_up.entities.EtapaReceita;
+import com.entra21.chef_up.entities.IngredienteReceita;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,4 +13,6 @@ public interface EtapaReceitaRepository extends JpaRepository<EtapaReceita, Inte
     Integer findMaxOrdemByReceitaId(@Param("idReceita") Integer idReceita);
 
     List<EtapaReceita> findByReceitaId(Integer idReceita);
+
+    List<EtapaReceita> removeByReceitaId(Integer idReceita);
 }

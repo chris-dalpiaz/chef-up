@@ -1,0 +1,25 @@
+meta {
+  name: criar_utensilio-receita
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/receitas/1/utensilios
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTUzOTA3MzAsImV4cCI6MTc1NTM5NDMzMH0.Dv1mPpklb6LupqvGqX-QKFn38mIeBhnD3MpQ7qH0DVI
+}
+
+body:json {
+  {
+    "idUtensilio": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+}

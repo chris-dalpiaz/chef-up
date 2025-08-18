@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+    padding: 2vh 4vw;
+    background-color: #fffaf5;
+}
+
+h1{
+    display: flex;
+    justify-content: center;
+}
+
+input{
+    margin-left: 0;
+}
+
+.adjetivo {
+    background-color: #E6E6E6;
+    border: none;
+    font-weight: 400;
+    border-radius: 15px;
+    border: 1px solid #fffaf5;
+    padding: 0.5vh 1vw;
+    font-size: 3.5vw;
+    max-width: fit-content;
+    width: auto; /* ajusta ao conteúdo */
+
+}
+.adjetivo:hover{
+    background-color: #FFE4C2;
+    border: 1px solid #F58700;
+    transition: 0.3s; 
+}
+
+.tag_usuario {
+    display: flex;
+    flex-direction: row;  /* já é padrão, mas deixei explícito */
+    flex-wrap: wrap;      /* quebra linha se não couber */
+    gap: 0.5vh;           /* espaçamento entre botões */
+    align-items: center;
+}
+
+
+.botao_comum{
+    margin: 0;
+    justify-content: center;
+    margin-top: 110px;
+}
+
+.bloqueado{
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.adjetivo.ativo {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
+  transition: background-color 0.3s ease;
+}
+

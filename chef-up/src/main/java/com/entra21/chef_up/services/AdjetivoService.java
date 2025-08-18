@@ -10,70 +10,119 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações CRUD de Adjetivo.
+ */
 @Service
 public class AdjetivoService {
 
-    private final AdjetivoRepository adjetivoRepository;
+    private static final String ERROR_ADJECTIVE_NOT_FOUND = "Adjetivo não encontrado";
+
+    private final AdjetivoRepository adjectiveRepository;
     private final ModelMapper modelMapper;
 
-    public AdjetivoService(AdjetivoRepository adjetivoRepository,
-                           ModelMapper modelMapper) {
-        this.adjetivoRepository = adjetivoRepository;
+    public AdjetivoService(AdjetivoRepository adjectiveRepository, ModelMapper modelMapper) {
+        this.adjectiveRepository = adjectiveRepository;
         this.modelMapper = modelMapper;
     }
 
-    public List<AdjetivoResponse> listarTodos() {
-        return adjetivoRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, AdjetivoResponse.class))
-                .toList();
+    /**
+     * Retorna todos os adjetivos cadastrados.
+     *
+     * @return lista de AdjetivoResponse
+     */
+    public List<AdjetivoResponse> listAll() {
+        return adjectiveRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public AdjetivoResponse buscar(Integer id) {
-        Adjetivo adjetivo = adjetivoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Adjetivo não encontrado"));
-
-        return modelMapper.map(adjetivo, AdjetivoResponse.class);
+    /**
+     * Busca um adjetivo pelo seu identificador.
+     *
+     * @param id identificador do adjetivo
+     * @return DTO contendo os dados do adjetivo
+     * @throws ResponseStatusException se o adjetivo não for encontrado
+     */
+    public AdjetivoResponse getById(Integer id) {
+        Adjetivo adjective = findEntityById(id);
+        return toResponse(adjective);
     }
 
-    public AdjetivoResponse criar(AdjetivoRequest request) {
-        /// Converte o DTO de requisição para a entidade Adjetivo
-        Adjetivo adjetivo = modelMapper.map(request, Adjetivo.class);
-
-        /// Salva a entidade no banco de dados
-        Adjetivo salvo = adjetivoRepository.save(adjetivo);
-
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, AdjetivoResponse.class);
+    /**
+     * Cria um novo adjetivo com base nos dados fornecidos.
+     *
+     * @param request DTO contendo as informações para criação
+     * @return DTO do adjetivo criado
+     */
+    public AdjetivoResponse create(AdjetivoRequest request) {
+        Adjetivo entity = toEntity(request);
+        Adjetivo savedEntity = adjectiveRepository.save(entity);
+        return toResponse(savedEntity);
     }
 
-    public AdjetivoResponse alterar(Integer id, AdjetivoRequest request) {
-        /// Busca o adjetivo pelo ID ou lança erro 404
-        Adjetivo alterar = adjetivoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Adjetivo não encontrado"));
-
-        /// Atualiza o nome com os dados do request
-        alterar.setNome(request.getNome());
-
-        /// Salva a alteração no banco
-        Adjetivo salvo = adjetivoRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, AdjetivoResponse.class);
+    /**
+     * Atualiza o nome de um adjetivo existente.
+     *
+     * @param id      identificador do adjetivo a ser atualizado
+     * @param request DTO contendo o novo nome
+     * @return DTO do adjetivo atualizado
+     * @throws ResponseStatusException se o adjetivo não for encontrado
+     */
+    public AdjetivoResponse update(Integer id, AdjetivoRequest request) {
+        Adjetivo entity = findEntityById(id);
+        entity.setNome(request.getNome());
+        Adjetivo updatedEntity = adjectiveRepository.save(entity);
+        return toResponse(updatedEntity);
     }
 
-    public AdjetivoResponse remover(Integer id) {
-        /// Busca o adjetivo pelo ID ou lança 404
-        Adjetivo adjetivo = adjetivoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Adjetivo não encontrado"));
+    /**
+     * Remove um adjetivo pelo seu identificador.
+     *
+     * @param id identificador do adjetivo a ser removido
+     * @return DTO do adjetivo removido
+     * @throws ResponseStatusException se o adjetivo não for encontrado
+     */
+    public AdjetivoResponse delete(Integer id) {
+        Adjetivo entity = findEntityById(id);
+        adjectiveRepository.delete(entity);
+        return toResponse(entity);
+    }
 
-        /// Deleta o adjetivo pelo ID
-        adjetivoRepository.deleteById(id);
+    /**
+     * Converte o DTO de requisição em entidade Adjetivo.
+     *
+     * @param request objeto de requisição
+     * @return entidade Adjetivo mapeada
+     */
+    private Adjetivo toEntity(AdjetivoRequest request) {
+        return modelMapper.map(request, Adjetivo.class);
+    }
 
-        /// Retorna o DTO do adjetivo deletado
-        return modelMapper.map(adjetivo, AdjetivoResponse.class);
+    /**
+     * Converte a entidade Adjetivo em DTO de resposta.
+     *
+     * @param adjective entidade persistida
+     * @return DTO de resposta
+     */
+    private AdjetivoResponse toResponse(Adjetivo adjective) {
+        return modelMapper.map(adjective, AdjetivoResponse.class);
+    }
+
+    /**
+     * Busca a entidade Adjetivo pelo ID ou lança exceção 404.
+     *
+     * @param id identificador do adjetivo
+     * @return entidade encontrada
+     * @throws ResponseStatusException se não encontrar a entidade
+     */
+    private Adjetivo findEntityById(Integer id) {
+        return adjectiveRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_ADJECTIVE_NOT_FOUND)
+                );
     }
 }

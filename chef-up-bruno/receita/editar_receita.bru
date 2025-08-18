@@ -5,24 +5,17 @@ meta {
 }
 
 put {
-  url: http://localhost:8080/receitas/1
+  url: http://localhost:8080/receitas/5
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3Njk4MTksImV4cCI6MTc1NDc3MzQxOX0.0uhQ9lZ5pduebEZloZuGzBj1x_o06Zhn9gx_Q8KLdmQ
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEB2aXRvcmlhIiwiaWF0IjoxNzU1NDU2OTM5LCJleHAiOjE3NTU0NjA1Mzl9.gcHcjbT18Xvlkd0-9nQa3h9Kl7-d3w1MNlDrL3mdYZE
 }
 
 body:json {
   {
-    "nome": "Receita Média",
-    "descricao": "essa é uma receita mediana",
-    "tempoPreparoSegundos": 360,
-    "dificuldade": "mediana",
-    "xpGanho": 300,
-    "categoria": {
-      "id": 2
-    }  
+     "imagemReceita": "../upload/receitas-do-sistema/suco-natural.png"
   }
 }

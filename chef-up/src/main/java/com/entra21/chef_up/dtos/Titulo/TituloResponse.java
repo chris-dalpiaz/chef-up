@@ -1,12 +1,20 @@
 package com.entra21.chef_up.dtos.Titulo;
 
 public class TituloResponse {
-    /// Nome do título
+
+    private Integer id;
+
     private String nome;
 
-    /// Condição para desbloquear o título (descrição)
     private String condicaoDesbloqueio;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getNome() {
         return nome;
     }

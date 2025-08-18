@@ -1,127 +1,222 @@
 package com.entra21.chef_up.services;
 
-
-import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
-import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.ProgressoUsuario;
 import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.entities.Usuario;
-import com.entra21.chef_up.repositories.ProgressoUsuarioRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações CRUD de usuário.
+ */
 @Service
 public class UsuarioService {
-    private final UsuarioRepository usuarioRepository;
+
+    private static final String ERROR_USER_NOT_FOUND = "Usuário não encontrado";
+    private static final String ERROR_RAW_PASSWORD = "Senha não pode ser nula";
+    private static final String ERROR_USER_NOT_FOUND_EMAIL = "Usuário não encontrado com o email: ";
+
+    private final UsuarioRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
-    private final ProgressoUsuarioRepository progressoUsuarioRepository;
-    private final PronomeService pronomeService;
+    private final PronomeService pronounService;
+    private final TituloUsuarioService userTitleService;
+    private final AdjetivoUsuarioService userAdjectiveService;
+    private final ReceitaUsuarioService userRecipeService;
+    private final ProgressoUsuarioService userProgressService;
+    private final IngredienteUsuarioService userIngredientService;
+    private final AvatarUsuarioService userAvatarService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository,
+    public UsuarioService(UsuarioRepository userRepository,
                           ModelMapper modelMapper,
                           PasswordEncoder passwordEncoder,
-                          ProgressoUsuarioRepository progressoUsuarioRepository,
-                          PronomeService pronomeService) {
-        this.usuarioRepository = usuarioRepository;
+                          PronomeService pronounService, TituloUsuarioService userTitleService, AdjetivoUsuarioService userAdjectiveService, ReceitaUsuarioService userRecipeService, ProgressoUsuarioService userProgressService, IngredienteUsuarioService userIngredientService, AvatarUsuarioService userAvatarService) {
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
-        this.progressoUsuarioRepository = progressoUsuarioRepository;
-        this.pronomeService = pronomeService;
+        this.pronounService = pronounService;
+        this.userTitleService = userTitleService;
+        this.userAdjectiveService = userAdjectiveService;
+        this.userRecipeService = userRecipeService;
+        this.userProgressService = userProgressService;
+        this.userIngredientService = userIngredientService;
+        this.userAvatarService = userAvatarService;
     }
 
-    /// Busca todos usuários do banco e cria um stream para processar um a um
-    public List<UsuarioResponse> listarTodos() {
-        return usuarioRepository.findAll().stream()
-                .map(u -> {
-                    UsuarioResponse usuarioResponse = modelMapper.map(u, UsuarioResponse.class);
+    /**
+     * Retorna todos os usuários cadastrados, mapeando também seus pronomes.
+     *
+     * @return lista de UsuarioResponse
+     */
+    public List<UsuarioResponse> listAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
 
-                    /// Mapear pronome manualmente, pois o modelmapper não consegue listar objetos complexos
-                    usuarioResponse.setPronome(pronomeService.mapParaResponse(u.getPronome()));
+    /**
+     * Busca um usuário pelo seu identificador.
+     *
+     * @param id identificador do usuário
+     * @return DTO contendo os dados do usuário
+     * @throws ResponseStatusException se o usuário não for encontrado
+     */
+    public UsuarioResponse getById(Integer id) {
+        Usuario user = findEntityById(id);
+        return toResponse(user);
+    }
 
-                    return usuarioResponse;
-                })
-                .toList();
+    /**
+     * Cria um novo usuário, inicializa seu progresso e criptografa a senha.
+     *
+     * @param request DTO contendo os dados de criação
+     * @return DTO do usuário criado
+     */
+
+    @Transactional
+    public UsuarioResponse create(UsuarioRequest request) {
+        Usuario user = new Usuario();
+        user.setNome(request.getNome());
+        user.setEmail(request.getEmail());
+
+        if (request.getSenha() == null) {
+            throw new IllegalArgumentException(ERROR_RAW_PASSWORD);
+        }
+        String password = passwordEncoder.encode(request.getSenha());
+
+        user.setSenha(password);
+        user.setDataCadastro(LocalDateTime.now());
+
+        ProgressoUsuario progress = new ProgressoUsuario();
+        progress.setNivel(1);
+        progress.setXp(0);
+        progress.setAtualizadoEm(LocalDateTime.now());
+
+        user.setProgressoUsuario(progress);
+        progress.setUsuario(user);
+
+        Usuario saved = userRepository.save(user);
+        return toResponse(saved);
     }
 
 
-    public UsuarioResponse buscar(Integer id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado"));
+    /**
+     * Atualiza nome e pronome de um usuário existente.
+     *
+     * @param id      identificador do usuário a ser atualizado
+     * @param request DTO contendo os novos dados
+     * @return DTO do usuário atualizado
+     * @throws ResponseStatusException se o usuário não for encontrado
+     */
+    public UsuarioResponse update(Integer id, UsuarioRequest request) {
+        Usuario user = findEntityById(id);
 
-        return modelMapper.map(usuario, UsuarioResponse.class);
+        if (request.getNome() != null && !request.getNome().isBlank()) {
+            user.setNome(request.getNome());
+        }
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            user.setEmail(request.getEmail());
+        }
+
+        if (request.getIdPronome() != null) {
+            Pronome pronoun = pronounService.findEntityById(request.getIdPronome());
+            user.setPronome(pronoun);
+        }
+
+        Usuario updated = userRepository.save(user);
+        return toResponse(updated);
     }
 
-    public UsuarioResponse criar(UsuarioRequest request,
-                                 ProgressoUsuarioRequest progressoUsuarioRequest) {
-
-        /// Converte o DTO de requisição para a entidade
-        Usuario usuario = modelMapper.map(request, Usuario.class);
-        ProgressoUsuario progressoUsuario = modelMapper.map(progressoUsuarioRequest, ProgressoUsuario.class);
-
-        /// Define a data de cadastro no momento atual
-        usuario.setDataCadastro(LocalDateTime.now());
-
-        /// Criptografa a senha recebida para salvar no banco
-        usuario.setSenhaHash(passwordEncoder.encode(usuario.getSenhaHash()));
-
-        /// Inicializa o progresso do usuário com nível 1 e XP 0
-        progressoUsuario.setUsuario(usuario);
-        progressoUsuario.setNivel(1);
-        progressoUsuario.setXp(0);
-        progressoUsuario.setAtualizadoEm(LocalDateTime.now());
-
-        /// Salva o progresso no banco
-        progressoUsuarioRepository.save(progressoUsuario);
-        /// Salva a entidade no banco de dados
-        Usuario salvo = usuarioRepository.save(usuario);
-
-
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, UsuarioResponse.class);
-
+    /**
+     * Remove um usuário pelo seu identificador.
+     *
+     * @param id identificador do usuário a ser removido
+     * @return DTO do usuário removido
+     * @throws ResponseStatusException se o usuário não for encontrado
+     */
+    public UsuarioResponse delete(Integer id) {
+        Usuario user = findEntityById(id);
+        userRepository.delete(user);
+        return toResponse(user);
     }
 
-    public UsuarioResponse alterar(Integer id, UsuarioRequest request) {
-        /// Busca pelo ID ou lança erro 404
-        Usuario alterar = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado"));
-
-        /// Atualiza o nome com os dados do request
-        alterar.setNome(request.getNome());
-
-        /// Buscar e atualizar pronome
-        Pronome pronome = pronomeService.buscarPorId(request.getIdPronome());
-        alterar.setPronome(pronome);
-
-        /// Salva a alteração no banco
-        Usuario salvo = usuarioRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, UsuarioResponse.class);
+    /**
+     * Converte DTO de requisição em entidade Usuario.
+     *
+     * @param request objeto de requisição
+     * @return entidade Usuario mapeada
+     */
+    private Usuario toEntity(UsuarioRequest request) {
+        return modelMapper.map(request, Usuario.class);
     }
 
-    public UsuarioResponse remover(Integer id) {
-        /// Busca pelo ID ou lança 404
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado"));
+    /**
+     * Converte entidade Usuario em DTO de resposta, incluindo pronome se existir.
+     *
+     * @param user entidade persistida
+     * @return DTO de resposta
+     */
+    private UsuarioResponse toResponse(Usuario user) {
+        UsuarioResponse response = modelMapper.map(user, UsuarioResponse.class);
 
-        /// Deleta pelo ID
-        usuarioRepository.deleteById(id);
+        if (user.getPronome() != null) {
+            response.setPronome(pronounService.toResponse(user.getPronome()));
+        }
 
-        /// Retorna o DTO do deletado
-        return modelMapper.map(usuario, UsuarioResponse.class);
+        return response;
+    }
+
+    /**
+     * Busca a entidade Usuario pelo ID ou lança ResponseStatusException 404.
+     *
+     * @param id identificador do usuário
+     * @return entidade encontrada
+     * @throws ResponseStatusException se não encontrar a entidade
+     */
+    private Usuario findEntityById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND)
+                );
+    }
+
+    public Usuario findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND_EMAIL + email));
+    }
+
+    public String getLoggedUserEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public UsuarioResponse getUsuarioResponseById(Integer id) {
+        Usuario user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
+
+        UsuarioResponse response = new UsuarioResponse();
+        response.setNome(user.getNome());
+        response.setEmail(user.getEmail());
+        response.setPronome(pronounService.toResponse(user.getPronome()));
+        response.setTitulos((userTitleService.toResponseList(user.getTitulos())));
+        response.setAdjetivos(userAdjectiveService.toResponseList(user.getAdjetivos()));
+        response.setReceitasConcluidas(userRecipeService.toResponseList(user.getReceitasConcluidas()));
+        response.setProgresso(userProgressService.toResponse(user.getProgressoUsuario()));
+        response.setIngredientes(userIngredientService.toResponseList(user.getIngredientes()));
+        response.setAvatares(userAvatarService.toResponseList(user.getAvatares()));
+        return response;
     }
 }

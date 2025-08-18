@@ -1,8 +1,12 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.Pronome.PronomeResponse;
 import com.entra21.chef_up.dtos.Titulo.TituloRequest;
 import com.entra21.chef_up.dtos.Titulo.TituloResponse;
+import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
+import com.entra21.chef_up.entities.Pronome;
 import com.entra21.chef_up.entities.Titulo;
+import com.entra21.chef_up.entities.TituloUsuario;
 import com.entra21.chef_up.repositories.TituloRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -10,70 +14,120 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações CRUD de Titulo.
+ */
 @Service
 public class TituloService {
-    private final TituloRepository tituloRepository;
-    private final ModelMapper modelMapper;
 
-    public TituloService(TituloRepository tituloRepository,
-                         ModelMapper modelMapper) {
-        this.tituloRepository = tituloRepository;
-        this.modelMapper = modelMapper;
+    private static final String ERROR_TITLE_NOT_FOUND = "Título não encontrado";
+
+    private final TituloRepository titleRepository;
+    private final ModelMapper mapper;
+
+    public TituloService(TituloRepository titleRepository, ModelMapper mapper) {
+        this.titleRepository = titleRepository;
+        this.mapper = mapper;
     }
 
-    public List<TituloResponse> listarTodos() {
-        return tituloRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, TituloResponse.class))
-                .toList();
+    /**
+     * Retorna todos os títulos cadastrados.
+     *
+     * @return lista de TituloResponse
+     */
+    public List<TituloResponse> listAll() {
+        return titleRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public TituloResponse buscar(Integer id) {
-        Titulo titulo = tituloRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Título não encontrado"));
-
-        return modelMapper.map(titulo, TituloResponse.class);
+    /**
+     * Busca um título pelo seu identificador.
+     *
+     * @param id identificador do título
+     * @return DTO contendo os dados do título
+     * @throws ResponseStatusException se o título não for encontrado
+     */
+    public TituloResponse getById(Integer id) {
+        Titulo entity = findEntityById(id);
+        return toResponse(entity);
     }
 
-    public TituloResponse criar(TituloRequest request) {
-        /// Converte o DTO de requisição para a entidade Título
-        Titulo titulo = modelMapper.map(request, Titulo.class);
-
-        /// Salva a entidade no banco de dados
-        Titulo salvo = tituloRepository.save(titulo);
-
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, TituloResponse.class);
+    /**
+     * Cria um novo título com base nos dados fornecidos.
+     *
+     * @param request DTO contendo as informações para criação
+     * @return DTO do título criado
+     */
+    public TituloResponse create(TituloRequest request) {
+        Titulo entity = toEntity(request);
+        Titulo saved = titleRepository.save(entity);
+        return toResponse(saved);
     }
 
-    public TituloResponse alterar(Integer id, TituloRequest request) {
-        /// Busca o título pelo ID ou lança erro 404
-        Titulo alterar = tituloRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Título não encontrado"));
-
-        /// Atualiza o nome com os dados do request
-        alterar.setNome(request.getNome());
-        alterar.setCondicaoDesbloqueio(request.getCondicaoDesbloqueio());
-
-        /// Salva a alteração no banco
-        Titulo salvo = tituloRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, TituloResponse.class);
+    /**
+     * Atualiza os dados de um título existente.
+     *
+     * @param id      identificador do título a ser atualizado
+     * @param request DTO contendo os novos dados
+     * @return DTO do título atualizado
+     * @throws ResponseStatusException se o título não for encontrado
+     */
+    public TituloResponse update(Integer id, TituloRequest request) {
+        Titulo entity = findEntityById(id);
+        entity.setNome(request.getNome());
+        entity.setCondicaoDesbloqueio(request.getCondicaoDesbloqueio());
+        Titulo updated = titleRepository.save(entity);
+        return toResponse(updated);
     }
 
-    public TituloResponse remover(Integer id) {
-        /// Busca o título pelo ID ou lança 404
-        Titulo titulo = tituloRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Título não encontrado"));
+    /**
+     * Remove um título pelo seu identificador.
+     *
+     * @param id identificador do título a ser removido
+     * @return DTO do título removido
+     * @throws ResponseStatusException se o título não for encontrado
+     */
+    public TituloResponse delete(Integer id) {
+        Titulo entity = findEntityById(id);
+        titleRepository.delete(entity);
+        return toResponse(entity);
+    }
 
-        /// Deleta o título pelo ID
-        tituloRepository.deleteById(id);
+    /**
+     * Converte o DTO de requisição em entidade Titulo.
+     *
+     * @param request objeto de requisição
+     * @return entidade Titulo mapeada
+     */
+    public Titulo toEntity(TituloRequest request) {
+        return mapper.map(request, Titulo.class);
+    }
 
-        /// Retorna o DTO do título deletado
-        return modelMapper.map(titulo, TituloResponse.class);
+    /**
+     * Converte a entidade Titulo em DTO de resposta.
+     *
+     * @param titulo entidade persistida
+     * @return DTO de resposta
+     */
+    public TituloResponse toResponse(Titulo titulo) {
+        return mapper.map(titulo, TituloResponse.class);
+    }
+
+    /**
+     * Busca a entidade Titulo pelo ID ou lança exceção 404.
+     *
+     * @param id identificador do título
+     * @return entidade encontrada
+     * @throws ResponseStatusException se não encontrar a entidade
+     */
+    public Titulo findEntityById(Integer id) {
+        return titleRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_TITLE_NOT_FOUND)
+                );
     }
 }

@@ -1,18 +1,24 @@
 package com.entra21.chef_up.dtos.Ingrediente;
 
 public class IngredienteResponse {
-    /// Nome do ingrediente
+
+    private Integer id;
+
     private String nome;
 
-    /// Categoria do ingrediente (ex: Verdura, Fruta, Temperos)
     private String categoria;
 
-    /// Estimativa de validade em dias
     private Integer estimativaValidade;
 
-    /// Dica de conservação para o ingrediente
     private String dicaConservacao;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getNome() {
         return nome;
     }

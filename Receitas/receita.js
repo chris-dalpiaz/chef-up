@@ -1,113 +1,52 @@
-// ==================== DADOS EXEMPLO ====================
-const receitas = [
-  {
-    id: 1,
-    nome: "Brussels Sprouts, Mashed Potato & Sausage Bowl",
-    imagem: "https://via.placeholder.com/300x200",
-    xp: 10,
-    categoria: "Popular"
-  },
-  {
-    id: 2,
-    nome: "Sushi Especial",
-    imagem: "https://via.placeholder.com/300x200",
-    xp: 8,
-    categoria: "Oriental"
-  },
-  {
-    id: 3,
-    nome: "Suco Detox",
-    imagem: "https://via.placeholder.com/300x200",
-    xp: 5,
-    categoria: "Bebidas"
-  },
-  {
-    id: 4,
-    nome: "Sanduíche Natural",
-    imagem: "https://via.placeholder.com/300x200",
-    xp: 6,
-    categoria: "Lanches"
-  }
-];
+// Seleciona todos os elementos do DOM que possuem a classe 'footer-item' e guarda na variável footerItems
+const footerItems = document.querySelectorAll('.footer-item');
 
-
-// ==================== ELEMENTOS ====================
-const listaReceitas = document.getElementById("lista-receitas");
-const campoBusca = document.querySelector(".search-bar input");
-const categorias = document.querySelectorAll(".category");
-const footerItems = document.querySelectorAll(".footer-item");
-const nivelEl = document.querySelector(".nivel");
-const barraXpEl = document.querySelector(".barra_xp");
-const pontosXpEl = document.querySelector(".pontos_xp");
-
-// ==================== FUNÇÕES ====================
-
-// Atualiza a barra de progresso
-function atualizarProgresso() {
-  nivelEl.innerHTML = `<span>${nivel}</span>`;
-  barraXpEl.style.width = `${(xpAtual / xpMax) * 100}%`;
-  pontosXpEl.textContent = `${xpAtual} / ${xpMax}`;
-}
-
-// Renderiza as receitas na tela
-function renderReceitas(filtroCategoria = "Popular", termoBusca = "") {
-  listaReceitas.innerHTML = "";
-
-  const receitasFiltradas = receitas.filter(r => {
-    const matchCategoria = filtroCategoria ? r.categoria === filtroCategoria : true;
-    const matchBusca = termoBusca
-      ? r.nome.toLowerCase().includes(termoBusca.toLowerCase())
-      : true;
-    return matchCategoria && matchBusca;
-  });
-
-  if (receitasFiltradas.length === 0) {
-    listaReceitas.innerHTML = "<p>Nenhuma receita encontrada.</p>";
-    return;
-  }
-
-  receitasFiltradas.forEach(r => {
-    const card = document.createElement("div");
-    card.classList.add("card-receita");
-
-    card.innerHTML = `
-      <img src="${r.imagem}" alt="${r.nome}">
-      <div class="xp-tag">${r.xp}XP</div>
-      <p>${r.nome}</p>
-    `;
-
-    listaReceitas.appendChild(card);
-  });
-}
-
-// ==================== EVENTOS ====================
-
-// Muda a categoria selecionada
-categorias.forEach(cat => {
-  cat.addEventListener("click", () => {
-    categorias.forEach(c => c.classList.remove("selected"));
-    cat.classList.add("selected");
-
-    const categoriaNome = cat.getAttribute("data-nome");
-    renderReceitas(categoriaNome, campoBusca.value);
-  });
-});
-
-// Filtra enquanto digita
-campoBusca.addEventListener("input", () => {
-  const categoriaAtual = document.querySelector(".category.selected").getAttribute("data-nome");
-  renderReceitas(categoriaAtual, campoBusca.value);
-});
-
-// Rodapé — muda o item selecionado
+// Para cada elemento dentro de footerItems, executa a função passada
 footerItems.forEach(item => {
-  item.addEventListener("click", () => {
-    footerItems.forEach(i => i.classList.remove("selected"));
-    item.classList.add("selected");
-    console.log("Mudou para:", item.innerText);
+  // Adiciona um listener para o evento de clique no item atual
+  item.addEventListener('click', () => {
+    // Ao clicar, percorre todos os footerItems e remove a classe 'selected' de cada um
+    footerItems.forEach(i => i.classList.remove('selected'));
+    // Adiciona a classe 'selected' somente no item que foi clicado, para destacar ele
+    item.classList.add('selected');
   });
 });
 
-// ==================== INICIALIZAÇÃO ====================
-renderReceitas("Popular");
-atualizarProgresso();
+window.addEventListener("load", carregarReceitas);
+
+async function carregarReceitas() {
+  const token = localStorage.getItem("token");
+  const container = document.querySelector(".receitas_container");
+
+  try {
+    const res = await fetch("http://localhost:8080/receitas", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!res.ok) throw new Error("Erro ao buscar receitas");
+
+    const receitas = await res.json();
+    container.innerHTML = "";
+
+    receitas.forEach(r => {
+      const card = document.createElement("div");
+      card.className = "receita_card";
+
+      // 👇 clique redireciona para página de detalhes
+      card.addEventListener("click", () => {
+        window.location.href = `detalhe_receita.html?id=${r.id}`;
+      });
+
+      card.innerHTML = `
+        <img src="${r.imagemReceita}" alt="${r.nome}" class="receita_imagem">
+        <h2>${r.nome}</h2>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error("Erro ao carregar receitas:", error);
+    container.innerHTML = "<p>Não foi possível carregar as receitas.</p>";
+  }
+}

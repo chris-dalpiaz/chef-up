@@ -2,18 +2,16 @@ package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.dtos.Login.LoginRequest;
 import com.entra21.chef_up.dtos.Login.LoginResponse;
-import com.entra21.chef_up.dtos.ProgressoUsuario.ProgressoUsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
-import com.entra21.chef_up.repositories.UsuarioRepository;
 import com.entra21.chef_up.services.AuthService;
 import com.entra21.chef_up.services.UsuarioService;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller responsável pelas operações de autenticação e registro de usuários.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -22,10 +20,9 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     * Construtor com injeção das dependências necessárias
+     * Construtor com injeção das dependências necessárias.
      */
-    public AuthController(UsuarioRepository usuarioRepository,
-                          UsuarioService usuarioService,
+    public AuthController(UsuarioService usuarioService,
                           AuthService authService) {
         this.usuarioService = usuarioService;
         this.authService = authService;
@@ -36,13 +33,11 @@ public class AuthController {
      * Recebe o objeto Usuario no corpo da requisição (JSON).
      *
      * @param request dados do novo usuário (senha em texto simples)
-     * @param progressoUsuarioRequest objeto para criar progresso inicial (recebido junto, mas ideal seria criado internamente)
      * @return usuário salvo no banco com ID gerado
      */
     @PostMapping("/register")
-    public UsuarioResponse criarUsuario(@RequestBody UsuarioRequest request,
-                                        ProgressoUsuarioRequest progressoUsuarioRequest) {
-        return usuarioService.criar(request, progressoUsuarioRequest);
+    public UsuarioResponse createUser(@RequestBody UsuarioRequest request) {
+        return usuarioService.create(request);
     }
 
     /**
@@ -54,7 +49,7 @@ public class AuthController {
      * @throws BadCredentialsException se a senha estiver incorreta
      */
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
-        return authService.login(request);
+    public LoginResponse loginUser(@RequestBody LoginRequest request) {
+        return authService.authenticate(request);
     }
 }

@@ -4,47 +4,50 @@ import jakarta.persistence.*;
 
 @Entity
 public class ReceitaColecao {
-    /// ID único da associação entre receita e coleção
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /// Receita associada (muitos para um)
     @ManyToOne()
-    @JoinColumn(name = "receitas_id")
+    @JoinColumn(name = "receita_id")
     private Receita receita;
 
-    /// Coleção associada (muitos para um)
     @ManyToOne()
-    @JoinColumn(name = "colecoes_id")
+    @JoinColumn(name = "colecao_id")
     private Colecao colecao;
 
-    /** Retorna o ID da associação */
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public Integer getId() {
         return id;
     }
 
-    /** Define o ID da associação */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /** Retorna a receita associada */
     public Receita getReceita() {
         return receita;
     }
 
-    /** Define a receita associada */
     public void setReceita(Receita receita) {
         this.receita = receita;
     }
 
-    /** Retorna a coleção associada */
     public Colecao getColecao() {
         return colecao;
     }
 
-    /** Define a coleção associada */
     public void setColecao(Colecao colecao) {
         this.colecao = colecao;
     }

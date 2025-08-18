@@ -1,84 +1,82 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.Utensilio;
-import com.entra21.chef_up.repositories.UtensilioRepository;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.dtos.Utensilio.UtensilioRequest;
+import com.entra21.chef_up.dtos.Utensilio.UtensilioResponse;
+import com.entra21.chef_up.services.UtensilioService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Utensilio.
+ */
 @RestController
-@RequestMapping("/utensilios") /// Define o caminho base para as rotas deste controlador
+@RequestMapping("/utensilios")
 public class UtensilioController {
 
-    private final UtensilioRepository utensilioRepository;
+    private final UtensilioService utensilioService;
 
-    /// Construtor para injetar a dependência do repositório
-    public UtensilioController(UtensilioRepository utensilioRepository) {
-        this.utensilioRepository = utensilioRepository;
+    /// Construtor para injetar a dependência do serviço
+    public UtensilioController(UtensilioService utensilioService) {
+        this.utensilioService = utensilioService;
     }
 
     /**
      * Lista todos os utensílios cadastrados.
+     *
+     * @return lista de utensílios
      */
     @GetMapping
-    public List<Utensilio> listarUtensilios() {
-        return utensilioRepository.findAll();
+    public List<UtensilioResponse> listUtensils() {
+        return utensilioService.listAll();
     }
 
     /**
      * Busca um utensílio específico pelo ID.
      * Retorna erro 404 se o utensílio não for encontrado.
+     *
+     * @param idUtensilio ID do utensílio
+     * @return utensílio encontrado
      */
     @GetMapping("/{idUtensilio}")
-    public Utensilio buscarUtensilio(@PathVariable Integer idUtensilio) {
-        return utensilioRepository.findById(idUtensilio)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
+    public UtensilioResponse getUtensil(@PathVariable Integer idUtensilio) {
+        return utensilioService.getById(idUtensilio);
     }
 
     /**
      * Cria um novo utensílio com os dados enviados no corpo da requisição.
+     *
+     * @param request dados do novo utensílio
+     * @return utensílio criado
      */
     @PostMapping
-    public Utensilio criarUtensilio(@RequestBody Utensilio utensilio) {
-        return utensilioRepository.save(utensilio);
+    public UtensilioResponse createUtensil(@RequestBody UtensilioRequest request) {
+        return utensilioService.create(request);
     }
 
     /**
      * Atualiza os dados de um utensílio existente pelo ID.
      * Retorna erro 404 se o utensílio não existir.
+     *
+     * @param idUtensilio ID do utensílio
+     * @param request     novos dados do utensílio
+     * @return utensílio atualizado
      */
     @PutMapping("/{idUtensilio}")
-    public Utensilio alterarUtensilio(
-            @PathVariable Integer idUtensilio,
-            @RequestBody Utensilio utensilio
-    ) {
-        /// Busca o utensílio para alterar, ou lança erro 404 se não encontrado
-        Utensilio alterar = utensilioRepository.findById(idUtensilio)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
-
-        /// Atualiza o nome do utensílio
-        alterar.setNome(utensilio.getNome());
-
-        /// Salva as alterações e retorna o utensílio atualizado
-        return utensilioRepository.save(alterar);
+    public UtensilioResponse updateUtensil(@PathVariable Integer idUtensilio,
+                                           @RequestBody UtensilioRequest request) {
+        return utensilioService.update(idUtensilio, request);
     }
 
     /**
      * Remove um utensílio pelo ID.
      * Retorna o utensílio removido ou erro 404 se não existir.
+     *
+     * @param idUtensilio ID do utensílio
+     * @return utensílio removido
      */
     @DeleteMapping("/{idUtensilio}")
-    public Utensilio removerUtensilio(@PathVariable Integer idUtensilio) {
-        /// Busca o utensílio para remover, ou lança erro 404 se não encontrado
-        Utensilio utensilio = utensilioRepository.findById(idUtensilio)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
-
-        /// Remove o utensílio do banco de dados
-        utensilioRepository.deleteById(idUtensilio);
-
-        /// Retorna o utensílio removido
-        return utensilio;
+    public UtensilioResponse deleteUtensil(@PathVariable Integer idUtensilio) {
+        return utensilioService.delete(idUtensilio);
     }
 }

@@ -10,78 +10,121 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Serviço responsável pelas operações CRUD de pronome.
+ */
 @Service
 public class PronomeService {
-    private final PronomeRepository pronomeRepository;
-    private final ModelMapper modelMapper;
 
-    public PronomeService(PronomeRepository pronomeRepository,
-                          ModelMapper modelMapper) {
-        this.pronomeRepository = pronomeRepository;
-        this.modelMapper = modelMapper;
+    private static final String ERROR_PRONOUN_NOT_FOUND = "Pronome não encontrado";
+
+    private final PronomeRepository pronounRepository;
+    private final ModelMapper mapper;
+
+    public PronomeService(PronomeRepository pronounRepository,
+                          ModelMapper mapper) {
+        this.pronounRepository = pronounRepository;
+        this.mapper = mapper;
     }
 
-    public List<PronomeResponse> listarTodos() {
-        return  pronomeRepository.findAll().stream()
-                .map(u -> modelMapper.map(u, PronomeResponse.class))
-                .toList();
+    /**
+     * Retorna todos os pronomes cadastrados.
+     *
+     * @return lista de PronomeResponse
+     */
+    public List<PronomeResponse> listAll() {
+        return pronounRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public PronomeResponse buscar(Integer id) {
-        Pronome pronome = pronomeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Pronome não encontrado"));
-
-        return modelMapper.map(pronome, PronomeResponse.class);
+    /**
+     * Busca um pronome pelo seu identificador.
+     *
+     * @param id identificador do pronome
+     * @return DTO contendo os dados do pronome
+     * @throws ResponseStatusException se o pronome não for encontrado
+     */
+    public PronomeResponse getById(Integer id) {
+        Pronome pronoun = findEntityById(id);
+        return toResponse(pronoun);
     }
 
-    public PronomeResponse criar(PronomeRequest request) {
-        /// Converte o DTO de requisição para a entidade
-        Pronome pronome = modelMapper.map(request, Pronome.class);
-
-        /// Salva a entidade no banco de dados
-        Pronome salvo = pronomeRepository.save(pronome);
-
-        /// Converte a entidade salva para o DTO de resposta e retorna
-        return modelMapper.map(salvo, PronomeResponse.class);
+    /**
+     * Cria um novo pronome com base nos dados fornecidos.
+     *
+     * @param request DTO contendo as informações para criação
+     * @return DTO do pronome criado
+     */
+    public PronomeResponse create(PronomeRequest request) {
+        Pronome entity = toEntity(request);
+        Pronome saved = pronounRepository.save(entity);
+        return toResponse(saved);
     }
 
-    public PronomeResponse alterar(Integer id, PronomeRequest request) {
-        /// Busca pelo ID ou lança erro 404
-        Pronome alterar = pronomeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Pronome não encontrado"));
-
-        /// Atualiza o nome com os dados do request
-        alterar.setNome(request.getNome());
-
-        /// Salva a alteração no banco
-        Pronome salvo = pronomeRepository.save(alterar);
-
-        /// Converte a entidade salva para DTO de resposta e retorna
-        return modelMapper.map(salvo, PronomeResponse.class);
+    /**
+     * Atualiza o nome de um pronome existente.
+     *
+     * @param id      identificador do pronome a ser atualizado
+     * @param request DTO contendo o novo nome
+     * @return DTO do pronome atualizado
+     * @throws ResponseStatusException se o pronome não for encontrado
+     */
+    public PronomeResponse update(Integer id, PronomeRequest request) {
+        Pronome entity = findEntityById(id);
+        entity.setNome(request.getNome());
+        Pronome updated = pronounRepository.save(entity);
+        return toResponse(updated);
     }
 
-    public PronomeResponse remover(Integer id) {
-        /// Busca pelo ID ou lança 404
-        Pronome pronome = pronomeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Pronome não encontrado"));
-
-        /// Deleta pelo ID
-        pronomeRepository.deleteById(id);
-
-        /// Retorna o DTO do deletado
-        return modelMapper.map(pronome, PronomeResponse.class);
+    /**
+     * Remove um pronome pelo seu identificador.
+     *
+     * @param id identificador do pronome a ser removido
+     * @return DTO do pronome removido
+     * @throws ResponseStatusException se o pronome não for encontrado
+     */
+    public PronomeResponse delete(Integer id) {
+        Pronome entity = findEntityById(id);
+        pronounRepository.delete(entity);
+        return toResponse(entity);
     }
 
-    public Pronome buscarPorId(Integer idPronome) {
-        return pronomeRepository.findById(idPronome).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "Pronome não encontrado"));
+    /**
+     * Retorna a entidade Pronome pelo ID ou lança exceção 404.
+     *
+     * @param id identificador do pronome
+     * @return entidade Pronome
+     * @throws ResponseStatusException se o pronome não for encontrado
+     */
+    public Pronome findEntityById(Integer id) {
+        return pronounRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_PRONOUN_NOT_FOUND)
+                );
     }
 
-    public PronomeResponse mapParaResponse(Pronome pronome){
-        return modelMapper.map(pronome, PronomeResponse.class);
+    /**
+     * Converte o DTO de requisição em entidade Pronome.
+     *
+     * @param request objeto de requisição
+     * @return entidade Pronome mapeada
+     */
+    private Pronome toEntity(PronomeRequest request) {
+        return mapper.map(request, Pronome.class);
     }
+
+    /**
+     * Converte a entidade Pronome em DTO de resposta.
+     *
+     * @param pronoun entidade persistida
+     * @return DTO de resposta
+     */
+    public PronomeResponse toResponse(Pronome pronoun) {
+        return mapper.map(pronoun, PronomeResponse.class);
+    }
+
 }

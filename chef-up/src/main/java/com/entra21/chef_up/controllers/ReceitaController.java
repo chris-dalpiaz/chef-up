@@ -1,10 +1,16 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.*;
+import com.entra21.chef_up.dtos.Receita.ReceitaRequest;
+import com.entra21.chef_up.dtos.Receita.ReceitaResponse;
+import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaRequest;
+import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaResponse;
+import com.entra21.chef_up.dtos.UtensilioReceita.UtensilioReceitaRequest;
+import com.entra21.chef_up.dtos.UtensilioReceita.UtensilioReceitaResponse;
+import com.entra21.chef_up.dtos.IngredienteReceita.IngredienteReceitaRequest;
+import com.entra21.chef_up.dtos.IngredienteReceita.IngredienteReceitaResponse;
 import com.entra21.chef_up.repositories.*;
-import org.springframework.http.HttpStatus;
+import com.entra21.chef_up.services.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -14,371 +20,159 @@ public class ReceitaController {
 
     private final ReceitaRepository receitaRepository;
     private final EtapaReceitaRepository etapaReceitaRepository;
-    private final UtensilioRepository utensilioRepository;
     private final UtensilioReceitaRepository utensilioReceitaRepository;
-    private final IngredienteRepository ingredienteRepository;
     private final IngredienteReceitaRepository ingredienteReceitaRepository;
+    private final ReceitaService receitaService;
+    private final EtapaReceitaService etapaReceitaService;
+    private final IngredienteReceitaService ingredienteReceitaService;
+    private final UtensilioReceitaService utensilioReceitaService;
 
-    /// Construtor com injeção de dependência dos repositórios
     public ReceitaController(ReceitaRepository receitaRepository,
                              EtapaReceitaRepository etapaReceitaRepository,
-                             UtensilioRepository utensilioRepository,
-                             UtensilioReceitaRepository utensilioReceitaRepository, IngredienteRepository ingredienteRepository, IngredienteReceitaRepository ingredienteReceitaRepository) {
+                             UtensilioReceitaRepository utensilioReceitaRepository,
+                             IngredienteReceitaRepository ingredienteReceitaRepository,
+                             ReceitaService receitaService,
+                             EtapaReceitaService etapaReceitaService,
+                             IngredienteReceitaService ingredienteReceitaService,
+                             UtensilioReceitaService utensilioReceitaService) {
         this.receitaRepository = receitaRepository;
         this.etapaReceitaRepository = etapaReceitaRepository;
-        this.utensilioRepository = utensilioRepository;
         this.utensilioReceitaRepository = utensilioReceitaRepository;
-        this.ingredienteRepository = ingredienteRepository;
         this.ingredienteReceitaRepository = ingredienteReceitaRepository;
+        this.receitaService = receitaService;
+        this.etapaReceitaService = etapaReceitaService;
+        this.ingredienteReceitaService = ingredienteReceitaService;
+        this.utensilioReceitaService = utensilioReceitaService;
     }
 
     /**
      * Lista todas as receitas cadastradas.
-     *
-     * @return lista de receitas
      */
     @GetMapping
-    public List<Receita> listarReceitas() {
-        return receitaRepository.findAll();
+    public List<ReceitaResponse> listRecipes() {
+        return receitaService.listAll();
     }
 
     /**
      * Busca uma receita pelo ID.
-     * Retorna 404 se não for encontrada.
-     *
-     * @param idReceita ID da receita na URL
-     * @return receita encontrada
      */
     @GetMapping("/{idReceita}")
-    public Receita buscarReceita(@PathVariable Integer idReceita) {
-        return receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
+    public ReceitaResponse getRecipe(@PathVariable Integer idReceita) {
+        return receitaService.getById(idReceita);
     }
 
     /**
      * Cria uma nova receita.
-     *
-     * @param receita dados da receita no corpo da requisição
-     * @return receita criada
      */
     @PostMapping
-    public Receita criarReceita(@RequestBody Receita receita) {
-        return receitaRepository.save(receita);
+    public ReceitaResponse createRecipe(@RequestBody ReceitaRequest request) {
+        return receitaService.create(request);
     }
 
     /**
      * Atualiza os dados de uma receita existente.
-     * Retorna 404 se não existir.
-     *
-     * @param idReceita ID da receita a alterar
-     * @param receita   novos dados da receita
-     * @return receita atualizada
      */
     @PutMapping("/{idReceita}")
-    public Receita alterarReceita(
-            @PathVariable Integer idReceita,
-            @RequestBody Receita receita
-    ) {
-        Receita alterar = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        alterar.setCategoria(receita.getCategoria());
-        alterar.setNome(receita.getNome());
-        alterar.setDificuldade(receita.getDificuldade());
-        alterar.setDescricao(receita.getDescricao());
-        alterar.setXpGanho(receita.getXpGanho());
-        alterar.setTempoPreparoSegundos(receita.getTempoPreparoSegundos());
-
-        return receitaRepository.save(alterar);
+    public ReceitaResponse updateRecipe(@PathVariable Integer idReceita,
+                                        @RequestBody ReceitaRequest request) {
+        return receitaService.update(idReceita, request);
     }
 
     /**
      * Remove uma receita pelo ID.
-     * Retorna a receita removida ou erro 404 se não existir.
-     *
-     * @param idReceita ID da receita para remover
-     * @return receita removida
      */
     @DeleteMapping("/{idReceita}")
-    public Receita removerReceita(@PathVariable Integer idReceita) {
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        receitaRepository.deleteById(idReceita);
-
-        return receita;
+    public ReceitaResponse deleteRecipe(@PathVariable Integer idReceita) {
+        return receitaService.delete(idReceita);
     }
 
-    ///* ---------- Etapas da Receita ---------- */
+    /* ---------- Etapas da Receita ---------- */
 
-    /**
-     * Lista todas as etapas associadas a uma receita.
-     *
-     * @param idReceita ID da receita
-     * @return lista de etapas
-     */
     @GetMapping("/{idReceita}/etapas")
-    public List<EtapaReceita> listarEtapaReceita(@PathVariable Integer idReceita) {
-        return etapaReceitaRepository.findByReceitaId(idReceita);
+    public List<EtapaReceitaResponse> listRecipeSteps(@PathVariable Integer idReceita) {
+        return etapaReceitaService.listByRecipe(idReceita);
     }
 
-    /**
-     * Busca uma etapa específica de uma receita pelo ID.
-     * Retorna 404 se não encontrada ou 400 se etapa não pertence à receita.
-     *
-     * @param idReceita ID da receita
-     * @param idEtapaReceita   ID da etapa
-     * @return etapa encontrada
-     */
     @GetMapping("/{idReceita}/etapas/{idEtapaReceita}")
-    public EtapaReceita buscarEtapaReceita(@PathVariable Integer idReceita,
-                                       @PathVariable Integer idEtapaReceita) {
-        EtapaReceita etapa = etapaReceitaRepository.findById(idEtapaReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa da receita não encontrada"));
-
-        if (!etapa.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etapa não pertence a receita");
-        }
-
-        return etapa;
+    public EtapaReceitaResponse getRecipeStep(@PathVariable Integer idReceita,
+                                              @PathVariable Integer idEtapaReceita) {
+        return etapaReceitaService.getById(idReceita, idEtapaReceita);
     }
 
-    /**
-     * Cria uma nova etapa para a receita.
-     * Define ordem incrementando o maior valor atual.
-     *
-     * @param idReceita    ID da receita
-     * @param etapaReceita dados da etapa no corpo da requisição
-     * @return etapa criada
-     */
     @PostMapping("/{idReceita}/etapas")
-    public EtapaReceita adicionarEtapa(@PathVariable Integer idReceita, @RequestBody EtapaReceita etapaReceita) {
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        Integer maxOrdem = etapaReceitaRepository.findMaxOrdemByReceitaId(idReceita);
-        if (maxOrdem == null) maxOrdem = 0;
-
-        etapaReceita.setReceita(receita);
-        etapaReceita.setOrdem(maxOrdem + 1);
-
-        return etapaReceitaRepository.save(etapaReceita);
+    public EtapaReceitaResponse addRecipeStep(@PathVariable Integer idReceita,
+                                              @RequestBody EtapaReceitaRequest request) {
+        return etapaReceitaService.create(idReceita, request);
     }
 
-    /**
-     * Edita uma etapa associada a uma receita.
-     * Verifica se etapa pertence à receita.
-     *
-     * @param idReceita    ID da receita
-     * @param idEtapaReceita      ID da etapa
-     * @param etapaReceita novos dados da etapa
-     * @return etapa atualizada
-     */
     @PutMapping("/{idReceita}/etapas/{idEtapaReceita}")
-    public EtapaReceita editarEtapaReceita(@PathVariable Integer idReceita,
-                                           @PathVariable Integer idEtapaReceita,
-                                           @RequestBody EtapaReceita etapaReceita) {
-        EtapaReceita alterar = etapaReceitaRepository.findById(idEtapaReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Etapa não encontrada"));
-
-        if (!alterar.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Etapa não pertence a receita");
-        }
-
-        alterar.setConteudo(etapaReceita.getConteudo());
-
-        return etapaReceitaRepository.save(alterar);
+    public EtapaReceitaResponse updateRecipeStep(@PathVariable Integer idReceita,
+                                                 @PathVariable Integer idEtapaReceita,
+                                                 @RequestBody EtapaReceitaRequest request) {
+        return etapaReceitaService.update(idReceita, idEtapaReceita, request);
     }
 
-    ///* ---------- Utensílios da Receita ---------- */
+    /* ---------- Utensílios da Receita ---------- */
 
-    /**
-     * Lista todos os utensílios associados a uma receita pelo ID.
-     */
     @GetMapping("/{idReceita}/utensilios")
-    public List<UtensilioReceita> listarUtensilioReceita(@PathVariable Integer idReceita) {
-
-        /// Retorna todos os utensílios da receita usando o repositório
-        return utensilioReceitaRepository.findByReceitaId(idReceita);
+    public List<UtensilioReceitaResponse> listRecipeUtensils(@PathVariable Integer idReceita) {
+        return utensilioReceitaService.listByRecipe(idReceita);
     }
 
-    /**
-     * Busca um utensílio específico de uma receita.
-     */
     @GetMapping("/{idReceita}/utensilios/{idUtensilioReceita}")
-    public UtensilioReceita buscarUtensilioReceita(@PathVariable Integer idReceita,
-                                                   @PathVariable Integer idUtensilioReceita) {
-
-        /// Busca o utensílio pelo ID ou lança erro 404 se não existir
-        UtensilioReceita utensilioReceita = utensilioReceitaRepository.findById(idUtensilioReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
-
-        /// Verifica se o utensílio pertence a receita; se não, lança erro 400
-        if (!utensilioReceita.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Utensílio não pertence a receita");
-        }
-
-        /// Retorna o utensílio válido
-        return utensilioReceita;
+    public UtensilioReceitaResponse getRecipeUtensil(@PathVariable Integer idReceita,
+                                                     @PathVariable Integer idUtensilioReceita) {
+        return utensilioReceitaService.getById(idReceita, idUtensilioReceita);
     }
 
-    /**
-     * Cria um novo utensílio associado a uma receita.
-     */
     @PostMapping("/{idReceita}/utensilios")
-    public UtensilioReceita criarUtensilioReceita(@PathVariable Integer idReceita,
-                                                  @RequestBody UtensilioReceita utensilioReceita) {
-
-        /// Busca a receita pelo ID ou lança erro 404 se não existir
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        /// Associa a receita ao novo utensílio
-        utensilioReceita.setReceita(receita);
-
-        /// Salva e retorna o utensílio criado no banco
-        return utensilioReceitaRepository.save(utensilioReceita);
+    public UtensilioReceitaResponse createRecipeUtensil(@PathVariable Integer idReceita,
+                                                        @RequestBody UtensilioReceitaRequest request) {
+        return utensilioReceitaService.create(idReceita, request);
     }
 
-    /**
-     * Edita um utensílio associado a uma receita.
-     */
     @PutMapping("/{idReceita}/utensilios/{idUtensilioReceita}")
-    public UtensilioReceita editarUtensilioReceita(@PathVariable Integer idReceita,
-                                                   @PathVariable Integer idUtensilioReceita,
-                                                   @RequestBody UtensilioReceita utensilioReceita) {
-        /// Busca o utensílio a ser alterado ou lança erro 404
-        UtensilioReceita alterar = utensilioReceitaRepository.findById(idUtensilioReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
-
-        /// Verifica se o utensílio pertence a receita; se não, lança erro 400
-        if (!alterar.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Utensílio não pertence a receita");
-        }
-
-        /// Atualiza o campo utensílio com os dados recebidos
-        alterar.setUtensilio(utensilioReceita.getUtensilio());
-
-        /// Salva e retorna o utensílio atualizado
-        return utensilioReceitaRepository.save(alterar);
+    public UtensilioReceitaResponse updateRecipeUtensil(@PathVariable Integer idReceita,
+                                                        @PathVariable Integer idUtensilioReceita,
+                                                        @RequestBody UtensilioReceitaRequest request) {
+        return utensilioReceitaService.update(idReceita, idUtensilioReceita, request);
     }
 
-    /**
-     * Remove um utensílio associado a uma receita.
-     */
     @DeleteMapping("/{idReceita}/utensilios/{idUtensilioReceita}")
-    public UtensilioReceita removerUtensilioReceita(@PathVariable Integer idReceita,
-                                                    @PathVariable Integer idUtensilioReceita) {
-        /// Busca o utensílio pelo ID ou lança erro 404
-        UtensilioReceita utensilioReceita = utensilioReceitaRepository.findById(idUtensilioReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utensílio não encontrado"));
-
-        /// Verifica se o utensílio pertence a receita; se não, lança erro 400
-        if (!utensilioReceita.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Utensílio não pertence a receita");
-        }
-
-        /// Deleta o utensílio do banco
-        utensilioReceitaRepository.delete(utensilioReceita);
-
-        /// Retorna o utensílio removido (opcional)
-        return utensilioReceita;
+    public UtensilioReceitaResponse deleteRecipeUtensil(@PathVariable Integer idReceita,
+                                                        @PathVariable Integer idUtensilioReceita) {
+        return utensilioReceitaService.delete(idReceita, idUtensilioReceita);
     }
 
-    ///* ---------- Ingredientes da Receita ---------- */
+    /* ---------- Ingredientes da Receita ---------- */
 
-    /**
-     * Lista todos os ingredientes associados a uma receita pelo ID.
-     */
     @GetMapping("/{idReceita}/ingredientes")
-    public List<IngredienteReceita> listarIngredienteReceita(@PathVariable Integer idReceita) {
-
-        /// Retorna todos os utensílios da receita usando o repositório
-        return ingredienteReceitaRepository.findByReceitaId(idReceita);
+    public List<IngredienteReceitaResponse> listRecipeIngredients(@PathVariable Integer idReceita) {
+        return ingredienteReceitaService.listByRecipe(idReceita);
     }
 
-    /**
-     * Busca um ingrediente específico de uma receita.
-     */
     @GetMapping("/{idReceita}/ingredientes/{idIngredienteReceita}")
-    public IngredienteReceita buscarIngredienteReceita(@PathVariable Integer idReceita,
-                                                   @PathVariable Integer idIngredienteReceita) {
-
-        /// Busca o ingrediente pelo ID ou lança erro 404 se não existir
-        IngredienteReceita ingredienteReceita = ingredienteReceitaRepository.findById(idIngredienteReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        /// Verifica se o ingrediente pertence a receita; se não, lança erro 400
-        if (!ingredienteReceita.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence a receita");
-        }
-
-        /// Retorna o ingrediente válido
-        return ingredienteReceita;
+    public IngredienteReceitaResponse getRecipeIngredient(@PathVariable Integer idReceita,
+                                                          @PathVariable Integer idIngredienteReceita) {
+        return ingredienteReceitaService.getById(idReceita, idIngredienteReceita);
     }
 
-    /**
-     * Cria um novo ingrediente associado a uma receita.
-     */
     @PostMapping("/{idReceita}/ingredientes")
-    public IngredienteReceita criarIngredienteReceita(@PathVariable Integer idReceita,
-                                                  @RequestBody IngredienteReceita ingredienteReceita) {
-
-        /// Busca a receita pelo ID ou lança erro 404 se não existir
-        Receita receita = receitaRepository.findById(idReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-
-        /// Associa a receita ao novo ingrediente
-        ingredienteReceita.setReceita(receita);
-
-        /// Salva e retorna o ingrediente criado no banco
-        return ingredienteReceitaRepository.save(ingredienteReceita);
+    public IngredienteReceitaResponse createRecipeIngredient(@PathVariable Integer idReceita,
+                                                             @RequestBody IngredienteReceitaRequest request) {
+        return ingredienteReceitaService.create(idReceita, request);
     }
 
-    /**
-     * Edita um ingrediente associado a uma receita.
-     */
     @PutMapping("/{idReceita}/ingredientes/{idIngredienteReceita}")
-    public IngredienteReceita editarIngredienteReceita(@PathVariable Integer idReceita,
-                                                   @PathVariable Integer idIngredienteReceita,
-                                                   @RequestBody IngredienteReceita ingredienteReceita) {
-        /// Busca o ingrediente a ser alterado ou lança erro 404
-        IngredienteReceita alterar = ingredienteReceitaRepository.findById(idIngredienteReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        /// Verifica se o ingrediente pertence a receita; se não, lança erro 400
-        if (!alterar.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence a receita");
-        }
-
-        /// Atualiza o campo igrediente com os dados recebidos
-        alterar.setIngrediente(ingredienteReceita.getIngrediente());
-        alterar.setQuantidade(ingredienteReceita.getQuantidade());
-        alterar.setUnidadeMedida(ingredienteReceita.getUnidadeMedida());
-
-        /// Salva e retorna o ingrediente atualizado
-        return ingredienteReceitaRepository.save(alterar);
+    public IngredienteReceitaResponse updateRecipeIngredient(@PathVariable Integer idReceita,
+                                                             @PathVariable Integer idIngredienteReceita,
+                                                             @RequestBody IngredienteReceitaRequest request) {
+        return ingredienteReceitaService.update(idReceita, idIngredienteReceita, request);
     }
 
-    /**
-     * Remove um ingrediente associado a uma receita.
-     */
     @DeleteMapping("/{idReceita}/ingredientes/{idIngredienteReceita}")
-    public IngredienteReceita removerIngredienteReceita(@PathVariable Integer idReceita,
-                                                    @PathVariable Integer idIngredienteReceita) {
-        /// Busca o ingrediente pelo ID ou lança erro 404
-        IngredienteReceita ingredienteReceita = ingredienteReceitaRepository.findById(idIngredienteReceita)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingrediente não encontrado"));
-
-        /// Verifica se o ingrediente pertence a receita; se não, lança erro 400
-        if (!ingredienteReceita.getReceita().getId().equals(idReceita)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ingrediente não pertence a receita");
-        }
-
-        /// Deleta o ingrediente do banco
-        ingredienteReceitaRepository.delete(ingredienteReceita);
-
-        /// Retorna o ingrediente removido (opcional)
-        return ingredienteReceita;
+    public IngredienteReceitaResponse deleteRecipeIngredient(@PathVariable Integer idReceita,
+                                                             @PathVariable Integer idIngredienteReceita) {
+        return ingredienteReceitaService.delete(idReceita, idIngredienteReceita);
     }
 }

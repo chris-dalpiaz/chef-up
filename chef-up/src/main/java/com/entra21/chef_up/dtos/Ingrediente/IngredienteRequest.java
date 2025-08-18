@@ -1,16 +1,13 @@
 package com.entra21.chef_up.dtos.Ingrediente;
 
 public class IngredienteRequest {
-    /// Nome do ingrediente
+
     private String nome;
 
-    /// Categoria do ingrediente (ex: Verdura, Fruta, Temperos)
     private String categoria;
 
-    /// Estimativa de validade em dias
     private Integer estimativaValidade;
 
-    /// Dica de conservação para o ingrediente
     private String dicaConservacao;
 
     public String getNome() {

@@ -5,17 +5,18 @@ meta {
 }
 
 put {
-  url: http://localhost:8080/receitas/4/etapas/1
+  url: http://localhost:8080/receitas/4/etapas/4
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3ODU5NDcsImV4cCI6MTc1NDc4OTU0N30.AfoS-rR-Ms9n9kdCAeokdoRNK30ucd8sRks85PL_Kgc
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2Fvc0BlbWFpbC5jb20iLCJpYXQiOjE3NTUxNDI0MjUsImV4cCI6MTc1NTE0NjAyNX0.hEovVfRSk466xSHlVjn1uwAeQfDyBPkA7U82db8dIao
 }
 
 body:json {
   {
+    "ordem": 2,
     "conteudo": "essa é a primeira etapa editada da minha receita"
   }
 }

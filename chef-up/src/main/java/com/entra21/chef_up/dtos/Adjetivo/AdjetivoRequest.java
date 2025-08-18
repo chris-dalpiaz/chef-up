@@ -1,7 +1,7 @@
 package com.entra21.chef_up.dtos.Adjetivo;
 
 public class AdjetivoRequest {
-    /// Nome do adjetivo
+
     private String nome;
 
     public String getNome() {

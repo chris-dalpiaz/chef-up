@@ -5,22 +5,17 @@ meta {
 }
 
 put {
-  url: http://localhost:8080/usuarios/4/adjetivos
+  url: http://localhost:8080/usuarios/1/adjetivos/1
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3Njk4MTksImV4cCI6MTc1NDc3MzQxOX0.0uhQ9lZ5pduebEZloZuGzBj1x_o06Zhn9gx_Q8KLdmQ
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2Fvc0BlbWFpbC5jb20iLCJpYXQiOjE3NTUxNDI0MjUsImV4cCI6MTc1NTE0NjAyNX0.hEovVfRSk466xSHlVjn1uwAeQfDyBPkA7U82db8dIao
 }
 
 body:json {
   {
-    "adjetivo": {
-      "id": 2
-    },
-    "usuario": {
-      "id": 4
-    }
+    "idAdjetivo": 5
   }
 }

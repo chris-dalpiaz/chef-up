@@ -1,11 +1,20 @@
 package com.entra21.chef_up.dtos.Categoria;
 
 public class CategoriaResponse {
-    /// Nome da categoria
+
+    private Integer id;
+
     private String nome;
-    /// URL do ícone que representa a categoria
+
     private String iconeUrl;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getIconeUrl() {
         return iconeUrl;
     }

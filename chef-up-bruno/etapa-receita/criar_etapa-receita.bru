@@ -5,17 +5,18 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/receitas/4/etapas
+  url: http://localhost:8080/receitas/1/etapas
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEBnbWFpbC5jb20iLCJpYXQiOjE3NTQ3ODYyMzIsImV4cCI6MTc1NDc4OTgzMn0.4NQnV_178M9gbx0Gag-nNsTQih1YLNIn6kMx-jj5LHM
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTUzODk3MDgsImV4cCI6MTc1NTM5MzMwOH0.yQmzNVzokGSWRLH2OR4qeuvVx6Z0lile-N0nKt4SNzM
 }
 
 body:json {
   {
+    "ordem": 1,
     "conteudo": "essa é a quarta etapa pra minha receita"
   }
 }

@@ -1,56 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
     <script src="perfil.js"></script>
-    <link rel="stylesheet" href="perfil.css">
-    <!-- CSS PADRÃO E FONTE -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <script src="../../default.js"></script>
     <link rel="stylesheet" href="../../default.css">
+    <link rel="stylesheet" href="perfil.css">
+    <!-- Fonte padrão -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <h1>Perfil do Usuario</h1>
-    <div class="perfil">
-        <div class="personagem"></div>
+    <header>
+        <h1>Perfil do Usuário</h1>
+    </header>
+
+    <!-- Seção de Perfil -->
+    <section class="perfil">
+        <div class="foto_usuario">
+            <img id="foto_usuario" src="../../img/placeholder_usuario1.jfif" alt="Avatar do usuário">
+        </div>
+
         <div class="dados_usuario">
-            <div class="nome_usuario">
-                <p>tomatinho_</p>
-                </div>
-            <div class="titulo_usuario">
-                <p>rainha da cocada</p>
-            </div>
+            <p class="nome_usuario"><b></b></p> <!-- JS insere nome -->
+            <p class="titulo_usuario"><i></i></p> <!-- JS insere título -->
+
             <div class="adjetivos_usuario">
-                <div class="adjetivo">
-                    <p>extrovertida</p>
-                    </div>
-                <div class="adjetivo">
-                <p>fofa</p>
-            </div>
-                <div class="adjetivo">
-                <p>simpática</p>
-            </div>
-            </div>
-            <div>
-                <button type="button" class="botao_pequeno"><b>Editar Perfil</b></button>
+                <!-- JS insere adjetivos e botão -->
             </div>
         </div>
-    </div>
-    
-    <div class="barra_progresso">
-        <div class="nivel">10</div>
+    </section>
+
+    <!-- Barra de Progresso -->
+    <section class="barra_progresso">
+        <div class="nivel"><span>0</span></div> <!-- JS insere nível -->
         <div class="barra_container">
-          <div class="barra_bg">
-            <div class="barra_xp" style="width: 97%;"></div>
-          </div>
-          <div class="pontos_xp">97 / 100</div>
+            <div class="barra_bg">
+                <div class="barra_xp" style="width: 0%;"></div> <!-- JS insere XP -->
+            </div>
+            <p class="pontos_xp">0 / 100</p> <!-- JS insere texto XP -->
         </div>
-      </div>
+    </section>
+
+    <!-- Lista de Pratos -->
+    <section class="pratos_feitos">
+        <h2>Pratos Feitos</h2>
+        <div class="grid_pratos">
+            <!-- JS insere imagens dos pratos -->
+        </div>
+    </section>
+
+    <!-- rodapé -->
+    <div class="footer">
+        <a href="perfil.html">
+            <div class="footer-item" data-icon="👤">
+                <span>Perfil</span>
+            </div>
+        </a>
+        <a href="../../despensa-virtual/despensa-virtual.html">
+            <div class="footer-item" data-icon="🛒">
+                <span>Despensa</span>
+            </div>
+        </a>
+        <a href="../../receitas/receita.html">
+            <div class="footer-item" data-icon="🍽️">
+                <span>Receitas</span>
+            </div>
+        </a>
+        <a href="../editar-perfil/editar_perfil.html">
+            <div class="footer-item" data-icon="⚙️">
+                <span>Configurações</span>
+            </div>
+        </a>
+    </div>
 </body>
 
 </html>

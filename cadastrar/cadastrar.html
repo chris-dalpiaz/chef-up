@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar</title>
     <script src="cadastrar.js"></script>
+    <script src="../default.js"></script>
     <link rel="stylesheet" href="cadastrar.css">
     <!-- CSS PADRÃO E FONTE -->
     <link
@@ -17,22 +18,25 @@
 <body>
     <h1>Cadastrar</h1>
     <div class="formulario">
-        <label for="nome">Nome do Perfil</label>
-        <input placeholder="nomeexemplo" type="text" name="nome" id="input_nome">
-    
-        <label for="email">E-mail</label>
-        <input placeholder="emailexemplo@email.com" type="text" name="email" id="input_email">
+        <label for="input_nome">Nome do Perfil</label>
+        <input placeholder="nomeexemplo" type="text" name="nome" id="input_nome" autocomplete="name">
 
-        <label for="senha">Senha</label>
-        <input placeholder="senhaexemplo" type="senha" name="senha" id="input_senha">
+        <label for="input_email">E-mail</label>
+        <input placeholder="email@exemplo.com" type="email" name="email" id="input_email" autocomplete="email">
+
+        <label for="input_senha">Senha</label>
+        <input placeholder="senhaexemplo" type="password" name="senha" id="input_senha" autocomplete="new-password">
     </div>
+
     <div>
-        <div class="botao" id="botaocriar">
-            <button type="button"><b>Criar Conta</b></button>
-            <p>Já possui conta? <b>Entrar</b></p>
+        <div class="botao" id="botaoregistrar">
+            <button id="registrar" type="button"><b>Criar Conta</b></button>
         </div>
+        <p id="aviso">
+            Já possui conta?
+            <a href="../entrar/entrar.html"><b>Entrar</b></a>
+        </p>
     </div>
-
 </body>
 
 </html>

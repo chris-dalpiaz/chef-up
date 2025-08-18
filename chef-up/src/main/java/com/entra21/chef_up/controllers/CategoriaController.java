@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller responsável pelas operações HTTP relacionadas à entidade Categoria.
+ */
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
@@ -20,11 +23,11 @@ public class CategoriaController {
     /**
      * Lista todas as categorias cadastradas no sistema.
      *
-     * @return lista de objetos Categoria
+     * @return lista de objetos CategoriaResponse
      */
     @GetMapping
-    public List<CategoriaResponse> listarCategorias() {
-        return categoriaService.listarTodos();
+    public List<CategoriaResponse> listCategories() {
+        return categoriaService.listAll();
     }
 
     /**
@@ -32,23 +35,23 @@ public class CategoriaController {
      * Retorna erro 404 se não encontrada.
      *
      * @param idCategoria ID da categoria a ser buscada (na URL)
-     * @return objeto Categoria encontrado
+     * @return objeto CategoriaResponse encontrado
      */
     @GetMapping("/{idCategoria}")
-    public CategoriaResponse buscarCategoria(@PathVariable Integer idCategoria) {
-        return categoriaService.buscar(idCategoria);
+    public CategoriaResponse getCategory(@PathVariable Integer idCategoria) {
+        return categoriaService.getById(idCategoria);
     }
 
     /**
      * Cria uma nova categoria.
      * Recebe os dados da categoria no corpo da requisição (JSON).
      *
-     * @param categoria objeto Categoria a ser criado
+     * @param request objeto CategoriaRequest a ser criado
      * @return categoria criada com ID gerado pelo banco
      */
     @PostMapping
-    public CategoriaResponse criarCategoria(@RequestBody CategoriaRequest request) {
-        return categoriaService.criar(request);
+    public CategoriaResponse createCategory(@RequestBody CategoriaRequest request) {
+        return categoriaService.create(request);
     }
 
     /**
@@ -56,15 +59,13 @@ public class CategoriaController {
      * Se não encontrar pelo ID, retorna erro 404.
      *
      * @param idCategoria ID da categoria que será atualizada (URL)
-     * @param categoria novo conteúdo para atualizar a categoria (JSON no corpo)
+     * @param request     novo conteúdo para atualizar a categoria (JSON no corpo)
      * @return categoria atualizada
      */
     @PutMapping("/{idCategoria}")
-    public CategoriaResponse alterarCategoria(
-            @PathVariable Integer idCategoria,
-            @RequestBody CategoriaRequest request
-    ) {
-        return categoriaService.alterar(idCategoria, request);
+    public CategoriaResponse updateCategory(@PathVariable Integer idCategoria,
+                                            @RequestBody CategoriaRequest request) {
+        return categoriaService.update(idCategoria, request);
     }
 
     /**
@@ -76,7 +77,7 @@ public class CategoriaController {
      * @return categoria removida
      */
     @DeleteMapping("/{idCategoria}")
-    public CategoriaResponse removerCategoria(@PathVariable Integer idCategoria) {
-        return categoriaService.remover(idCategoria);
+    public CategoriaResponse deleteCategory(@PathVariable Integer idCategoria) {
+        return categoriaService.delete(idCategoria);
     }
 }

@@ -1,3 +1,9 @@
+a {
+  color: inherit; /* Herda a cor do elemento pai */
+  text-decoration: none; /* Remove o sublinhado */
+  font: inherit; /* Herda a fonte do elemento pai */
+}
+
 body {
   font-family: 'DM Sans';
   background-color: #fffaf5;
@@ -44,6 +50,7 @@ button {
   /* Alinha verticalmente */
   flex-direction: column;
   
+  
 }
 
 input {
@@ -55,8 +62,9 @@ input {
 }
 
 input:focus{
-  border: 1px solid #F58700;
-  
+  border-color: #f58700;
+  outline: none;
+  transition: 0.3s; 
 }
 
 #botaocriar {
@@ -96,4 +104,115 @@ input:focus{
   font-size: 14px;
 }
 
-.barra_xp {}
+.botao-bloqueado{
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ===== Barra de progresso ===== */
+:root{
+  --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
+  --bar-space: 8px;     /* espaço entre barra e texto */
+}
+
+/* container principal */
+.barra_progresso {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3vh 0;
+}
+
+/* losango (nível) */
+.nivel {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    background-color: #2bb3a3;
+    color: #000000;
+    font-weight: bold;
+    transform: rotate(45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* número dentro do losango fica na posição correta */
+.nivel span {
+    transform: rotate(-45deg);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* aqui o container da barra tem SÓ a altura da barra */
+.barra_container {
+    flex: 1;
+    position: relative;
+    height: var(--bar-height);
+}
+
+/* fundo da barra e overflow para a barra de xp */
+.barra_bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #E6E6E6;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* barra preenchida (XP) */
+.barra_xp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--xp, 0%);
+    background-color: #fcb347;
+    border-radius: 20px;
+}
+
+/* pontos embaixo da barra — removidos do fluxo para não aumentar a altura do container */
+.pontos_xp {
+    position: absolute;
+    left: 0;
+    top: calc(100% + var(--bar-space));
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+/* ===== Rodapé ===== */
+.footer {
+  position: fixed; /* fixa o rodapé na tela, mesmo quando rolar a página */
+  bottom: 0;       /* posiciona o rodapé colado na parte inferior da janela */
+  left: 0;         /* posiciona o rodapé a partir da borda esquerda da janela */
+  width: 100%;     /* o rodapé ocupa toda a largura da tela */
+  background: #fff; /* fundo branco para o rodapé */
+  display: flex;   /* usa flexbox para organizar os itens dentro do rodapé */
+  justify-content: space-around; /* distribui os itens igualmente espaçados horizontalmente */
+  align-items: center; /* alinha os itens verticalmente no centro */
+  padding: 8px 0;  /* espaço interno acima e abaixo (8px), sem espaçamento nas laterais */
+  border-top: 1px solid #ddd; /* uma linha fina e cinza clara no topo do rodapé */
+}
+
+.footer-item {
+  display: flex;              /* cada item do rodapé também é flex container */
+  flex-direction: column;    /* organiza os elementos dentro do item em coluna (vertical) */
+  align-items: center;       /* centraliza os elementos dentro do item horizontalmente */
+  font-size: 14px;           /* tamanho da fonte do texto */
+  color: #888;               /* cor cinza para o texto padrão */
+  cursor: pointer;           /* cursor muda para mãozinha ao passar o mouse, indicando que é clicável */
+  transition: color 0.2s ease; /* transição suave de 0.2 segundos na mudança da cor */
+}
+
+.footer-item::before {
+  content: attr(data-icon); /* insere antes do conteúdo do item o valor do atributo data-icon (emoji) */
+  font-size: 22px;          /* tamanho maior para o emoji */
+  margin-bottom: 4px;       /* espaço abaixo do emoji para separar do texto */
+}
+
+.footer-item.selected {
+  color: #FFA336; /* muda a cor do texto para laranja quando o item está selecionado */
+}
