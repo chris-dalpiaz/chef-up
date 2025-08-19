@@ -1,9 +1,10 @@
 /* Estiliza o corpo da página */
 body {
-  margin: 0; /* Remove margens padrão */
+  margin-left: 2vh;
+  margin-right: 2vh; /* Remove margens padrão */
   font-family: 'DM Sans', sans-serif; /* Define a fonte principal */
   background: #ffffff; /* Fundo branco */
-  padding: 0 20px; /* Espaçamento horizontal nas bordas */
+  padding: 1 20px; /* Espaçamento horizontal nas bordas */
 }
 
 /* Estilo do título principal */
@@ -112,67 +113,147 @@ body {
   background: #FFD02C; /* Fundo amarelo para destacar */
 }
 
-  /* Container da barra de progresso */
+:root{
+  --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
+  --bar-space: 8px;     /* espaço entre barra e texto */
+}
+
+/* container principal */
 .barra_progresso {
-  display: flex; /* Organiza os elementos em linha */
-  align-items: center; /* Alinha verticalmente ao centro */
-  gap: 10px; /* Espaço entre os elementos */
-  margin-top: 3vh; /* Espaço acima proporcional à altura da tela */
-  justify-content: center; /* Centraliza tudo na horizontal */
+    display: flex;
+    align-items: center; /* vai centrar o losango em relação à altura da .barra_container */
+    gap: 1rem;
+    margin: 3vh 0;
 }
 
-/* Quadrado rotacionado representando o nível */
+/* losango (nível) */
 .nivel {
-  width: 40px; /* Largura do quadrado */
-  height: 40px; /* Altura do quadrado */
-  background-color: #2bb3a3; /* Cor verde-água de fundo */
-  color: black; /* Cor do texto */
-  font-weight: bold; /* Texto em negrito */
-  transform: rotate(45deg); /* Rotaciona o quadrado em 45 graus */
-  display: flex; /* Layout flexível para centralizar conteúdo */
-  align-items: center; /* Alinha verticalmente o conteúdo */
-  justify-content: center; /* Alinha horizontalmente o conteúdo */
+    flex-shrink: 0;
+    width: 28px;              /* ajuste o tamanho do losango se quiser menor/grande */
+    height: 28px;
+    background-color: #2bb3a3;
+    color: #000000;
+    font-weight: bold;
+    transform: rotate(45deg); /* forma de losango */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Texto dentro do quadrado rotacionado */
+/* número dentro do losango fica na posição correta */
 .nivel span {
-  transform: rotate(-45deg) translateY(1px); /* Rotaciona o texto para compensar o quadrado */
-  display: inline-block;
-  font-size: 20px; /* Ajuste do tamanho do número */
-  line-height: 1;  /* Remove espaçamento vertical extra */
+    transform: rotate(-45deg);
+    font-size: 12px;
+    font-weight: bold;
 }
 
-/* Container da barra de XP e texto */
+/* aqui o container da barra tem SÓ a altura da barra */
 .barra_container {
-  display: flex; /* Layout flexível */
-  flex-direction: column; /* Organiza elementos verticalmente */
+    flex: 1;
+    position: relative;
+    height: var(--bar-height); /* muito importante: limita a altura para alinhar corretamente */
 }
 
-/* Fundo da barra de XP */
+/* fundo da barra e overflow para a barra de xp */
 .barra_bg {
-  width: 350px; /* Largura da barra */
-  height: 20px; /* Altura da barra */
-  background-color: #a7ddd7; /* Cor azul-claro de fundo */
-  border-radius: 20px; /* Bordas arredondadas */
-  overflow: hidden; /* Esconde conteúdo que ultrapassa os limites */
-  position: relative; /* Permite posicionar elementos filhos de forma absoluta */
+    position: relative;
+    width: 100%;
+    height: 100%; /* usa a altura definida no .barra_container */
+    background-color: #E6E6E6;
+    border-radius: 20px;
+    overflow: hidden;
 }
 
-/* Barra de XP preenchida */
+/* barra preenchida (XP) */
 .barra_xp {
-  position: absolute; /* Posiciona em relação ao .barra_bg */
-  height: 100%; /* Ocupa toda a altura da barra */
-  background-color: #fcb347; /* Cor laranja de preenchimento */
-  border-radius: 20px; /* Bordas arredondadas para combinar com o fundo */
-  /* A largura será definida dinamicamente via JavaScript ou inline */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--xp, 0%);
+    background-color: #fcb347;
+    border-radius: 20px;
 }
 
-/* Texto com os pontos de XP */
+/* pontos embaixo da barra — removidos do fluxo para não aumentar a altura do container */
 .pontos_xp {
-  margin-top: 5px; /* Espaço acima do texto */
-  font-size: 14px; /* Tamanho da fonte */
-  color: #333; /* Cor do texto em cinza escuro */
+    position: absolute;
+    left: 0;
+    top: calc(100% + var(--bar-space)); /* posiciona abaixo da barra */
+    margin: 0;
+    font-size: 14px;
+    color: #333;
 }
+
+/* receitas */
+
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #FFF8E1;
+  margin: 0;
+  padding: 0;
+}
+
+.secao-receitas {
+  padding: 16px;
+}
+
+.titulo-secao {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+/* Lista de receitas */
+#lista-receitas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  min-height: 200px;
+}
+
+/* Card */
+.card-receita {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.card-receita img {
+  width: 100%;
+  display: block;
+}
+
+/* Tag XP no canto superior direito */
+.xp-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #FFA336;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 6px;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.card-receita p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  padding: 8px;
+  color: #555;
+  margin: 0;
+}
+
+
+
+
+
 
 
 /* rodapé */
