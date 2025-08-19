@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Perfil</title>
+  <script src="editar-perfil.js" defer></script>
+  <script src="../../default.js" defer></script>
+  <link rel="stylesheet" href="../../default.css" />
+  <link rel="stylesheet" href="editar-perfil.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Roboto&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <header>
+    <h1>Editar Perfil</h1>
+  </header>
+
+  <div class="cadastro">
+    <label for="input_cadastro">Nome do usuário</label>
+    <input type="text" id="input_cadastro" placeholder="Digite o novo nome" />
+  </div>
+
+  <div class="email">
+    <label for="input_email">E-mail</label>
+    <input type="text" id="input_email" placeholder="Digite o novo e-mail" />
+  </div>
+
+  <h2>Alterar Avatar</h2>
+  <div class="botao">
+    <button id="btn_avatar">Alterar Avatar</button>
+  </div>
+
+  <h2>Pronomes</h2>
+  <div class="container_pronomes"></div>
+
+  <h2>Adjetivos (máximo 3)</h2>
+  <div class="container_adjetivos"></div>
+
+  <h2>Títulos Desbloqueáveis</h2>
+  <div class="container_titulos"></div>
+
+  <div class="botao">
+    <button class="botao_comum">Salvar Alterações</button>
+  </div>
+</body>
+
+</html>
