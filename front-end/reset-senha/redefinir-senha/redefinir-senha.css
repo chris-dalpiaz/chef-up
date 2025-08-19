@@ -3,8 +3,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 40px;
-    height: 35vh;
     text-align: center;
 }
  
@@ -116,7 +114,7 @@ input {
         transform: none;
         width: 100%;
         max-width: 100%;
-        margin-top: 2vh;
+        margin-top: 110%;
     }
  
     .inputs {
