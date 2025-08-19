@@ -1,36 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar</title>
+    <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
     <script src="entrar.js"></script>
     <script src="../default.js"></script>
     <link rel="stylesheet" href="entrar.css">
-    <!-- CSS PADRÃO E FONTE -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../default.css">
 </head>
 
 <body>
-    <h1>Entrar</h1>
-    <div class="formulario">
-        <label for="input_email">E-mail</label>
-        <input placeholder="email@exemplo.com" type="email" name="email" id="input_email" autocomplete="email">
-
-        <label for="input_senha">Senha</label>
-        <input placeholder="senhaexemplo" type="password" name="senha" id="input_senha" autocomplete="current-password">
-        Esqueceu a Senha?
-    </div>
-    <div>
-        <div class="botao" id="botao_entrar">
-            <button type="button"><b>Entrar</b></button>
+    <div class="tittles">
+        <div class="tittle">
+            <h1>Entrar</h1>
         </div>
-        <p id="aviso">Não possui conta? <a href="../cadastrar/cadastrar.html"><b>Cadastrar-se</b></a></p>
+        <div class="subtittle">
+            <p>Faça login para acessar sua conta</p> <!-- Adicionado subtítulo opcional para consistência -->
+        </div>
+        <div class="formulario">
+            <label for="input_email"><b>E-mail</b></label>
+            <input placeholder="email@exemplo.com" type="email" name="email" id="input_email" autocomplete="email">
+            <label for="input_senha"><b>Senha</b></label>
+            <input placeholder="senhaexemplo" type="password" name="senha" id="input_senha" autocomplete="current-password">
+            <p class="esqueci-senha"><a href="#">Esqueceu a Senha?</a></p>
+        </div>
     </div>
+    <div class="botao" id="botao_entrar">
+        <button type="button"><b>Entrar</b></button>
+    </div>
+    <p id="aviso">Não possui conta? <a href="../cadastrar/cadastrar.html"><b>Cadastrar-se</b></a></p>
 </body>
-
 </html>
