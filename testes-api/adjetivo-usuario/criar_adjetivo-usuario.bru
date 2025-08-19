@@ -1,0 +1,21 @@
+meta {
+  name: criar_adjetivo-usuario
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/usuarios/1/adjetivos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTU1Njc4MTcsImV4cCI6MTc1NTU3MTQxN30.nlxC2pS5VSl7uQPXl4qJg2GSYHda1qcUBLCt-uX5R_A
+}
+
+body:json {
+  {
+    "idAdjetivo": 1
+  }
+}

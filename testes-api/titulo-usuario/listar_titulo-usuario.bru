@@ -1,0 +1,19 @@
+meta {
+  name: listar_titulo-usuario
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/usuarios/1/titulos
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTU1Njg0MjAsImV4cCI6MTc1NTU3MjAyMH0._yI9v1pZy524kg72SyePvaekR5CegbjMopIVp8hOnEQ
+}
+
+settings {
+  encodeUrl: true
+}
