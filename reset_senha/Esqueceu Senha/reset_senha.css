@@ -1,42 +1,56 @@
+/* Estilo base (desktop) */
 .button {
     display: flex;
     justify-content: center;
-    /* Alinha horizontalmente */
-    align-items: center;
-    /* Alinha verticalmente */
-    height: 80vh;
-    /* Exemplo: altura total da viewport */
+    align-items: center; /* Alinha verticalmente */
+    height: 80vh; /* Altura da viewport */
 }
 
 .tittles {
     display: flex;
     flex-direction: column;
-    justify-content: left;
-    margin-top: 10%;
-    margin-bottom: 10px;
-    padding: 1%; 
+    align-items: center;     /* Centraliza horizontalmente */
+    margin-top: 40px;           /* Removemos o margin-top fixo */
+    height: 35vh;            /* Ajuste a altura que quiser */
+    text-align: center;      /* Centraliza o texto dentro das divs */
 }
 
-.tittle{
-display: flex;
-margin-bottom: -35px;    
+.tittle {
+    display: flex;
+    margin-bottom: -10px;
 }
 
-.subtittle{
-display: flex;
-font-size: 16px;
-color: #666666;
+.subtittle {
+    display: flex;
+    font-size: 16px;
+    color: #666666;
 }
 
-.input{
+/* Ajuste para usar .input em vez de .inputs */
+.input {
     display: flex;
     flex-direction: column;
+    width: 350px;           /* Largura fixa para maior espaço */
+    padding: 25px;          /* Preenchimento interno maior */
+    background-color: #fff; /* Fundo branco */
+    border-radius: 10px;    /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    margin: 0 auto;         /* Centraliza horizontalmente */
+    align-items: center;    /* Centraliza os itens internamente */
+    gap: 10px;              /* Espaçamento entre os inputs */
 }
 
-.botao{
+input {
+    margin: 12px 0;         /* Margem acima e abaixo */
+    padding: 12px;          /* Preenchimento interno */
+    width: 100%;            /* Largura total do container */
+    border: 1px solid #ccc; /* Borda sutil */
+    border-radius: 5px;     /* Bordas arredondadas */
+}
+
+.botao {
     display: flex;
-    
-    align-items: center;     
+    align-items: center;
     position: absolute;
     top: 93%;
     left: 50%;
@@ -45,6 +59,90 @@ color: #666666;
     width: 90%;
 }
 
-label{
+label {
     padding: 1%;
+    margin-top: 0;          /* Corrige o posicionamento incorreto, removendo o valor negativo extremo */
+}
+
+/* Tablet (largura entre 768px e 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .button {
+        height: 70vh;
+    }
+
+    .tittles {
+        margin-top: 8%;
+        padding: 1%;
+    }
+
+    .tittle {
+        margin-bottom: -25px;
+    }
+
+    .subtittle {
+        font-size: 14px;
+    }
+
+    .botao {
+        top: 92%;
+        width: 85%;
+    }
+
+    .input {
+        width: 300px;       /* Ajuste para tablet */
+        padding: 20px;      /* Ajuste de padding */
+    }
+
+    input {
+        padding: 10px;      /* Ajuste de padding para tablet */
+    }
+}
+
+/* Celular (largura até 767px) */
+@media (max-width: 767px) {
+    .button {
+        height: auto;
+        flex-direction: column;
+        padding: 5vh 2vw;
+    }
+
+    .tittles {
+        margin-top: 5%;
+        margin-bottom: 5px;
+        padding: 1%;
+        width: 95%;
+    }
+
+    .tittle {
+        margin-bottom: -20px;
+        flex-direction: column;
+    }
+
+    .subtittle {
+        font-size: 12px;
+    }
+
+    .input {
+        width: 95%;         /* Ajuste para celular */
+        padding: 20px;      /* Ajuste de padding */
+    }
+
+    .botao {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 2vh;
+    }
+
+    input {
+        padding: 8px;       /* Ajuste de padding para celular */
+    }
+
+    label {
+        padding: 0.5%;
+        font-size: 12px;
+    }
 }

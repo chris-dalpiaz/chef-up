@@ -1,62 +1,112 @@
-input{
-    max-width:20px ;
+/* Input */
+input {
+    max-width: 20px;
     max-height: 20px;
     font-size: 50px;
     text-align: center;
     font-family: 'DM Sans';
-    font-weight:600;
+    font-weight: 600;
 }
 
-.tittles{
+/* Container principal */
+.container {
     display: flex;
     flex-direction: column;
+    align-items: center; /* centraliza horizontalmente */
+    justify-content: center; /* centraliza verticalmente se necessário */
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Títulos */
+.tittles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 10%;
-
-    padding-left: 1%;
+    text-align: center;
+    gap: 10px; /* espaçamento entre título e subtítulo */
 }
 
-.tittle{
-    display: flex;
-    margin-bottom: -35px;  
+.tittle {
+    font-size: 50px;
+    font-weight: 600;
+    font-family: 'DM Sans';
+    color: #000; /* cor do título */
 }
 
-.subtittle{
-    display: flex;
+.subtittle {
+    font-size: 20px;
     color: #666666;
 }
-.code-input{
+
+/* Inputs */
+.code-input {
     display: flex;
     align-items: center;
     justify-content: center;
-
+    gap: 5px; /* espaçamento entre inputs */
+    margin-top: 20px;
 }
 
-.aviso{
+.inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    gap: 10px;
+}
+
+/* Avisos */
+.aviso {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 3.5px;
     padding: 1%;
+    color: #666666;
 }
 
-.aviso{
-    gap:3.5px
-}
-
-.text{
-color: #666666;
-}
-
-.botao{
+/* Botão */
+.botao {
     display: flex;
-    justify-content: center; 
-    align-items: center;     
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 93%;
     left: 50%;
     transform: translate(-50%, -50%);
+    max-width: 414px;
+    width: 90%;
 }
 
-input {
-    max-width: 70px;
-    max-height: 70px;
+/* Responsividade */
+@media (max-width: 768px) {
+    .tittle {
+        font-size: 40px;
+    }
+
+    .subtittle {
+        font-size: 18px;
+    }
+
+    .inputs {
+        width: 70%;
+    }
+}
+
+@media (max-width: 480px) {
+    .tittle {
+        font-size: 30px;
+    }
+
+    .subtittle {
+        font-size: 16px;
+    }
+
+    .inputs {
+        width: 90%;
+    }
 }
