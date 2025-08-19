@@ -1,10 +1,32 @@
+/* Estilo base (desktop) */
 .container {
-    display: flex;
-    justify-content: center; /* Alinha horizontalmente */
-    align-items: center;    /* Alinha verticalmente */
-    height: 80vh;          /* Exemplo: altura total da viewport */
-  }
-  
+  display: flex;
+  justify-content: center; /* Alinha horizontalmente */
+  align-items: center;     /* Alinha verticalmente */
+  height: 80vh;            /* Altura total da viewport */
+}
+
+#logo {
+  max-width: 100%; /* Ajusta o tamanho da imagem */
+  width: 300px;    /* Largura inicial para desktop */
+}
+
+/* Tablet (largura entre 768px e 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
   #logo {
-    max-width: 100%; /* Ajusta o tamanho da imagem, se necessário */
+      width: 200px; /* Diminui a largura da logo no tablet */
   }
+}
+
+/* Celular (largura até 767px) */
+@media (max-width: 767px) {
+  .container {
+      height: 60vh; /* Ajusta a altura para telas pequenas */
+      flex-direction: column; /* Se houver mais elementos, empilha */
+      padding: 10px;
+  }
+
+  #logo {
+      width: 150px; /* Reduz ainda mais a logo no celular */
+  }
+}
