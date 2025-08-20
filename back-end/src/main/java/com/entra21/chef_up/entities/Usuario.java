@@ -47,6 +47,9 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<AvatarUsuario> avatares = new ArrayList<>();
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private CodigoVerificacao codigoVerificacao;
+
     public List<TituloUsuario> getTitulos() {
         return titulos;
     }
