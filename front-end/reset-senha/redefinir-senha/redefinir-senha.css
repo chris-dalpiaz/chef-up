@@ -1,31 +1,32 @@
-
-.tittles{
+/* ===== Desktop (base) ===== */
+.tittles {
     display: flex;
     flex-direction: column;
-    margin-top: 10%;
-    padding-left: 1%;
-    margin-bottom: 15%;
+    align-items: center;
+    text-align: center;
 }
-
-.tittle{
+ 
+.tittle {
     display: flex;
-    margin-bottom: -35px;  
+    margin-bottom: -10px;
 }
-
-.subtittle{
+ 
+.subtittle {
     display: flex;
+    font-size: 16px;
     color: #666666;
 }
-
-label{
-    font-weight:700;
-    justify-content: left;
+ 
+label {
+    font-weight: 700;
+    text-align: left;
+    font-size: 16px;
 }
-
-.botao{
+ 
+.botao {
     display: flex;
-    
-    align-items: center;     
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 93%;
     left: 50%;
@@ -33,9 +34,91 @@ label{
     max-width: 414px;
     width: 90%;
 }
-
-
-.inputs{
+ 
+.inputs {
     display: flex;
     flex-direction: column;
+    width: 350px;           /* Aumentado de 300px para 350px */
+    padding: 25px;          /* Aumentado de 20px para 25px */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    align-self: center;
+}
+ 
+input {
+    margin: 12px 0;         /* Aumentado de 10px para 12px */
+    padding: 12px;          /* Aumentado de 10px para 12px */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+ 
+/* ===== Tablet (768px a 1024px) ===== */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .tittles {
+        margin-top: 8%;
+        margin-bottom: 12%;
+        padding-left: 2%;
+    }
+ 
+    .tittle {
+        margin-bottom: -25px;
+    }
+ 
+    .subtittle {
+        font-size: 14px;
+    }
+ 
+    label {
+        font-size: 14px;
+    }
+ 
+    .botao {
+        top: 92%;
+        width: 85%;
+    }
+ 
+    .inputs {
+        width: 300px;      
+        padding: 20px;    
+    }
+}
+ 
+/* ===== Celular (até 767px) ===== */
+@media (max-width: 767px) {
+    .tittles {
+        margin-top: 5%;
+        margin-bottom: 10%;
+        padding-left: 2%;
+        width: 95%;
+    }
+ 
+    .tittle {
+        flex-direction: column;
+        margin-bottom: -20px;
+    }
+ 
+    .subtittle {
+        font-size: 12px;
+    }
+ 
+    label {
+        font-size: 12px;
+    }
+ 
+    .botao {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 110%;
+    }
+ 
+    .inputs {
+        width: 95%;         /* Aumentado de 90% para 95% */
+        padding: 20px;      /* Aumentado de 15px para 20px */
+    }
 }
