@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar</title>
+    <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
     <script src="cadastrar.js"></script>
     <script src="../default.js"></script>
     <link rel="stylesheet" href="cadastrar.css">
     <!-- CSS PADRÃO E FONTE -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../default.css">
 </head>
 
+
 <body>
-    <h1>Cadastrar</h1>
-    <div class="formulario">
-        <label for="input_nome">Nome do Perfil</label>
-        <input placeholder="nomeexemplo" type="text" name="nome" id="input_nome" autocomplete="name">
-
-        <label for="input_email">E-mail</label>
-        <input placeholder="email@exemplo.com" type="email" name="email" id="input_email" autocomplete="email">
-
-        <label for="input_senha">Senha</label>
-        <input placeholder="senhaexemplo" type="password" name="senha" id="input_senha" autocomplete="new-password">
-    </div>
-
-    <div>
-        <div class="botao" id="botaoregistrar">
-            <button id="registrar" type="button"><b>Criar Conta</b></button>
+    <div class="tittles">
+        <div class="tittle">
+            <h1>Cadastrar</h1>
         </div>
-        <p id="aviso">
-            Já possui conta?
-            <a href="../entrar/entrar.html"><b>Entrar</b></a>
-        </p>
+        <div class="subtittle">
+            <p>Crie sua conta para começar</p> <!-- Subtítulo opcional para consistência -->
+        </div>
+        <div class="formulario">
+            <label for="input_nome"><b>Nome do Perfil</b></label>
+            <input placeholder="nomeexemplo" type="text" name="nome" id="input_nome" autocomplete="name">
+            <label for="input_email"><b>E-mail</b></label>
+            <input placeholder="email@exemplo.com" type="email" name="email" id="input_email" autocomplete="email">
+            <label for="input_senha"><b>Senha</b></label>
+            <input placeholder="senhaexemplo" type="password" name="senha" id="input_senha" autocomplete="new-password">
+        </div>
     </div>
+    <div class="botao" id="botaoregistrar">
+        <button id="registrar" type="button"><b>Criar Conta</b></button>
+    </div>
+    <p id="aviso">
+        Já possui conta? <a href="../entrar/entrar.html"><b>Entrar</b></a>
+    </p>
 </body>
-
 </html>
