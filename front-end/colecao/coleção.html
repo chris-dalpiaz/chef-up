@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR"> <!-- Corrigido para pt-BR para consistência -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coleção</title>
+    <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
+    <script src="receita5.js"></script>
+    <!-- CSS PADRÃO E FONTE -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../default.css">
+    <link rel="stylesheet" href="coleção.css">
+</head>
+
+<body>
+    <!-- Botão Voltar -->
+    <button class="svg-button" type="button" onclick="voltar()">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="12" fill="#f3dede" />
+            <path d="M14 7L9 12L14 17" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <div class="tittles">
+        <div class="tittle">
+            <h1>Selecione Coleções</h1>
+        </div>
+        <div class="subtittle">
+            <p>Crie suas próprias coleções para acesso rápido a todos os seus favoritos. Adicione sua primeira coleção para começar.</p>
+        </div>
+        <div class="formulario">
+            <main class="collections">
+                <div class="collection selected">
+                    <img src="https://tse4.mm.bing.net/th/id/OIP.JaipD2XWcFIgI-qKjMg-nAHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Doce">
+                    <div class="info">
+                        <strong>Doces</strong>
+                        <span>2 Receitas</span>
+                    </div>
+                    <div class="checkbox">&#10003;</div>
+                </div>
+                <div class="collection">
+                    <img src="https://i.pinimg.com/originals/3b/1b/58/3b1b581edbbf5aaa1a6b423cd9830fb9.jpg" alt="Salgados">
+                    <div class="info">
+                        <strong>Salgados</strong>
+                        <span>5 Receitas</span>
+                    </div>
+                    <div class="checkbox"></div>
+                </div>
+            </main>
+            <button class="new-collection">+ Criar Nova Coleção</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="botao" id="botaoadicionar">
+            <button type="button"><b>Adicionar</b></button>
+        </div>
+    </footer>
+
+    <script src="coleção.js"></script>
+</body>
+</html>

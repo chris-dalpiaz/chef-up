@@ -1,0 +1,231 @@
+/* Estilo base (desktop) */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #fffaf5;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh; /* Ocupa a tela inteira */
+}
+
+.tittles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  min-height: 60vh; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza os filhos */
+  text-align: center;
+  width: 100%;
+  max-width: 600px; /* Limita a largura */
+}
+
+.tittle {
+  display: flex;
+  margin-bottom: -10px;
+}
+
+.subtittle {
+  display: flex;
+  font-size: 16px;
+  color: #666666;
+  margin-bottom: 20px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  width: 350px;           /* Largura fixa */
+  padding: 25px;          /* Preenchimento interno */
+  background-color: #fff; /* Fundo branco */
+  border-radius: 12px;    /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+  margin: 0 auto;         /* Centraliza */
+  gap: 12px;              /* Espaçamento */
+}
+
+.svg-button {
+  position: fixed;
+  top: 40px;
+  left: -160px; /* Mantém o valor original, ajuste se necessário */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Coleções */
+.collections {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.collection {
+  display: flex;
+  align-items: center;
+  background-color: #fef1e0;
+  border-radius: 12px;
+  padding: 12px;
+  gap: 12px;
+}
+
+.collection.selected {
+  border: 2px solid #FFA336;
+  background-color: #fff2e0;
+}
+
+.collection img {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.collection .info {
+  flex-grow: 1;
+}
+
+.collection .info strong {
+  display: block;
+  font-size: 16px;
+}
+
+.collection .info span {
+  font-size: 12px;
+  color: #555;
+}
+
+.collection .checkbox {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #FFA336;
+}
+
+.collection.selected .checkbox {
+  border-color: #FFA336;
+  background-color: #FFA336;
+  color: white;
+}
+
+/* Botão criar nova coleção */
+.new-collection {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #FFA336;
+  border-radius: 12px;
+  background: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%; /* Ocupa a largura do container */
+}
+
+.botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 93%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 414px;
+  width: 90%;
+  margin-top: 20px; /* Espaçamento */
+}
+
+.botao button {
+  font-family: 'DM Sans';
+  background-color: #F58700; /* Laranja */
+  color: #000 !important; /* Texto preto */
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  width: 100%;
+  font-weight: 650;
+}
+
+.botao button:hover {
+  background-color: #e57a00; /* Tom mais escuro no hover */
+}
+
+/* Tablet (largura entre 768px e 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .tittles {
+      margin-top: 8%;
+      min-height: 50vh;
+  }
+
+  .tittle {
+      margin-bottom: -15px;
+  }
+
+  .subtittle {
+      font-size: 14px;
+  }
+
+  .formulario {
+      width: 300px; /* Ajuste para tablet */
+      padding: 20px;
+  }
+
+  .botao {
+      top: 92%;
+  }
+
+  .botao button {
+      font-size: 15px;
+      padding: 10px;
+  }
+}
+
+/* Celular (largura até 767px) */
+@media (max-width: 767px) {
+  .tittles {
+      margin-top: 5%;
+      width: 95%;
+      min-height: 60vh;
+  }
+
+  .tittle {
+      flex-direction: column;
+      margin-bottom: -10px;
+  }
+
+  .subtittle {
+      font-size: 12px;
+  }
+
+  .formulario {
+      width: 95%; /* Ajuste para celular */
+      padding: 15px;
+  }
+
+  .botao {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      width: 100%;
+      max-width: 100%;
+      margin-top: 10px;
+  }
+
+  .botao button {
+      font-size: 14px;
+      padding: 8px;
+  }
+}
