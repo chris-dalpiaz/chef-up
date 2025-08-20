@@ -7,7 +7,6 @@ header {
     margin-top: 1vh;
     display: flex;
     justify-content: center;
-   
 }
 
 .input {
@@ -21,23 +20,20 @@ header {
 .buscar {
     margin-top: -1vh;
     width: 100%;
-   
-
 }
 
 .linha {
-    width: 430px;
+    width: 102%;
     margin-left: -1.8vh;
     border-bottom: 4px solid #ccc;
 }
 
 .linha-usuer {
-    width: 430px;
-    margin-left: -1.2vh;
+    width: 100%; /* Ocupa toda a largura do .user */
+    margin-left: 0; /* Remove margem para alinhar com o contêiner */
     border-bottom: 2px solid #ddd;
-
+    box-sizing: border-box; /* Inclui padding e border na largura */
 }
-
 
 :root {
     --bar-height: 16px;
@@ -47,18 +43,13 @@ header {
 /* bloco do topo */
 .user {
     width: 100%;
-   
     padding: 8px 12px;
-    margin-left: -1.9vh;  
-    /*-1.9vh*/ 
+    margin-left: -1.9vh;
 }
-
-
 
 /* layout lado a lado (foto) + (nome em cima / barra embaixo) */
 .Usuario {
     height: 13vh;
-    
     display: grid;
     grid-template-columns: 70px 1fr;
     grid-template-rows: auto auto;
@@ -153,4 +144,126 @@ header {
     font-size: 12px;
     color: #333;
     white-space: nowrap;
+}
+
+/* Tablet (largura entre 768px e 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .buscar {
+        margin-top: -0.5vh;
+    }
+
+    .linha {
+        width: 90%;
+        margin-left: -1.5vh;
+        border-bottom-width: 3px;
+    }
+
+    .linha-usuer {
+        width: 90%; /* Ajuste proporcional */
+        margin-left: 0;
+        border-bottom-width: 1.5px;
+    }
+
+    .user {
+        margin-left: -1.5vh;
+        padding: 6px 10px;
+    }
+
+    .Usuario {
+        height: 12vh;
+    }
+
+    .foto_usuario {
+        width: 60px;
+        height: 60px;
+    }
+
+    .linha-superior {
+        margin-left: 2.5vh;
+        margin-bottom: -4vh;
+    }
+
+    .nome_usuario {
+        font-size: 13px;
+    }
+
+    .barra_progresso {
+        gap: 6px;
+    }
+
+    .nivel {
+        width: 16px;
+        height: 16px;
+    }
+
+    .nivel span {
+        font-size: 9px;
+    }
+
+    .pontos_xp {
+        font-size: 11px;
+    }
+}
+
+/* Celular (largura até 767px) */
+@media (max-width: 767px) {
+    body {
+        padding: 10px;
+    }
+
+    .buscar {
+        margin-top: 0;
+    }
+
+    .linha {
+        width: 100%;
+        margin-left: 0;
+        border-bottom-width: 2px;
+    }
+
+    .linha-usuer {
+        width: 100%; /* Estica até o final */
+        margin-left: 0;
+        border-bottom-width: 1px;
+    }
+
+    .user {
+        margin-left: 0;
+        padding: 5px 8px;
+    }
+
+    .Usuario {
+        height: 11vh;
+    }
+
+    .foto_usuario {
+        width: 50px;
+        height: 50px;
+    }
+
+    .linha-superior {
+        margin-left: 2vh;
+        margin-bottom: -3.5vh;
+    }
+
+    .nome_usuario {
+        font-size: 12px;
+    }
+
+    .barra_progresso {
+        gap: 5px;
+    }
+
+    .nivel {
+        width: 14px;
+        height: 14px;
+    }
+
+    .nivel span {
+        font-size: 8px;
+    }
+
+    .pontos_xp {
+        font-size: 10px;
+    }
 }
