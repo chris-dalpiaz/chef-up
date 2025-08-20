@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #b3b3b3;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+}
+
+.instructions {
+    font-size: 12px;
+    color: white;
+    position: absolute;
+    top: 10px;
+}
+
+.phone {
+    width: 430px;
+    height: 932px;
+    background: white;
+    border-radius: 0; /* removido arredondamento */
+    padding: 25px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.progress {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 45px 0;
+}
+
+.dot {
+    width: 20px; /* mais largo na horizontal */
+    height: 10px; /* mais baixo na vertical */
+    border-radius: 5px; /* formato de pílula */
+    background: #d3d3d3;
+}
+
+.dot.active {
+    background: #00a651;
+}
+
+.content {
+    text-align: left;
+}
+
+.content h1 {
+    font-size: 48px; /* tamanho grande igual ao exemplo */
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+    font-family: 'Arial Black', Arial, sans-serif; /* mais grosso */
+}
+
+.content p {
+    font-size: 18px; /* texto maior e mais legível */
+    line-height: 1.5; /* espaçamento entre linhas */
+    font-family: Arial, Helvetica, sans-serif; /* limpa e moderna */
+}
+
+.content ul {
+    font-size: 16px;
+    line-height: 1.4;
+    padding-left: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.list-btn {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 50px; /* largura fixa */
+}
+
+.next-btn {
+    background: rgb(255, 145, 0);
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 16px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 256px; /* largura fixa */
+}
+
