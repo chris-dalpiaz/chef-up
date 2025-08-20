@@ -34,7 +34,7 @@ async function carregarReceitas() {
       card.className = "receita_card";
 
       card.addEventListener("click", () => {
-        window.location.href = `detalhe_receita.html?id=${receita.id}`;
+        window.location.href = `../pagina-receita/pagina-receita.html?id=${receita.id}`;
       });
 
       card.innerHTML = `

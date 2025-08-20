@@ -1,145 +1,157 @@
+/* Reset e fonte */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #fff;
-  }
-  
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
-  
-  .svg-button {
-    position: fixed;
-    top: 40px;
-    left: -160px; /* Altere aqui para mover mais para dentro ou fora */
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  
-  .xp-button {
-    position: fixed;
-    top: 40px;
-    right: -130px; /* Altere aqui para mover mais para dentro ou fora */
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  
-  
-  /* Imagem */
-  .imagem-receita img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  
-  /* Conteúdo */
-  .receita-container {
-    padding: 16px;
-    background-color: #fff;
-    border-radius: 20px 20px 0 0;
-    margin-top: -20px;
-    position: relative;
-    z-index: 2;
-  }
-  
+  margin: 0;
+  font-family: 'DM Sans', 'Roboto', Arial, sans-serif;
+  background-color: #fff;
+}
+
+/* Botão Voltar */
+.svg-button {
+  position: fixed;
+  top: 40px;
+  left: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Botão XP */
+.xp-button {
+  position: fixed;
+  top: 40px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Imagem da Receita */
+.imagem-receita img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Container da Receita */
+.receita-container {
+  padding: 24px 16px;
+  background-color: #fff;
+  border-radius: 20px 20px 0 0;
+  margin-top: -20px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Título e Info */
+.receita-titulo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 8px;
+}
+
+.receita-info {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 24px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #FFA336;
+  background-color: transparent;
+  font-weight: bold;
+  color: #FFA336;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab.ativo {
+  background-color: #FFA336;
+  color: white;
+  border: none;
+}
+
+/* Conteúdo Dinâmico */
+.conteudo {
+  font-weight: bold;
+  margin-bottom: 16px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Botões de Ação */
+.botoes {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.btn-feito,
+.btn-comecar {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-feito {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.btn-comecar {
+  background-color: #f05a28;
+  color: white;
+}
+
+/* Botão Favorito */
+.favorite-button {
+  position: fixed;
+  top: 420px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
   .receita-titulo {
     font-size: 20px;
-    font-weight: bold;
-    color: #000;
-    margin-bottom: 6px;
   }
-  
-  .receita-info {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 16px;
-  }
-  
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  
+
   .tab {
-    flex: 1;
+    font-size: 14px;
     padding: 8px;
-    border-radius: 8px;
-    border: 1px solid #FFA336;
-    background-color: transparent;
-    font-weight: bold;
-    color: #FFA336;
-    cursor: pointer;
   }
-  
-  .tab.ativo {
-    background-color: #FFA336;
-    color: white;
-    border: none;
-  }
-  
-  .conteudo {
-    font-weight: bold;
-    margin-bottom: 24px;
-  }
-  
-  /* Botões */
-  .botoes {
-    margin-top: 70px;
-    display: flex;
-    gap: 8px;
 
-   
+  .btn-feito,
+  .btn-comecar {
+    font-size: 14px;
+    padding: 10px;
   }
-  
-  .botao-feito {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    margin: 0px;
-    padding: 0px 0px;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  .botao-comecar {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin: 0px;
-    padding: 0px 0px;
-    background-color: #f05a28;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
 
-  body {
-    margin: 0;
-  }
-  
   .favorite-button {
-    position: fixed;
-    top: 420px; /* ajuste conforme sua imagem */
-    right: -175px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1000;
+    top: auto;
+    bottom: 80px;
+    right: 16px;
   }
- 
+}
