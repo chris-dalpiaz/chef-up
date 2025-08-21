@@ -35,7 +35,7 @@ async function processarPrato() {
         });
 
         const avaliacaoData = await parseJsonOrThrow(avaliarResp, "avaliar-prato");
-        const { avaliacaoTexto, pontuacao } = avaliacaoData;
+        const { avaliacao, nota, filename } = avaliacaoData;
         if (avaliacaoTexto == null || pontuacao == null) {
             throw new Error(`[avaliar-prato] Campos esperados ausentes. JSON=${JSON.stringify(avaliacaoData)}`);
         }

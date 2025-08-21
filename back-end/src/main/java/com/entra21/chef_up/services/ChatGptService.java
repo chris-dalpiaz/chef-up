@@ -1,10 +1,13 @@
 package com.entra21.chef_up.services;
 
+import com.entra21.chef_up.dtos.Avaliacao.AvaliacaoResponseDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
 
 import java.util.*;
 
@@ -17,69 +20,55 @@ public class ChatGptService {
     @Value("${openai.api.url}")
     private String apiUrl;
 
-    public String avaliarPratoComImagem(String base64Image) {
-        RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplate restTemplate = new RestTemplate();
 
-        // 🔹 Monta payload no formato esperado pela API
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", "gpt-4o");
+    public AvaliacaoResponseDTO avaliarPratoComImagem(String base64Image) {
+        // ### 1) Forçar JSON estrito via mensagem de sistema
+        Map<String, Object> systemMsg = Map.of(
+                "role", "system",
+                "content", "Retorne estritamente um JSON no formato: " +
+                        "{\"avaliacao\":\"<texto>\",\"nota\":<inteiro de 0 a 5>} sem nenhum outro texto."
+        );
 
-        Map<String, Object> userMessage = new HashMap<>();
-        userMessage.put("role", "user");
-
-        List<Map<String, Object>> content = new ArrayList<>();
-
-        // Texto
-        content.add(Map.of(
-                "type", "text",
-                "text", "Avalie este prato de comida e dê uma nota de 0 a 5."
-        ));
-
-        // Imagem (base64)
-        content.add(Map.of(
-                "type", "image_url",
-                "image_url", Map.of(
-                        "url", "data:image/jpeg;base64," + base64Image
+        // ### 2) Mensagem do usuário com texto e imagem
+        Map<String, Object> userMsg = Map.of(
+                "role", "user",
+                "content", List.of(
+                        Map.of("type", "text",
+                                "text", "Avalie este prato de comida e dê uma nota de 0 a 5."),
+                        Map.of("type", "image_url",
+                                "image_url", Map.of("url", "data:image/jpeg;base64," + base64Image))
                 )
-        ));
+        );
 
-        userMessage.put("content", content);
-
-        requestBody.put("messages", List.of(userMessage));
+        Map<String, Object> body = new HashMap<>();
+        body.put("model", "gpt-4o");                                 // modelo explícito
+        body.put("messages", List.of(systemMsg, userMsg));           // ordem: sistema → usuário
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + apiKey);
+        headers.setBearerAuth(apiKey);
 
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    apiUrl,
-                    HttpMethod.POST,
-                    entity,
-                    Map.class
+            ResponseEntity<Map> resp = restTemplate.exchange(
+                    apiUrl, HttpMethod.POST, request, Map.class
             );
 
-            Map responseBody = response.getBody();
-            if (responseBody != null && responseBody.containsKey("choices")) {
-                List<Map<String, Object>> choices = (List<Map<String, Object>>) responseBody.get("choices");
-                if (!choices.isEmpty()) {
-                    Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
-                    if (message != null && message.containsKey("content")) {
-                        return message.get("content").toString();
-                    }
-                }
-            }
-            return "Erro: resposta inválida do ChatGPT";
+            // ### 3) Extrair content bruto
+            List<Map<String, Object>> choices = (List<Map<String, Object>>) resp.getBody()
+                    .get("choices");
+            String raw = ((Map<String,Object>)choices.get(0).get("message"))
+                    .get("content").toString();
 
-        } catch (HttpClientErrorException e) {
-            System.err.println(" Erro HTTP: " + e.getStatusCode());
-            System.err.println(" Corpo da resposta: " + e.getResponseBodyAsString());
-            return "Erro ao comunicar com a API do ChatGPT: " + e.getMessage();
+            // ### 4) Desserializar para DTO
+            AvaliacaoResponseDTO dto = objectMapper.readValue(raw, AvaliacaoResponseDTO.class);
+            return dto;
+
         } catch (Exception e) {
-            System.err.println(" Erro inesperado: " + e.getMessage());
-            return "Erro inesperado ao avaliar o prato.";
+            throw new RuntimeException("Falha ao chamar API ChatGPT: " + e.getMessage(), e);
         }
     }
 }

@@ -1,17 +1,21 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.Avaliacao.AvaliacaoResponseDTO;
 import com.entra21.chef_up.entities.ReceitaUsuario;
 import com.entra21.chef_up.repositories.ReceitaUsuarioRepository;
 import com.entra21.chef_up.services.ChatGptService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -28,93 +32,78 @@ public class AvaliacaoPratoController {
     @Autowired
     private ChatGptService chatGptService;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     public AvaliacaoPratoController() throws IOException {
         Files.createDirectories(tempDir);
         Files.createDirectories(finalDir);
     }
 
-    @PostMapping("/upload-temp")
-    public ResponseEntity<Map<String, String>> uploadTemp(@RequestParam("file") MultipartFile file) {
-        try {
-            String filename = UUID.randomUUID() + "-" + file.getOriginalFilename();
-            Path filePath = tempDir.resolve(filename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            String tempUrl = "http://localhost:8080/avaliacao/temp/" + filename;
-            return ResponseEntity.ok(Map.of("tempUrl", tempUrl));
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Falha ao salvar arquivo"));
-        }
-    }
-
-    @GetMapping("/temp/{filename:.+}")
-    public ResponseEntity<Resource> getTempFile(@PathVariable String filename) throws IOException {
-        Path filePath = tempDir.resolve(filename);
-        Resource resource = new UrlResource(filePath.toUri());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-    }
-
-    /**
-     * 🔸 Novo endpoint que usa ChatGptService para avaliar a imagem
-     */
     @PostMapping("/avaliar-prato")
-    public ResponseEntity<Map<String, Object>> avaliarPrato(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> avaliarPrato(
+            @RequestParam("file") MultipartFile file) {
         try {
-            // 🔸 Converte a imagem para Base64
-            String base64Image = Base64.getEncoder().encodeToString(file.getBytes());
+            // ### 1) Salvando em temp
+            String filename = UUID.randomUUID() + "-" + file.getOriginalFilename();
+            Path tempFile = tempDir.resolve(filename);
+            Files.copy(file.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
 
-            // 🔸 Chama o ChatGPT Service com a imagem
-            String avaliacaoTexto = chatGptService.avaliarPratoComImagem(base64Image);
+            // ### 2) Converter para Base64 e chamar ChatGPT
+            String base64 = java.util.Base64.getEncoder().encodeToString(file.getBytes());
+            AvaliacaoResponseDTO dto = chatGptService.avaliarPratoComImagem(base64);
 
-            // 🔹 Extração simples de pontuação (melhorar regex conforme resposta)
-            String match = avaliacaoTexto.replaceAll("\\D+", "");
-            int pontuacao = match.isEmpty() ? 0 : Integer.parseInt(match);
+            // ### 3) Validar nota (0–5)
+            if (dto.getNota() == null
+                    || dto.getNota() < 0
+                    || dto.getNota() > 5) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_GATEWAY,
+                        "Nota fora do intervalo esperado (0–5). Recebido=" + dto.getNota()
+                );
+            }
 
+            // ### 4) Retornar JSON com avaliação, nota e filename
             return ResponseEntity.ok(Map.of(
-                    "avaliacaoTexto", avaliacaoTexto,
-                    "pontuacao", pontuacao
+                    "avaliacao", dto.getAvaliacao(),
+                    "nota", dto.getNota(),
+                    "filename", filename
             ));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(Map.of("error", "Erro ao avaliar prato"));
+        } catch (IOException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Falha ao processar arquivo", ex
+            );
         }
     }
 
-    /**
-     * 🔹 Salvar no banco após avaliação
-     */
     @PostMapping("/salvar-prato")
-    public ResponseEntity<Map<String, String>> salvarPrato(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Map<String, String>> salvarPrato(
+            @RequestBody Map<String, String> body) {
         try {
-            String avaliacaoTexto = body.get("avaliacaoTexto");
-            String pontuacaoStr = body.get("pontuacao");
-            String tempUrl = body.get("imageUrl");
-            String usuarioIdStr = body.get("usuarioId");
-            String receitaIdStr = body.get("receitaId");
+            String avaliacao = body.get("avaliacao");
+            Integer nota       = Integer.valueOf(body.get("nota"));
+            String filename    = body.get("filename");
 
-            String filename = tempUrl.substring(tempUrl.lastIndexOf("/") + 1);
-            Path tempFile = tempDir.resolve(filename);
+            // ### 1) Mover de temp → final
+            Path tempFile  = tempDir.resolve(filename);
             Path finalFile = finalDir.resolve(filename);
-
             Files.move(tempFile, finalFile, StandardCopyOption.REPLACE_EXISTING);
 
-            ReceitaUsuario receitaUsuario = new ReceitaUsuario();
-            receitaUsuario.setFotoPrato("/uploads/finais/" + filename);
-            receitaUsuario.setPontuacaoPrato(Integer.parseInt(pontuacaoStr));
-            receitaUsuario.setDataConclusao(java.time.LocalDateTime.now());
+            // ### 2) Persistir no banco
+            ReceitaUsuario ru = new ReceitaUsuario();
+            ru.setFotoPrato("/uploads/finais/" + filename);
+            ru.setPontuacaoPrato(nota);
+            ru.setDataConclusao(LocalDateTime.now());
+            // TODO: ru.setUsuario(...); ru.setReceita(...);
 
-            // 🔹 Aqui você pode setar Usuario e Receita vindos do banco
-            // receitaUsuario.setUsuario(usuarioRepository.findById(...))
-            // receitaUsuario.setReceita(receitaRepository.findById(...))
-
-            receitaUsuarioRepository.save(receitaUsuario);
+            receitaUsuarioRepository.save(ru);
 
             return ResponseEntity.ok(Map.of("message", "Prato salvo com sucesso!"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(Map.of("error", "Erro ao salvar prato"));
+        } catch (IOException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Arquivo não encontrado: " + ex.getMessage(), ex
+            );
         }
     }
 }
