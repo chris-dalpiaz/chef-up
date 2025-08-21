@@ -69,7 +69,7 @@ function realizarLogin() {
 
 function redirecionarUsuario() {
     console.log("Redirecionando...");
-    window.location.href = "/boas-vindas/aprenda-receitas/aprenda-receitas.html";
+    window.location.href = "../boas-vindas/aprenda-receitas/aprenda-receitas.html";
 }
 
 // Função que configura os eventos da página
