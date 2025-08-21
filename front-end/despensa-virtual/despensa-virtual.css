@@ -72,39 +72,15 @@ body {
     color: #333;
 }
 
-#barraNavegacao {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.nav-item {
-    text-align: center;
-    color: white;
-    text-decoration: none;
-    flex: 1;
-    padding: 0 16px;
-}
-  
-.nav-item .icon {
-    font-size: 20px;
-    display: block;
-    color: #B3B3B3;
-}
-  
-.nav-item .text {
-    font-size: 12px;
-    color: #B3B3B3;
-}
-
 .ingredientes {
-    margin-top: 20px;
+    margin-top: 50px;
     padding: 0 15px;
+    margin-bottom: 80px; /* Espaço no final para o rodapé */
+}
+
+#lista-ingredientes {
+    min-height: calc(100vh - 100px); /* Altura mínima ajustada */
+    padding-bottom: 20px; /* Espaço adicional no final */
 }
 
 .card {
@@ -163,6 +139,9 @@ body {
 #simbolo {
     font-size: 5vh;
     background-color: transparent;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
 }
 
 .modal {
@@ -185,7 +164,7 @@ body {
     width: 90%;
     max-width: 400px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    position: relative; /* Para posicionar o botão de fechar */
+    position: relative;
 }
 
 .modal-content h2 {
@@ -230,6 +209,53 @@ body {
     color: #c9302c;
 }
 
+.modal-content .salvar {
+    margin-top: 30px; /* Mantém o espaçamento para baixo */
+}
+
+#botaoSalvar {
+    background-color: #fcb347; /* Cor laranja original */
+    color: #000000; /* Texto preto original */
+    border: none;
+    padding: 10px; /* Padding original */
+    border-radius: 20px; /* Formato original */
+    cursor: pointer;
+    width: 100%; /* Largura total */
+}
+
+#botaoSalvar:hover {
+    background-color: #e5942a; /* Hover original */
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.footer-item {
+    text-align: center;
+    color: #B3B3B3;
+    text-decoration: none;
+    flex: 1;
+    padding: 0 16px;
+}
+
+.footer-item .icon {
+    font-size: 20px;
+    display: block;
+}
+
+.footer-item .text {
+    font-size: 12px;
+}
+
 /* Tablet (768px-1024px) */
 @media (max-width: 1024px) and (min-width: 768px) {
     #despensavirtual {
@@ -271,6 +297,26 @@ body {
     .close-modal {
         font-size: 18px;
     }
+
+    .modal-content .salvar {
+        margin-top: 18px;
+    }
+
+    #botaoSalvar {
+        background-color: #fcb347;
+        color: #000000;
+        padding: 8px;
+        border-radius: 20px;
+    }
+
+    .ingredientes {
+        margin-bottom: 70px;
+    }
+
+    #lista-ingredientes {
+        min-height: calc(100vh - 90px);
+        padding-bottom: 18px;
+    }
 }
 
 /* Celular (até 767px) */
@@ -281,6 +327,12 @@ body {
 
     .ingredientes {
         padding: 0 10px;
+        margin-bottom: 60px;
+    }
+
+    #lista-ingredientes {
+        min-height: calc(100vh - 80px);
+        padding-bottom: 15px;
     }
 
     .card img {
@@ -322,5 +374,16 @@ body {
 
     .close-modal {
         font-size: 16px;
+    }
+
+    .modal-content .salvar {
+        margin-top: 15px;
+    }
+
+    #botaoSalvar {
+        background-color: #fcb347;
+        color: #000000;
+        padding: 6px;
+        border-radius: 20px;
     }
 }
