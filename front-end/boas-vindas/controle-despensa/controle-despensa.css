@@ -25,14 +25,21 @@ body {
     padding: 40px 20px;
     text-align: center;
 }
-
+ 
 .dots { display:flex; gap:12px; margin-bottom:16px; }
 .dots span {
     width:10px; height:10px; border-radius:50%;
     background:#47B3A8; opacity:.5;
 }
-.dots span:first-child { background:#F58700; opacity:1; }
-
+.dots span:nth-child(2) { /* Segundo span agora é laranja */
+    background:#F58700;
+    opacity:1;
+}
+.dots span:first-child { /* Primeiro span volta ao padrão azul */
+    background:#47B3A8;
+    opacity:.5;
+}
+ 
 h1 {
     margin: 0;
     font-size: 1.8rem;
@@ -60,13 +67,13 @@ h1 {
 }
 
 #proximo2 {
-    background: #47B3A8;
-    color: #fff;
-    font-weight: bold;
-}
-
-#pular {
 background: #47B3A8;
 color: #fff;
 font-weight: bold;
+}
+
+#pular {
+background: transparent;
+text-decoration: underline;
+color: #555;
 }

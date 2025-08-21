@@ -193,3 +193,13 @@ async function salvarIngrediente() {
     alert("Erro ao salvar ingrediente.");
   }
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const closeModal = document.querySelector('.close-modal');
+  const modal = document.querySelector('#modalIngrediente');
+
+  closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+  });
+});
