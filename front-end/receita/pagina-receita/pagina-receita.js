@@ -69,7 +69,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Erro ao carregar receita:", error);
     document.querySelector(".receita-container").innerHTML = "<p>Erro ao carregar receita.</p>";
   }
+
+  // Botão "Começar" redireciona para página de etapas
+const botaoComecar = document.querySelector(".btn-comecar");
+if (botaoComecar) {
+  botaoComecar.addEventListener("click", () => {
+    window.location.href = `../etapa-receita/etapa-receita.html?id=${receitaId}`;
+  });
+}
 });
+
+
 
 // Funções de botão (simples placeholders)
 function voltar() {
