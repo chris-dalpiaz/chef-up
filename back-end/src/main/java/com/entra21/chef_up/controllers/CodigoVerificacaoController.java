@@ -1,10 +1,10 @@
 package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.entities.CodigoVerificacao;
+import com.entra21.chef_up.services.CodigoVerificacaoService;
+import com.entra21.chef_up.repositories.CodigoVerificacaoRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/{idUsuario}/codigo")
@@ -20,7 +20,13 @@ public class CodigoVerificacaoController {
         this.codigoVerificacaoRepository = codigoVerificacaoRepository;
     }
 
+    @GetMapping
     public CodigoVerificacao getCodigoVerificao(@PathVariable Integer idUsuario) {
-        return codigoVerificacaoService.findByIdUsuario(idUsuario);
+        return codigoVerificacaoService.findByUsuarioId(idUsuario);
+    }
+
+    @PostMapping
+    public CodigoVerificacao gerarCodigo(@PathVariable Integer idUsuario) {
+
     }
 }
