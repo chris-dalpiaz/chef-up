@@ -60,20 +60,17 @@ public class AvaliacaoPratoController {
      * 🔸 Novo endpoint que usa ChatGptService para avaliar a imagem
      */
     @PostMapping("/avaliar-prato")
-    public ResponseEntity<Map<String, Object>> avaliarPrato(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Map<String, Object>> avaliarPrato(@RequestParam("file") MultipartFile file) {
         try {
-            String tempUrl = body.get("imageUrl");
+            // 🔸 Converte a imagem para Base64
+            String base64Image = Base64.getEncoder().encodeToString(file.getBytes());
 
-            // Monta mensagem para enviar ao ChatGPT
-            String mensagem = "Verifique se a imagem do prato é válida e atribua uma pontuação de 0 a 5. URL da imagem: " + tempUrl;
+            // 🔸 Chama o ChatGPT Service com a imagem
+            String avaliacaoTexto = chatGptService.avaliarPratoComImagem(base64Image);
 
-            // 🔸 Chamada ao ChatGptService
-            String avaliacaoTexto = chatGptService.avaliarPrato(mensagem);
-
-            // Extrai pontuação numérica simples
-            int pontuacao = 0;
-            var match = avaliacaoTexto.matches(".*\\d+.*") ? avaliacaoTexto.replaceAll("\\D+", "") : "0";
-            pontuacao = Integer.parseInt(match);
+            // 🔹 Extração simples de pontuação (melhorar regex conforme resposta)
+            String match = avaliacaoTexto.replaceAll("\\D+", "");
+            int pontuacao = match.isEmpty() ? 0 : Integer.parseInt(match);
 
             return ResponseEntity.ok(Map.of(
                     "avaliacaoTexto", avaliacaoTexto,
