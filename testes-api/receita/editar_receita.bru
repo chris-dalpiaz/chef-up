@@ -5,17 +5,17 @@ meta {
 }
 
 put {
-  url: http://localhost:8080/receitas/5
+  url: http://localhost:8080/receitas/9
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJhaEB2aXRvcmlhIiwiaWF0IjoxNzU1NDU2OTM5LCJleHAiOjE3NTU0NjA1Mzl9.gcHcjbT18Xvlkd0-9nQa3h9Kl7-d3w1MNlDrL3mdYZE
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTU4MTk4MjgsImV4cCI6MTc1NTgyMzQyOH0.6WIrP0np7DONMkMPtnXerVFB8gOZ58ik0T7haBP5qaA
 }
 
 body:json {
   {
-     "imagemReceita": "../upload/receitas-do-sistema/suco-natural.png"
+     "imagemReceita": "http://localhost:8080/img/receitas/nhoque-batata.jpg"
   }
 }
