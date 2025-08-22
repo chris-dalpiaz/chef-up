@@ -1,7 +1,7 @@
 const userId = localStorage.getItem("id");
 const token = localStorage.getItem("token");
 
-let tituloSelecionadoId = null; // 👈 armazena temporariamente
+let tituloSelecionadoId = null;
 let adjetivosSelecionados = [];
 
 async function carregarPerfil() {
@@ -25,18 +25,16 @@ async function carregarPerfil() {
 
   renderizarPronomes(pronomes, usuario.pronome);
   carregarTitulos();
-  carregarAdjetivos(); // 👈 novo
+  carregarAdjetivos();
 }
 
 async function carregarAdjetivos() {
   try {
-
     if (!token || !userId) {
       console.warn("Token ou ID do usuário não encontrado.");
       return;
     }
 
-    // Faz duas requisições em paralelo: todos os adjetivos e os selecionados pelo usuário
     const [resAdjetivos, resSelecionados] = await Promise.all([
       fetch("http://localhost:8080/adjetivos", {
         headers: { Authorization: `Bearer ${token}` }
@@ -54,7 +52,6 @@ async function carregarAdjetivos() {
     const lista = await resAdjetivos.json();
     const selecionados = await resSelecionados.json();
 
-    // Remove duplicatas e atualiza array global
     const idsSelecionados = [...new Set(selecionados.map(item => item.adjetivo.id))];
     adjetivosSelecionados = [...idsSelecionados];
 
@@ -91,44 +88,8 @@ async function carregarAdjetivos() {
     console.error("Erro ao carregar adjetivos:", error);
   }
 }
-function renderizarPronomes(lista, ativo, token, userId) {
-  const container = document.querySelector(".container_pronomes");
-  container.innerHTML = "";
 
-  lista.forEach(p => {
-    const btn = document.createElement("button");
-    btn.className = "pronome"; // usa a classe correta conforme o CSS
-    btn.textContent = p.nome;
-    btn.dataset.id = p.id;
-
-    if (p.id === ativo?.id) {
-      btn.classList.add("ativo");
-    }
-
-    btn.addEventListener("click", async () => {
-      container.querySelectorAll("button").forEach(b => b.classList.remove("ativo"));
-      btn.classList.add("ativo");
-
-      try {
-        await fetch(`http://localhost:8080/usuarios/${userId}/pronome`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({ id: p.id })
-        });
-      } catch (error) {
-        console.error("Erro ao atualizar pronome:", error);
-      }
-    });
-
-    container.appendChild(btn);
-  });
-}
-
-
-function renderizarPronomes(lista, ativo, token, userId) {
+function renderizarPronomes(lista, ativo) {
   const container = document.querySelector(".container_pronomes");
   container.innerHTML = "";
 
@@ -171,7 +132,6 @@ async function carregarTitulos() {
       return;
     }
 
-    // Busca todos os títulos e os títulos do usuário
     const [resTodos, resUsuario] = await Promise.all([
       fetch("http://localhost:8080/titulos", {
         headers: { Authorization: `Bearer ${token}` }
@@ -192,7 +152,6 @@ async function carregarTitulos() {
     const container = document.querySelector(".container_titulos");
     container.innerHTML = "";
 
-    // Cria um mapa para acesso rápido aos títulos desbloqueados
     const desbloqueadosMap = new Map();
     titulosUsuario.forEach(t => {
       if (t.desbloqueadoEm) {
@@ -248,7 +207,6 @@ async function carregarTitulos() {
   }
 }
 
-
 async function salvarAlteracoes() {
   const emailAntigo = localStorage.getItem("email");
 
@@ -263,7 +221,6 @@ async function salvarAlteracoes() {
   if (email) payload.email = email;
   if (pronomeBtn) payload.idPronome = parseInt(pronomeBtn.dataset.id);
 
-  // Atualiza dados do usuário
   if (Object.keys(payload).length > 0) {
     const usuarioReq = fetch(`http://localhost:8080/usuarios/${userId}`, {
       method: "PUT",
@@ -277,7 +234,6 @@ async function salvarAlteracoes() {
     updatePromises.push(usuarioReq);
   }
 
-  // Atualiza título selecionado
   if (tituloSelecionadoId) {
     const tituloReq = fetch(`http://localhost:8080/usuarios/${userId}/titulos/${tituloSelecionadoId}`, {
       method: "PUT",
@@ -291,11 +247,9 @@ async function salvarAlteracoes() {
     updatePromises.push(tituloReq);
   }
 
-  // Aguarda atualizações básicas
   const updateResults = await Promise.all(updatePromises);
   const updateSuccess = updateResults.every(res => res.ok);
 
-  // Atualiza adjetivos
   let adjetivoSuccess = true;
   try {
     const atuaisRes = await fetch(`http://localhost:8080/usuarios/${userId}/adjetivos`, {
@@ -335,7 +289,6 @@ async function salvarAlteracoes() {
   }
 
   if (updateSuccess && adjetivoSuccess) {
-    // Atualiza localStorage com nome, email e pronome
     if (payload.nome) localStorage.setItem("nome", payload.nome);
     if (payload.email) localStorage.setItem("email", payload.email);
     if (payload.idPronome) {
@@ -345,7 +298,6 @@ async function salvarAlteracoes() {
       }
     }
 
-    // Atualiza localStorage com título ativo
     if (tituloSelecionadoId) {
       const tituloSelecionado = document.querySelector(`.container_titulos button[data-id="${tituloSelecionadoId}"]`);
       if (tituloSelecionado) {
@@ -355,7 +307,6 @@ async function salvarAlteracoes() {
       }
     }
 
-    // Atualiza localStorage com os novos adjetivos
     const novosAdjetivosRes = await fetch(`http://localhost:8080/usuarios/${userId}/adjetivos`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -364,7 +315,6 @@ async function salvarAlteracoes() {
       localStorage.setItem("adjetivos", JSON.stringify(novosAdjetivos));
     }
 
-    // 🚨 Verifica se o email foi alterado
     if (payload.email && payload.email !== emailAntigo) {
       alert("Email alterado. Por segurança, faça login novamente.");
       localStorage.clear();
@@ -373,14 +323,13 @@ async function salvarAlteracoes() {
       alert("Perfil atualizado com sucesso!");
       window.location.href = "../perfil/perfil.html";
     }
-
   } else {
     alert("Erro ao salvar alterações");
   }
 }
 
 function redirecionarAlterarAvatar() {
-  window.location.href = "../editar-imagem/editar-imagem.html"
+  window.location.href = "../editar-imagem/editar-imagem.html";
 }
 
 function carregarEventos() {
