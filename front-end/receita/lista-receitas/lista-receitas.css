@@ -1,6 +1,12 @@
 /* Estiliza o corpo da página */
 body {
   margin-left: 2vh;
+<<<<<<< HEAD
+  margin-right: 2vh; /* Remove margens padrão */
+  font-family: 'DM Sans', sans-serif; /* Define a fonte principal */
+  background-color: #FFF8E1;
+  padding: 1 20px; /* Espaçamento horizontal nas bordas */
+=======
   margin-right: 2vh;
   /* Remove margens padrão */
   font-family: 'DM Sans', sans-serif;
@@ -9,6 +15,7 @@ body {
   /* Fundo branco */
   padding: 1 20px;
   /* Espaçamento horizontal nas bordas */
+>>>>>>> 8d784b09ef6919beb013ed394a0f2fee6ebf2d27
 }
 
 /* Estilo do título principal */
@@ -256,8 +263,6 @@ body {
 }
 
 /* receitas */
-
-
 body {
   font-family: 'DM Sans', sans-serif;
   background-color: #FFF8E1;
@@ -320,15 +325,57 @@ body {
   margin: 0;
 }
 
-
-
-
-
-
-
-/* rodapé */
-
+/* ===== Footer ===== */
 .footer {
+<<<<<<< HEAD
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    padding: 1vh 0;
+    z-index: 1000;
+}
+
+.footer a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5vh;
+    padding: 0.5vh;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.footer-item:hover {
+    background-color: #f0f0f0;
+}
+
+.footer-item::before {
+    content: attr(data-icon);
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.footer-item span {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.footer-item.selected {
+    color: #FFA336;
+=======
   position: fixed;
   /* fixa o rodapé na tela, mesmo quando rolar a página */
   bottom: 0;
@@ -380,6 +427,7 @@ body {
 .footer-item.selected {
   color: #FFA336;
   /* muda a cor do texto para laranja quando o item está selecionado */
+>>>>>>> 8d784b09ef6919beb013ed394a0f2fee6ebf2d27
 }
 
 /* Container de receitas em grid */
@@ -421,6 +469,8 @@ body {
   color: #333;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
+<<<<<<< HEAD
+=======
 }
 
 .filter-wrapper {
@@ -454,4 +504,5 @@ body {
 
 .filter-btn:focus {
   outline: none;
+>>>>>>> 8d784b09ef6919beb013ed394a0f2fee6ebf2d27
 }
