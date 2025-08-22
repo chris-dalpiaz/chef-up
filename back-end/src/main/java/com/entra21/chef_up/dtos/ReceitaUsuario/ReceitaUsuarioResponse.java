@@ -1,6 +1,7 @@
 package com.entra21.chef_up.dtos.ReceitaUsuario;
 
 import com.entra21.chef_up.dtos.Receita.ReceitaResponse;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +11,10 @@ public class ReceitaUsuarioResponse {
 
     private ReceitaResponse receita;
 
+    @JsonFormat(
+            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            shape   = JsonFormat.Shape.STRING
+    )
     private LocalDateTime dataConclusao;
 
     private String fotoPrato;

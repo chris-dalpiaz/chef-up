@@ -1,117 +1,143 @@
 // *********************************************
-// Utilitário: parse JSON ou lança erro claro
+// Configurações
+// *********************************************
+const API_BASE = 'http://localhost:8080'
+const token = localStorage.getItem('token')
+const userId = parseInt(localStorage.getItem('id'), 10)
+
+// *********************************************
+// Utilitário: lê JSON ou lança erro detalhado
 // *********************************************
 async function parseJsonOrThrow(resp, etapa) {
-    const ct = resp.headers.get("content-type") || "";
-  
+    const ct = resp.headers.get('content-type') || ''
+
+    // respostas não-ok
     if (!resp.ok) {
-      const texto = await resp.text().catch(() => "");
-      throw new Error(`[${etapa}] HTTP ${resp.status} – ${texto || "sem corpo"}`);
+        const txt = await resp.text().catch(() => '')
+        throw new Error(`[${etapa}] HTTP ${resp.status} — ${txt || 'sem corpo'}`)
     }
-  
-    if (!ct.includes("application/json")) {
-      const texto = await resp.text().catch(() => "");
-      throw new Error(
-        `[${etapa}] Resposta não é JSON. content-type=${ct} corpo=${texto.slice(0,200)}`
-      );
+
+    // content-type não JSON
+    if (!ct.includes('application/json')) {
+        const txt = await resp.text().catch(() => '')
+        throw new Error(
+            `[${etapa}] content-type inválido: ${ct} → ${txt.slice(0, 200)}`
+        )
     }
-  
-    return resp.json();
-  }
-  
-  // *********************************************
-  // Função principal: avalia imagem e salva conclusão
-  // *********************************************
-  async function processarPrato() {
-    // validações iniciais
-    const inputFile = document.getElementById("input_file");
-    if (!inputFile || inputFile.files.length === 0) {
-      alert("Insira a imagem do prato");
+
+    return resp.json()
+}
+
+// *********************************************
+// Fluxo principal: avalia e persiste o prato
+// *********************************************
+async function processarPrato() {
+    // 1) validações iniciais
+    console.log('>>> Iniciando processarPrato');
+    const inputFile = document.getElementById('input_file');
+    if (!inputFile?.files.length) {
+      alert('Insira a imagem do prato');
+      return;
+    }
+    if (!token || !userId) {
+      alert('Usuário não autenticado');
       return;
     }
   
-    const params     = new URLSearchParams(window.location.search);
-    const receitaId  = parseInt(params.get("id"), 10);
-    const userId     = parseInt(localStorage.getItem("id"), 10);
-    const token      = localStorage.getItem("token");
-    const file       = inputFile.files[0];
-  
-    if (!receitaId || !userId) {
-      alert("ID da receita ou do usuário não encontrados.");
-      return;
-    }
-  
-    if (!token) {
-      alert("Token de autenticação não encontrado. Faça login novamente.");
+    // 2) extrai ID da receita
+    const receitaId = parseInt(
+      new URLSearchParams(window.location.search).get('id'),
+      10
+    );
+    console.log('receitaId=', receitaId);
+    if (!receitaId) {
+      alert('ID da receita não encontrado na URL');
       return;
     }
   
     try {
-      // 1) envia imagem para avaliação
+      // 3) upload da imagem para avaliação
+      const file = inputFile.files[0];
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append('file', file);
   
+      console.log('Enviando /receitas/.../avaliar-prato');
       const avaliarResp = await fetch(
-        `http://localhost:8080/receitas/${receitaId}/avaliar-prato`,
-        {
-          method: "POST",
+        `${API_BASE}/receitas/${receitaId}/avaliar-prato`, {
+          method:  'POST',
+          mode:    'cors',
           headers: { Authorization: `Bearer ${token}` },
-          body: formData
+          body:    formData
         }
       );
   
-      const { comentario, nota, filename } =
-        await parseJsonOrThrow(avaliarResp, "avaliar-prato");
+      console.log('[avaliar-prato] status=', avaliarResp.status);
+      const avaliarRaw = await avaliarResp.text().catch(() => '');
+      console.log('[avaliar-prato] raw body=', avaliarRaw);
   
-      if (comentario == null || nota == null || !filename) {
-        throw new Error("Resposta de avaliação incompleta.");
+      if (!avaliarResp.ok) {
+        throw new Error(`[avaliar-prato] HTTP ${avaliarResp.status} — ${avaliarRaw || 'sem corpo'}`);
       }
   
-      alert(`Avaliação do GPT:\n${comentario}\nNota: ${nota}`);
+      const { comentario, nota, filename } = JSON.parse(avaliarRaw);
+      console.log('JSON avaliação:', { comentario, nota, filename });
   
-      // 2) monta payload e salva como receita concluída
+      // 4) monta payload de salvar
+      const dataConclusao = new Date()
+        .toISOString()
+        .replace(/Z$/, '');
+  
       const payload = {
         idReceita:      receitaId,
-        dataConclusao:  new Date().toISOString(),
+        dataConclusao,             
         fotoPrato:      `/uploads/finais/${filename}`,
         pontuacaoPrato: nota,
         textoAvaliacao: comentario
       };
   
-      // JSON puro, sem crases envolventes
-      const bodyJson = JSON.stringify(payload);
-      console.log("Body JSON enviado:", bodyJson, "primeiro char:", bodyJson.charAt(0));
+      console.log('Payload salvar-prato:', payload);
   
+      // 5) persiste conclusão da receita
+      console.log('Enviando POST /usuarios/.../receitas');
       const salvarResp = await fetch(
-        `http://localhost:8080/usuarios/${userId}/receitas`,
-        {
-          method: "POST",
+        `${API_BASE}/usuarios/${userId}/receitas`, {
+          method:  'POST',
+          mode:    'cors',
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            'Content-Type': 'application/json',
+            Authorization:  `Bearer ${token}`
           },
-          body: bodyJson
+          body: JSON.stringify(payload)
         }
       );
   
-      const salvarData = await parseJsonOrThrow(salvarResp, "salvar-prato");
-      alert("Receita concluída salva com sucesso!");
+      console.log('[salvar-prato] status=', salvarResp.status);
+      const salvarRaw = await salvarResp.text().catch(() => '');
+      console.log('[salvar-prato] raw body=', salvarRaw);
   
-    } catch (err) {
-      console.error("Erro no fluxo:", err);
-      alert("Ocorreu um erro:\n" + err.message);
+      if (!salvarResp.ok) {
+        throw new Error(`[salvar-prato] HTTP ${salvarResp.status} — ${salvarRaw || 'sem corpo'}`);
+      }
+  
+      const salvarJson = salvarRaw ? JSON.parse(salvarRaw) : {};
+      console.log('Resposta salvar-prato JSON:', salvarJson);
+  
+      alert('Receita concluída salva com sucesso!');
+    }
+    catch (err) {
+      console.error('processarPrato error:', err);
+      alert('Erro no processamento:\n' + err.message);
     }
   }
   
-  // *********************************************
-  // Vincula o clique no botão avaliar
-  // *********************************************
-  function carregarEvento() {
-    const botaoAvaliar = document.getElementById("botao_avaliar");
-    if (botaoAvaliar) {
-      botaoAvaliar.addEventListener("click", processarPrato);
-    }
-  }
-  
-  window.addEventListener("load", carregarEvento);
-  
+
+// *********************************************
+// Hook do botão
+// *********************************************
+function carregarEvento() {
+    document
+        .getElementById('botao_avaliar')
+        ?.addEventListener('click', processarPrato)
+}
+
+window.addEventListener('load', carregarEvento)
