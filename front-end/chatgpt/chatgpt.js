@@ -24,8 +24,12 @@ async function processarPrato() {
     const formData = new FormData();
     formData.append("file", file);
 
+    // 🔹 Aqui você adiciona o ID da receita de teste
+    const receitaIdTeste = 1; // Coloque o ID que existe no banco
+    formData.append("receitaId", receitaIdTeste);
+
     try {
-        // 🔸 1) Enviar direto para avaliação
+        // 🔸 1) Enviar para avaliação
         const avaliarResp = await fetch("http://localhost:8080/avaliacao/avaliar-prato", {
             method: "POST",
             headers: {
@@ -35,13 +39,15 @@ async function processarPrato() {
         });
 
         const avaliacaoData = await parseJsonOrThrow(avaliarResp, "avaliar-prato");
-        const { avaliacaoTexto, pontuacao } = avaliacaoData;
-        if (avaliacaoTexto == null || pontuacao == null) {
+
+        // Extrai JSON do GPT e filename gerado
+        const { comentario: avaliacaoTexto, nota: pontuacao, filename } = avaliacaoData;
+        if (!avaliacaoTexto || pontuacao == null || !filename) {
             throw new Error(`[avaliar-prato] Campos esperados ausentes. JSON=${JSON.stringify(avaliacaoData)}`);
         }
 
-        console.log("Avaliação GPT:", avaliacaoTexto, "Pontuação:", pontuacao);
-        alert("Avaliação do GPT: " + avaliacaoTexto + "\nPontuação: " + pontuacao);
+        console.log("Avaliação GPT:", avaliacaoTexto, "Pontuação:", pontuacao, "Filename:", filename);
+        alert(`Avaliação do GPT:\n${avaliacaoTexto}\nPontuação: ${pontuacao}`);
 
         // 🔸 2) Salvar no banco
         const salvarResp = await fetch("http://localhost:8080/avaliacao/salvar-prato", {
@@ -53,10 +59,9 @@ async function processarPrato() {
             body: JSON.stringify({
                 avaliacaoTexto,
                 pontuacao,
-                // podemos salvar só o nome do arquivo ou path final
-                imageUrl: file.name,
-                usuarioId: 1, // TODO: ID real do usuário
-                receitaId: 1  // TODO: ID real da receita
+                filename,       // ⚠️ usar o filename retornado pelo endpoint /avaliar-prato
+                usuarioId: 1,   // TODO: substituir pelo ID real do usuário logado
+                receitaId: 1    // TODO: substituir pelo ID real da receita
             })
         });
 
@@ -77,4 +82,5 @@ function carregarEvento() {
     const botaoAvaliar = document.getElementById("botao_avaliar");
     botaoAvaliar.addEventListener("click", processarPrato);
 }
+
 window.addEventListener("load", carregarEvento);
