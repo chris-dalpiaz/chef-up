@@ -195,6 +195,8 @@ body {
   color: #444;
   border: 1px solid #f0f0f0;
   transition: all 0.3s;
+  font-weight: 600; /* Ajustado para igualar ao .ingredient-name */
+  font-family: 'DM Sans','Roboto',sans-serif; /* Garantir consistência */
 }
 
 .item:hover {
@@ -231,12 +233,14 @@ body {
   font-weight: 600;
   color: #333;
   font-size: 15px;
+  font-family: 'DM Sans','Roboto',sans-serif;
 }
 
 .ingredient-amount {
   color: #666;
   font-size: 14px;
   font-weight: 500;
+  font-family: 'DM Sans','Roboto',sans-serif;
 }
 
 .instrucao {
@@ -290,7 +294,7 @@ body {
   top: -1px;
 }
 
-/* MOBILE PORTRAIT - FULL SCREEN (até 767px) */
+/* Media queries mantidas iguais ao ingrediente.css */
 @media (max-width: 767px) {
   body {
     padding: 0;
@@ -335,78 +339,4 @@ body {
   }
 }
 
-/* TABLET PORTRAIT - FULL SCREEN (768px - 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  body {
-    padding: 0;
-    align-items: stretch;
-  }
-
-  #container {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    min-width: auto;
-    max-height: none;
-    min-height: auto;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  .recipe-title {
-    font-size: 1.4rem;
-  }
-
-  .recipe-image {
-    height: 280px;
-  }
-}
-
-/* DESKTOP - DESIGN ORIGINAL (1024px+) */
-@media (min-width: 1024px) {
-  body {
-    padding: 20px;
-  }
-
-  #container {
-    max-width: 480px;
-    height: 980px;
-  }
-
-  .recipe-title {
-    font-size: 1.5rem;
-  }
-}
-
-/* LANDSCAPE ORIENTATION - Mobile e Tablet */
-@media (orientation: landscape) and (max-width: 1023px) {
-  #container {
-    width: 100vw;
-    height: 100vh;
-    max-width: none;
-    max-height: none;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  .content {
-    margin-bottom: 10px;
-    padding: 20px;
-  }
-
-  .recipe-image {
-    height: 200px;
-  }
-
-  .instrucao {
-    padding: 15px 20px 20px 20px;
-  }
-}
-
-/* Ultra-wide screens */
-@media (min-width: 1400px) {
-  #container {
-    max-width: 480px;
-    height: 980px;
-  }
-}
+/* Outras media queries podem ser copiadas do ingrediente.css se necessário */

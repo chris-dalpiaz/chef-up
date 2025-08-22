@@ -6,7 +6,7 @@
     <title>Receitas</title>
     <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="ingrediente.css">
+    <link rel="stylesheet" href="utensilios.css">
 </head>
 <body>
     <div id="container">
@@ -35,10 +35,10 @@
             <h1 class="recipe-title">Salada de Salada com Salada de Mais Salada Com Capim e Cidreira</h1>
             <p class="recipe-info">35 minutos • 2 porções</p>
             <div class="tabs">
-                <button class="tab" onclick="switchTab('utensilios')">Utensílios</button>
-                <button class="tab active" onclick="switchTab('ingredientes')">Ingredientes</button>
+                <button class="tab active" onclick="switchTab('utensilios')">Utensílios</button>
+                <button class="tab" onclick="switchTab('ingredientes')">Ingredientes</button>
             </div>
-            <div class="tab-content hidden" id="utensilios-content">
+            <div class="tab-content" id="utensilios-content">
                 <div class="item-list">
                     <div class="item">abridor de lata</div>
                     <div class="item">espátula</div>
@@ -46,23 +46,23 @@
                     <div class="item">colher</div>
                 </div>
             </div>
-            <div class="tab-content" id="ingredientes-content">
+            <div class="tab-content hidden" id="ingredientes-content">
                 <div class="ingredients-table">
                     <div class="ingredient-row">
-                        <span class="ingredient-name">arroz</span>
-                        <span class="ingredient-amount">½ xícara</span>
-                    </div>
-                    <div class="ingredient-row">
-                        <span class="ingredient-name">frango</span>
+                        <span class="ingredient-name">Alface fresca</span>
                         <span class="ingredient-amount">1 unidade</span>
                     </div>
                     <div class="ingredient-row">
-                        <span class="ingredient-name">carne de peru</span>
-                        <span class="ingredient-amount">1 kilograma</span>
+                        <span class="ingredient-name">Tomate cereja</span>
+                        <span class="ingredient-amount">200g</span>
                     </div>
                     <div class="ingredient-row">
-                        <span class="ingredient-name">leite de coco</span>
-                        <span class="ingredient-amount">1 litro</span>
+                        <span class="ingredient-name">Pepino</span>
+                        <span class="ingredient-amount">1 unidade</span>
+                    </div>
+                    <div class="ingredient-row">
+                        <span class="ingredient-name">Azeite extra virgem</span>
+                        <span class="ingredient-amount">2 colheres de sopa</span>
                     </div>
                 </div>
             </div>
