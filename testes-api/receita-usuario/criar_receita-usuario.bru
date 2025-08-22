@@ -5,19 +5,20 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/usuarios/1/receitas
+  url: http://localhost:8080/usuarios/2/receitas
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTU3MzM0MjIsImV4cCI6MTc1NTczNzAyMn0.gEgwToyJeQaQdQfCLUpnjPmniBHQC5wF4_2e5aA2Inw
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTU5MDIwNzYsImV4cCI6MTc1NTkwNTY3Nn0.1Ep_CmzxXfvkkKaN5-p2wFnMnmZNt16NJTewYpcPkIs
 }
 
 body:json {
   {
-    "idReceita": 3,
-    "fotoPrato": "http://localhost:8080/img/receitas/macarrao-a-bolonhesa.png"
+    "idReceita": 1,
+    "fotoPrato": "http://localhost:8080/img/receitas/macarrao-a-bolonhesa.png",
+    "textoAvaliacao": "binto"
   }
 }
 

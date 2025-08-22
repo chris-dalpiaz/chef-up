@@ -72,6 +72,7 @@ public class ReceitaUsuarioService {
         newAssociation.setDataConclusao(LocalDateTime.now());
         newAssociation.setFotoPrato(request.getFotoPrato());
         newAssociation.setPontuacaoPrato(request.getPontuacaoPrato());
+        newAssociation.setTextoAvaliacao(request.getTextoAvaliacao()); // <-- salvar avaliação IA
 
         ReceitaUsuario saved = recipeUserRepository.save(newAssociation);
         return toResponse(saved);
@@ -99,6 +100,10 @@ public class ReceitaUsuarioService {
         // Atualiza a pontuação do prato, se fornecida
         if (request.getPontuacaoPrato() != null) {
             association.setPontuacaoPrato(request.getPontuacaoPrato());
+        }
+
+        if (request.getTextoAvaliacao() != null && !request.getTextoAvaliacao().isBlank()) {
+            association.setTextoAvaliacao(request.getTextoAvaliacao());
         }
 
         ReceitaUsuario updated = recipeUserRepository.save(association);

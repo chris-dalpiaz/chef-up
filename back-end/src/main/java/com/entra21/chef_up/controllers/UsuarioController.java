@@ -219,30 +219,35 @@ public class UsuarioController {
 
     /* ---------- Receitas Concluídas pelo Usuário ---------- */
 
+    // Lista todas as receitas concluídas por um usuário
     @GetMapping("/{idUsuario}/receitas")
     public List<ReceitaUsuarioResponse> listUserRecipes(@PathVariable Integer idUsuario) {
         return receitaUsuarioService.listByUser(idUsuario);
     }
 
+    // Busca uma receita concluída específica do usuário
     @GetMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
     public ReceitaUsuarioResponse getUserRecipe(@PathVariable Integer idUsuario,
                                                 @PathVariable Integer idReceitaUsuario) {
         return receitaUsuarioService.getById(idUsuario, idReceitaUsuario);
     }
 
-    @PutMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
-    public ReceitaUsuarioResponse updateUserRecipe(@PathVariable Integer idUsuario,
-                                                 @PathVariable Integer idReceitaUsuario,
-                                                 @RequestBody ReceitaUsuarioRequest request) {
-        return receitaUsuarioService.update(idUsuario, idReceitaUsuario, request);
-    }
-
+    // Cria associação de receita concluída (idReceita vem no path agora)
     @PostMapping("/{idUsuario}/receitas")
     public ReceitaUsuarioResponse createUserRecipe(@PathVariable Integer idUsuario,
                                                    @RequestBody ReceitaUsuarioRequest request) {
         return receitaUsuarioService.create(idUsuario, request);
     }
 
+    // Atualiza a associação de uma receita concluída
+    @PutMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
+    public ReceitaUsuarioResponse updateUserRecipe(@PathVariable Integer idUsuario,
+                                                   @PathVariable Integer idReceitaUsuario,
+                                                   @RequestBody ReceitaUsuarioRequest request) {
+        return receitaUsuarioService.update(idUsuario, idReceitaUsuario, request);
+    }
+
+    // Deleta a associação
     @DeleteMapping("/{idUsuario}/receitas/{idReceitaUsuario}")
     public ReceitaUsuarioResponse deleteUserRecipe(@PathVariable Integer idUsuario,
                                                    @PathVariable Integer idReceitaUsuario) {

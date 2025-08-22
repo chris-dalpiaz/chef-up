@@ -26,8 +26,18 @@ public class ReceitaUsuario {
 
     private Integer pontuacaoPrato;
 
+    private String textoAvaliacao;
+
     @Version
     private Integer version;
+
+    public String getTextoAvaliacao() {
+        return textoAvaliacao;
+    }
+
+    public void setTextoAvaliacao(String textoAvaliacao) {
+        this.textoAvaliacao = textoAvaliacao;
+    }
 
     public Integer getVersion() {
         return version;
