@@ -42,7 +42,7 @@ public class SecurityConfig {
                 // Define regras de autorização
                 .authorizeHttpRequests()
                 // Permite acesso público às rotas de autenticação (ex: login, registro)
-                .requestMatchers("/auth/register", "/auth/login", "/img/**").permitAll()
+                .requestMatchers("/auth/register", "/auth/login", "/img/**", "/avaliacao/**").permitAll()
                 // Exige autenticação para todas as outras rotas
                 .anyRequest().authenticated()
                 .and()
