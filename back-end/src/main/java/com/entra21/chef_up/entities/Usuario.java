@@ -47,7 +47,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<AvatarUsuario> avatares = new ArrayList<>();
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private CodigoVerificacao codigoVerificacao;
 
     public List<TituloUsuario> getTitulos() {
@@ -152,5 +152,13 @@ public class Usuario {
 
     public void setPronome(Pronome pronome) {
         this.pronome = pronome;
+    }
+
+    public CodigoVerificacao getCodigoVerificacao() {
+        return codigoVerificacao;
+    }
+
+    public void setCodigoVerificacao(CodigoVerificacao codigoVerificacao) {
+        this.codigoVerificacao = codigoVerificacao;
     }
 }

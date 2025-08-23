@@ -1,6 +1,6 @@
 package com.entra21.chef_up.controllers;
 
-import com.entra21.chef_up.entities.CodigoVerificacao;
+import com.entra21.chef_up.dtos.CodigoVerificacao.CodigoVerificacaoResponse;
 import com.entra21.chef_up.services.CodigoVerificacaoService;
 import com.entra21.chef_up.repositories.CodigoVerificacaoRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
@@ -21,12 +21,15 @@ public class CodigoVerificacaoController {
     }
 
     @GetMapping
-    public CodigoVerificacao getCodigoVerificao(@PathVariable Integer idUsuario) {
-        return codigoVerificacaoService.findByUsuarioId(idUsuario);
+    public CodigoVerificacaoResponse getCodigoVerificao(@PathVariable Integer idUsuario) {
+        return codigoVerificacaoService.getByUsuarioId(idUsuario);
     }
 
     @PostMapping
-    public CodigoVerificacao gerarCodigo(@PathVariable Integer idUsuario) {
+    public CodigoVerificacaoResponse gerarCodigo(@PathVariable Integer idUsuario) {
 
+        int codigo = (int) (Math.random() * 9999);
+
+        return codigoVerificacaoService.create(codigo, idUsuario);
     }
 }
