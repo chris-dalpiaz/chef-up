@@ -1,30 +1,177 @@
-#senha{
-    text-decoration: underline;
-    font-size: 16px;
+/* Estilo base (desktop) */
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #fff8f1;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
-#aviso{
+.tittles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    min-height: 60vh; /* Ajuste para centralizar verticalmente */
+    justify-content: center; /* Centraliza os filhos verticalmente */
     text-align: center;
+}
+
+.tittle {
+    display: flex;
+    margin-bottom: -10px;
+}
+
+.subtittle {
+    display: flex;
+    font-size: 16px;
+    color: #666666;
+    margin-bottom: 20px;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    width: 350px;           /* Largura fixa para maior espaço */
+    padding: 25px;          /* Preenchimento interno maior */
+    background-color: #fff; /* Fundo branco */
+    border-radius: 10px;    /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    margin: 0 auto;         /* Centraliza horizontalmente */
+    gap: 10px;              /* Espaçamento entre os elementos */
+}
+
+label {
+    margin-top: 0;          /* Remove margem negativa extrema */
+    font-weight: bold;
+    text-align: left;
+    padding: 1%;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: #fff !important;
+}
+
+.esqueci-senha {
+    margin: 10px 0;
+    text-align: left;
+}
+
+.esqueci-senha a {
+    font-size: 14px;
+    text-decoration: underline;
+    color: black;
+}
+
+.botao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 93%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 414px;
+    width: 90%;
+}
+
+.botao button {
+    background-color: #ff8c00;
+    color: rgb(5, 5, 5);
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 16px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.botao button:hover {
+    background-color: #e57a00;
+}
+
+#aviso {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
 }
 
 /* Tablet (largura entre 768px e 1024px) */
 @media (max-width: 1024px) and (min-width: 768px) {
-    #senha {
+    .tittles {
+        margin-top: 8%;
+        min-height: 50vh;
+    }
+
+    .tittle {
+        margin-bottom: -15px;
+    }
+
+    .subtittle {
         font-size: 14px;
     }
-    #aviso {
-        text-align: center;
+
+    .formulario {
+        width: 300px;       /* Ajuste para tablet */
+        padding: 20px;      /* Ajuste de padding */
+    }
+
+    input {
+        font-size: 14px;
         padding: 10px;
+    }
+
+    #aviso {
+        font-size: 13px;
     }
 }
 
 /* Celular (largura até 767px) */
 @media (max-width: 767px) {
-    #senha {
+    .tittles {
+        margin-top: 5%;
+        width: 95%;
+        min-height: 60vh;
+    }
+
+    .tittle {
+        flex-direction: column;
+        margin-bottom: -10px;
+    }
+
+    .subtittle {
         font-size: 12px;
     }
+
+    .formulario {
+        width: 95%;         /* Ajuste para celular */
+        padding: 15px;      /* Ajuste de padding */
+    }
+
+    input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .botao {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+    }
+
     #aviso {
-        text-align: center;
-        padding: 5px;
+        font-size: 12px;
     }
 }

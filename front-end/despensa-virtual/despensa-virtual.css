@@ -1,40 +1,51 @@
 body {
-    margin: 0 !important;
+    margin: 0 auto;
+    padding: 2vh 5vw;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #FFF8E1;
+    max-width: 800px;
 }
 
 #despensavirtual {
-    font-size: 26px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1D1D1D;
     text-align: center;
+    margin: 40px 0 20px 0;
 }
 
-:root{
-    --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
-    --bar-space: 8px;     /* espaço entre barra e texto */
+:root {
+    --bar-height: 17px;
+    --bar-space: 8px;
 }
 
 .barra_progresso {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin: 4vh;
+    margin: 3vh 0;
+    padding: 1.5vh;
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nivel {
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    background-color: #2bb3a3;
-    color: #000000;
+    width: 40px;
+    height: 40px;
+    background-color: #ff9800;
+    color: white;
     font-weight: bold;
-    transform: rotate(45deg);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
 }
 
 .nivel span {
-    transform: rotate(-45deg);
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -42,14 +53,17 @@ body {
     flex: 1;
     position: relative;
     height: var(--bar-height);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
 }
 
 .barra_bg {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: #a7ddd7;
-    border-radius: 20px;
+    background-color: #ddd;
+    border-radius: 4px;
     overflow: hidden;
 }
 
@@ -59,52 +73,27 @@ body {
     left: 0;
     height: 100%;
     width: var(--xp, 0%);
-    background-color: #fcb347;
-    border-radius: 20px;
+    background-color: #47B3A8;
+    border-radius: 4px;
+    transition: width 0.3s ease;
 }
 
 .pontos_xp {
-    position: absolute;
-    left: 0;
-    top: calc(100% + var(--bar-space));
-    margin: 0;
-    font-size: 14px;
-    color: #333;
-}
-
-#barraNavegacao {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.nav-item {
-    text-align: center;
-    color: white;
-    text-decoration: none;
-    flex: 1;
-    padding: 0 16px;
-}
-  
-.nav-item .icon {
-    font-size: 20px;
-    display: block;
-    color: #B3B3B3;
-}
-  
-.nav-item .text {
     font-size: 12px;
-    color: #B3B3B3;
+    color: #666;
+    margin: 0;
+    text-align: right;
+    margin-top: var(--bar-space);
 }
 
 .ingredientes {
-    margin-top: 20px;
-    padding: 0 15px;
+    margin-top: 3vh;
+    margin-bottom: 8vh;
+}
+
+#lista-ingredientes {
+    min-height: calc(100vh - 200px);
+    padding-bottom: 20px;
 }
 
 .card {
@@ -115,7 +104,12 @@ body {
     margin-bottom: 15px;
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
 }
 
 .card img {
@@ -133,6 +127,7 @@ body {
 .card h3 {
     font-size: 18px;
     margin-bottom: 5px;
+    color: #333;
 }
 
 .card p {
@@ -158,51 +153,336 @@ body {
     font-weight: bold;
     bottom: 10vh;
     right: 2vh;
+    background-color: #ff9800;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 999;
+}
+
+#botaoadicionar:hover {
+    background-color: #e5942a;
 }
 
 #simbolo {
     font-size: 5vh;
     background-color: transparent;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: #000;
 }
 
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
 }
 
 .modal-content {
-  background-color: #fff;
-  padding: 24px;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+.close-modal:hover {
+    color: #d9534f;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
+
 .card .acoes {
-  margin-top: 8px;
-  text-align: right;
+    margin-top: 8px;
+    text-align: right;
 }
 
 .btn-deletar {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #d9534f;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #d9534f;
 }
 
 .btn-deletar:hover {
-  color: #c9302c;
+    color: #c9302c;
+}
+
+.modal-content .salvar {
+    margin-top: 30px;
+}
+
+#botaoSalvar {
+    background-color: #ff9800;
+    color: #000000;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#botaoSalvar:hover {
+    background-color: #e5942a;
+}
+
+/* ===== Footer ===== */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    padding: 1vh 0;
+    z-index: 1000;
+}
+
+.footer a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5vh;
+    padding: 0.5vh;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.footer-item:hover {
+    background-color: #f0f0f0;
+}
+
+.footer-item::before {
+    content: attr(data-icon);
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.footer-item span {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.footer-item.selected {
+    color: #FFA336;
+}
+
+.footer-item .icon {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.footer-item .text {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Responsividade para Tablet */
+@media (max-width: 1024px) {
+    body {
+        padding: 2vh 8vw;
+        max-width: 600px;
+    }
+
+    #despensavirtual {
+        font-size: 22px;
+    }
+
+    .nivel {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .card img {
+        width: 60px;
+        height: 48px;
+    }
+
+    .card h3 {
+        font-size: 16px;
+    }
+
+    .card p {
+        font-size: 12px;
+    }
+
+    .seta {
+        font-size: 18px;
+    }
+
+    #botaoadicionar {
+        width: 7vh;
+        height: 7vh;
+        bottom: 8vh;
+        right: 1.5vh;
+    }
+
+    #simbolo {
+        font-size: 4.5vh;
+    }
+
+    .modal-content {
+        max-width: 350px;
+    }
+
+    .close-modal {
+        font-size: 18px;
+    }
+
+    .modal-content .salvar {
+        margin-top: 18px;
+    }
+
+    #botaoSalvar {
+        padding: 8px;
+        font-size: 15px;
+    }
+
+    .ingredientes {
+        margin-bottom: 7vh;
+    }
+
+    #lista-ingredientes {
+        min-height: calc(100vh - 180px);
+        padding-bottom: 18px;
+    }
+}
+
+/* Responsividade para Celular */
+@media (max-width: 767px) {
+    body {
+        padding: 2vh 5vw;
+        max-width: 100%;
+    }
+
+    #despensavirtual {
+        font-size: 20px;
+        margin: 20px 0 15px 0;
+    }
+
+    .nivel {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .ingredientes {
+        margin-bottom: 6vh;
+    }
+
+    #lista-ingredientes {
+        min-height: calc(100vh - 160px);
+        padding-bottom: 15px;
+    }
+
+    .card img {
+        width: 50px;
+        height: 40px;
+    }
+
+    .card .info {
+        margin-left: 15px;
+    }
+
+    .card h3 {
+        font-size: 14px;
+    }
+
+    .card p {
+        font-size: 10px;
+    }
+
+    .seta {
+        font-size: 16px;
+    }
+
+    #botaoadicionar {
+        width: 6vh;
+        height: 6vh;
+        bottom: 6vh;
+        right: 1vh;
+    }
+
+    #simbolo {
+        font-size: 4vh;
+    }
+
+    .modal-content {
+        max-width: 300px;
+        padding: 20px;
+    }
+
+    .close-modal {
+        font-size: 16px;
+    }
+
+    .modal-content .salvar {
+        margin-top: 15px;
+    }
+
+    #botaoSalvar {
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    .footer-item::before {
+        font-size: 20px;
+    }
+
+    .footer-item span {
+        font-size: 11px;
+    }
+
+    .footer-item .icon {
+        font-size: 20px;
+    }
+
+    .footer-item .text {
+        font-size: 11px;
+    }
 }
