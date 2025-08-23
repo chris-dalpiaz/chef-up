@@ -46,7 +46,17 @@ function proximaEtapa() {
   if (etapaAtual < etapas.length - 1) {
     mostrarEtapa(etapaAtual + 1);
   } else {
-    alert("Você concluiu todas as etapas!");
+    // 🔹 Pegamos o id da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const receitaId = urlParams.get("id");
+
+    if (!receitaId) {
+      alert("ID da receita não encontrado.");
+      return;
+    }
+
+    // 🔹 Redireciona para página de avaliação com o id na query string
+    window.location.href = `../../chatgpt/chatgpt.html?id=${receitaId}`;
   }
 }
 

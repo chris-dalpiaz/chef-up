@@ -175,7 +175,7 @@ async function carregarReceitas() {
 
             if (foto) {
                 // Se a imagem não for uma URL completa, prefixe com "/"
-                const caminho = foto.startsWith("http") ? foto : `/${foto}`;
+                const caminho = `http://localhost:8080${foto}`;
 
                 grid.innerHTML += `
                     <div class="receita_item">

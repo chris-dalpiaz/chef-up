@@ -13,6 +13,15 @@ public class ReceitaUsuarioRequest {
 
     private Integer pontuacaoPrato;
 
+    private String textoAvaliacao;
+
+    public String getTextoAvaliacao() {
+        return textoAvaliacao;
+    }
+
+    public void setTextoAvaliacao(String textoAvaliacao) {
+        this.textoAvaliacao = textoAvaliacao;
+    }
     public Integer getIdReceita() {
         return idReceita;
     }
