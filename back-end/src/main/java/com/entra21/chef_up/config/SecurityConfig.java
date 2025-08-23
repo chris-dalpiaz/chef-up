@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 "/auth/register",
                                 "/auth/login",
                                 "/img/**",
-                                "/avaliacao/**"
+                                "/avaliacao/**",
+                                "/uploads/**"
                         ).permitAll()
                         // todas as outras exigem autenticação
                         .anyRequest().authenticated()
