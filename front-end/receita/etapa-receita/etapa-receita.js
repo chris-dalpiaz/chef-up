@@ -81,8 +81,22 @@ function proximaEtapa() {
     // Exibe a próxima etapa
     mostrarEtapa(etapaAtual + 1);
   } else {
+<<<<<<< HEAD
     // Se todas as etapas foram concluídas, exibe uma mensagem
     alert("Você concluiu todas as etapas!");
+=======
+    // 🔹 Pegamos o id da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const receitaId = urlParams.get("id");
+
+    if (!receitaId) {
+      alert("ID da receita não encontrado.");
+      return;
+    }
+
+    // 🔹 Redireciona para página de avaliação com o id na query string
+    window.location.href = `../../chatgpt/chatgpt.html?id=${receitaId}`;
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
   }
 }
 

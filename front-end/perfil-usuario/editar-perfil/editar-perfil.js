@@ -2,10 +2,14 @@
 const userId = localStorage.getItem("id");
 const token = localStorage.getItem("token");
 
+<<<<<<< HEAD
 // Variável que armazena temporariamente o ID do título selecionado
 let tituloSelecionadoId = null;
 
 // Array que armazena os IDs dos adjetivos selecionados pelo usuário
+=======
+let tituloSelecionadoId = null;
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
 let adjetivosSelecionados = [];
 
 // Função principal que carrega os dados do perfil do usuário
@@ -40,21 +44,27 @@ async function carregarPerfil() {
 
   // Chama funções para carregar títulos e adjetivos
   carregarTitulos();
-  carregarAdjetivos(); // 👈 novo
+  carregarAdjetivos();
 }
 
 // Função que carrega os adjetivos disponíveis e os selecionados pelo usuário
 async function carregarAdjetivos() {
   try {
+<<<<<<< HEAD
     // Verifica se o token e o ID do usuário estão disponíveis
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     if (!token || !userId) {
       console.warn("Token ou ID do usuário não encontrado.");
       return;
     }
 
+<<<<<<< HEAD
     // Faz duas requisições em paralelo:
     // 1. Para obter todos os adjetivos disponíveis
     // 2. Para obter os adjetivos já selecionados pelo usuário
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     const [resAdjetivos, resSelecionados] = await Promise.all([
       fetch("http://localhost:8080/adjetivos", {
         headers: { Authorization: `Bearer ${token}` }
@@ -74,7 +84,10 @@ async function carregarAdjetivos() {
     const lista = await resAdjetivos.json();
     const selecionados = await resSelecionados.json();
 
+<<<<<<< HEAD
     // Extrai os IDs dos adjetivos selecionados e remove duplicatas
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     const idsSelecionados = [...new Set(selecionados.map(item => item.adjetivo.id))];
 
     // Atualiza o array global com os IDs selecionados
@@ -121,6 +134,7 @@ async function carregarAdjetivos() {
     console.error("Erro ao carregar adjetivos:", error);
   }
 }
+<<<<<<< HEAD
 
 // Função que renderiza os pronomes disponíveis na interface e permite ao usuário selecionar um
 function renderizarPronomes(lista, ativo, token, userId) {
@@ -139,10 +153,24 @@ function renderizarPronomes(lista, ativo, token, userId) {
     btn.dataset.id = p.id;           // Armazena o ID do pronome como atributo personalizado
 
     // Se o pronome atual for o ativo do usuário, marca o botão como ativo
+=======
+
+function renderizarPronomes(lista, ativo) {
+  const container = document.querySelector(".container_pronomes");
+  container.innerHTML = "";
+
+  lista.forEach(p => {
+    const btn = document.createElement("button");
+    btn.className = "pronome";
+    btn.textContent = p.nome;
+    btn.dataset.id = p.id;
+
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     if (p.id === ativo?.id) {
       btn.classList.add("ativo");
     }
 
+<<<<<<< HEAD
     // Adiciona evento de clique ao botão
     btn.addEventListener("click", async () => {
       // Remove a classe "ativo" de todos os botões
@@ -160,6 +188,20 @@ function renderizarPronomes(lista, ativo, token, userId) {
             Authorization: `Bearer ${token}`    // Envia o token de autenticação
           },
           body: JSON.stringify({ id: p.id })    // Envia o ID do pronome selecionado
+=======
+    btn.addEventListener("click", async () => {
+      container.querySelectorAll("button").forEach(b => b.classList.remove("ativo"));
+      btn.classList.add("ativo");
+
+      try {
+        await fetch(`http://localhost:8080/usuarios/${userId}/pronome`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ id: p.id })
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
         });
       } catch (error) {
         // Exibe erro no console em caso de falha na requisição
@@ -181,9 +223,12 @@ async function carregarTitulos() {
       return;
     }
 
+<<<<<<< HEAD
     // Faz duas requisições em paralelo:
     // 1. Para obter todos os títulos disponíveis
     // 2. Para obter os títulos associados ao usuário
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     const [resTodos, resUsuario] = await Promise.all([
       fetch("http://localhost:8080/titulos", {
         headers: { Authorization: `Bearer ${token}` }
@@ -207,7 +252,10 @@ async function carregarTitulos() {
     const container = document.querySelector(".container_titulos");
     container.innerHTML = ""; // Limpa o conteúdo anterior
 
+<<<<<<< HEAD
     // Cria um mapa para acesso rápido aos títulos desbloqueados pelo usuário
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     const desbloqueadosMap = new Map();
     titulosUsuario.forEach(t => {
       if (t.desbloqueadoEm) {
@@ -276,7 +324,10 @@ async function carregarTitulos() {
   }
 }
 
+<<<<<<< HEAD
 // Função que salva as alterações feitas no perfil do usuário
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
 async function salvarAlteracoes() {
   // Recupera o email antigo do localStorage para verificar se foi alterado
   const emailAntigo = localStorage.getItem("email");
@@ -299,7 +350,10 @@ async function salvarAlteracoes() {
   if (email) payload.email = email;
   if (pronomeBtn) payload.idPronome = parseInt(pronomeBtn.dataset.id);
 
+<<<<<<< HEAD
   // Se houver dados para atualizar, envia requisição PUT para atualizar o usuário
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
   if (Object.keys(payload).length > 0) {
     const usuarioReq = fetch(`http://localhost:8080/usuarios/${userId}`, {
       method: "PUT",
@@ -313,7 +367,10 @@ async function salvarAlteracoes() {
     updatePromises.push(usuarioReq);
   }
 
+<<<<<<< HEAD
   // Se um título foi selecionado, envia requisição para ativá-lo
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
   if (tituloSelecionadoId) {
     const tituloReq = fetch(`http://localhost:8080/usuarios/${userId}/titulos/${tituloSelecionadoId}`, {
       method: "PUT",
@@ -327,13 +384,19 @@ async function salvarAlteracoes() {
     updatePromises.push(tituloReq);
   }
 
+<<<<<<< HEAD
   // Aguarda todas as atualizações básicas (nome, email, pronome, título)
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
   const updateResults = await Promise.all(updatePromises);
 
   // Verifica se todas as requisições foram bem-sucedidas
   const updateSuccess = updateResults.every(res => res.ok);
 
+<<<<<<< HEAD
   // Variável para controlar sucesso na atualização de adjetivos
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
   let adjetivoSuccess = true;
 
   try {
@@ -385,7 +448,10 @@ async function salvarAlteracoes() {
 
   // Se todas as atualizações foram bem-sucedidas
   if (updateSuccess && adjetivoSuccess) {
+<<<<<<< HEAD
     // Atualiza localStorage com os novos dados
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     if (payload.nome) localStorage.setItem("nome", payload.nome);
     if (payload.email) localStorage.setItem("email", payload.email);
 
@@ -397,7 +463,10 @@ async function salvarAlteracoes() {
       }
     }
 
+<<<<<<< HEAD
     // Atualiza título ativo no localStorage
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     if (tituloSelecionadoId) {
       const tituloSelecionado = document.querySelector(`.container_titulos button[data-id="${tituloSelecionadoId}"]`);
       if (tituloSelecionado) {
@@ -407,7 +476,10 @@ async function salvarAlteracoes() {
       }
     }
 
+<<<<<<< HEAD
     // Atualiza adjetivos no localStorage
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     const novosAdjetivosRes = await fetch(`http://localhost:8080/usuarios/${userId}/adjetivos`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -417,7 +489,10 @@ async function salvarAlteracoes() {
       localStorage.setItem("adjetivos", JSON.stringify(novosAdjetivos));
     }
 
+<<<<<<< HEAD
     // Se o email foi alterado, força logout por segurança
+=======
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
     if (payload.email && payload.email !== emailAntigo) {
       alert("Email alterado. Por segurança, faça login novamente.");
       localStorage.clear(); // Limpa todos os dados locais
@@ -426,7 +501,6 @@ async function salvarAlteracoes() {
       alert("Perfil atualizado com sucesso!");
       window.location.href = "../perfil/perfil.html"; // Redireciona para perfil
     }
-
   } else {
     alert("Erro ao salvar alterações");
   }
@@ -450,5 +524,9 @@ function carregarEventos() {
   alterarAvatar.addEventListener("click", redirecionarAlterarAvatar);
 }
 
+<<<<<<< HEAD
 // Executa a configuração de eventos quando a página carregar
 window.addEventListener("load", carregarEventos);
+=======
+window.addEventListener("load", carregarEventos);
+>>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637

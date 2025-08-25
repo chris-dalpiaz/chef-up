@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receitas</title>
+    <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="utensilios.css">
+</head>
+<body>
+    <div id="container">
+        <div class="nav">
+            <button class="back-btn" onclick="voltar()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m12 19-7-7 7-7"/>
+                    <path d="M19 12H5"/>
+                </svg>
+            </button>
+            <div class="xp-badge">
+                <span class="xp-text">10 XP</span>
+            </div>
+        </div>
+        <div class="recipe-image">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.FhiNXnC9ZN9CyLehAhCT_AHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Salada">
+            <button class="favorite-btn" onclick="toggleFavorito()" aria-label="Favoritar">
+                <svg id="icon-coracao" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path id="coracao-path"
+                        d="M12 21C12 21 4 14.5 4 9.5C4 6.46 6.46 4 9.5 4C11.04 4 12.5 4.94 13.07 6.22C13.64 4.94 15.1 4 16.64 4C19.68 4 22 6.46 22 9.5C22 14.5 12 21 12 21Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </svg>
+            </button>
+        </div>
+        <div class="content">
+            <h1 class="recipe-title">Salada de Salada com Salada de Mais Salada Com Capim e Cidreira</h1>
+            <p class="recipe-info">35 minutos • 2 porções</p>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('utensilios')">Utensílios</button>
+                <button class="tab" onclick="switchTab('ingredientes')">Ingredientes</button>
+            </div>
+            <div class="tab-content" id="utensilios-content">
+                <div class="item-list">
+                    <div class="item">abridor de lata</div>
+                    <div class="item">espátula</div>
+                    <div class="item">bowl</div>
+                    <div class="item">colher</div>
+                </div>
+            </div>
+            <div class="tab-content hidden" id="ingredientes-content">
+                <div class="ingredients-table">
+                    <div class="ingredient-row">
+                        <span class="ingredient-name">Alface fresca</span>
+                        <span class="ingredient-amount">1 unidade</span>
+                    </div>
+                    <div class="ingredient-row">
+                        <span class="ingredient-name">Tomate cereja</span>
+                        <span class="ingredient-amount">200g</span>
+                    </div>
+                    <div class="ingredient-row">
+                        <span class="ingredient-name">Pepino</span>
+                        <span class="ingredient-amount">1 unidade</span>
+                    </div>
+                    <div class="ingredient-row">
+                        <span class="ingredient-name">Azeite extra virgem</span>
+                        <span class="ingredient-amount">2 colheres de sopa</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="instrucao">
+            <button class="botoes feito-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Feito
+            </button>
+            <button class="botoes comecar-btn">Começar</button>
+        </div>
+    </div>
+</body>
+</html>

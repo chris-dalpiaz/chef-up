@@ -1,40 +1,51 @@
 body {
-    margin: 0 !important;
+    margin: 0 auto;
+    padding: 2vh 5vw;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #FFF8E1;
+    max-width: 800px;
 }
 
 #despensavirtual {
-    font-size: 26px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1D1D1D;
     text-align: center;
+    margin: 40px 0 20px 0;
 }
 
 :root {
-    --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
-    --bar-space: 8px;     /* espaço entre barra e texto */
+    --bar-height: 17px;
+    --bar-space: 8px;
 }
 
 .barra_progresso {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin: 4vh;
+    margin: 3vh 0;
+    padding: 1.5vh;
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nivel {
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    background-color: #2bb3a3;
-    color: #000000;
+    width: 40px;
+    height: 40px;
+    background-color: #ff9800;
+    color: white;
     font-weight: bold;
-    transform: rotate(45deg);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
 }
 
 .nivel span {
-    transform: rotate(-45deg);
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -42,14 +53,17 @@ body {
     flex: 1;
     position: relative;
     height: var(--bar-height);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
 }
 
 .barra_bg {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: #a7ddd7;
-    border-radius: 20px;
+    background-color: #ddd;
+    border-radius: 4px;
     overflow: hidden;
 }
 
@@ -59,28 +73,27 @@ body {
     left: 0;
     height: 100%;
     width: var(--xp, 0%);
-    background-color: #fcb347;
-    border-radius: 20px;
+    background-color: #47B3A8;
+    border-radius: 4px;
+    transition: width 0.3s ease;
 }
 
 .pontos_xp {
-    position: absolute;
-    left: 0;
-    top: calc(100% + var(--bar-space));
+    font-size: 12px;
+    color: #666;
     margin: 0;
-    font-size: 14px;
-    color: #333;
+    text-align: right;
+    margin-top: var(--bar-space);
 }
 
 .ingredientes {
-    margin-top: 50px;
-    padding: 0 15px;
-    margin-bottom: 80px; /* Espaço no final para o rodapé */
+    margin-top: 3vh;
+    margin-bottom: 8vh;
 }
 
 #lista-ingredientes {
-    min-height: calc(100vh - 100px); /* Altura mínima ajustada */
-    padding-bottom: 20px; /* Espaço adicional no final */
+    min-height: calc(100vh - 200px);
+    padding-bottom: 20px;
 }
 
 .card {
@@ -91,7 +104,12 @@ body {
     margin-bottom: 15px;
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
 }
 
 .card img {
@@ -109,6 +127,7 @@ body {
 .card h3 {
     font-size: 18px;
     margin-bottom: 5px;
+    color: #333;
 }
 
 .card p {
@@ -134,6 +153,14 @@ body {
     font-weight: bold;
     bottom: 10vh;
     right: 2vh;
+    background-color: #ff9800;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 999;
+}
+
+#botaoadicionar:hover {
+    background-color: #e5942a;
 }
 
 #simbolo {
@@ -142,6 +169,7 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1;
+    color: #000;
 }
 
 .modal {
@@ -169,6 +197,8 @@ body {
 
 .modal-content h2 {
     margin-top: 0;
+    font-size: 20px;
+    color: #333;
 }
 
 .close-modal {
@@ -210,56 +240,102 @@ body {
 }
 
 .modal-content .salvar {
-    margin-top: 30px; /* Mantém o espaçamento para baixo */
+    margin-top: 30px;
 }
 
 #botaoSalvar {
-    background-color: #fcb347; /* Cor laranja original */
-    color: #000000; /* Texto preto original */
+    background-color: #ff9800;
+    color: #000000;
     border: none;
-    padding: 10px; /* Padding original */
-    border-radius: 20px; /* Formato original */
+    padding: 10px;
+    border-radius: 20px;
     cursor: pointer;
-    width: 100%; /* Largura total */
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 #botaoSalvar:hover {
-    background-color: #e5942a; /* Hover original */
+    background-color: #e5942a;
 }
 
+/* ===== Footer ===== */
 .footer {
     position: fixed;
     bottom: 0;
-    width: 100%;
-    background-color: #ffffff;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
     display: flex;
     justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    padding: 1vh 0;
     z-index: 1000;
 }
 
-.footer-item {
-    text-align: center;
-    color: #B3B3B3;
+.footer a {
     text-decoration: none;
-    flex: 1;
-    padding: 0 16px;
+    color: inherit;
+}
+
+.footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5vh;
+    padding: 0.5vh;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.footer-item:hover {
+    background-color: #f0f0f0;
+}
+
+.footer-item::before {
+    content: attr(data-icon);
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.footer-item span {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.footer-item.selected {
+    color: #FFA336;
 }
 
 .footer-item .icon {
-    font-size: 20px;
+    font-size: 22px;
     display: block;
+    margin-bottom: 4px;
 }
 
 .footer-item .text {
     font-size: 12px;
+    font-weight: 500;
 }
 
-/* Tablet (768px-1024px) */
-@media (max-width: 1024px) and (min-width: 768px) {
+/* Responsividade para Tablet */
+@media (max-width: 1024px) {
+    body {
+        padding: 2vh 8vw;
+        max-width: 600px;
+    }
+
     #despensavirtual {
         font-size: 22px;
+    }
+
+    .nivel {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
     }
 
     .card img {
@@ -303,35 +379,44 @@ body {
     }
 
     #botaoSalvar {
-        background-color: #fcb347;
-        color: #000000;
         padding: 8px;
-        border-radius: 20px;
+        font-size: 15px;
     }
 
     .ingredientes {
-        margin-bottom: 70px;
+        margin-bottom: 7vh;
     }
 
     #lista-ingredientes {
-        min-height: calc(100vh - 90px);
+        min-height: calc(100vh - 180px);
         padding-bottom: 18px;
     }
 }
 
-/* Celular (até 767px) */
+/* Responsividade para Celular */
 @media (max-width: 767px) {
+    body {
+        padding: 2vh 5vw;
+        max-width: 100%;
+    }
+
     #despensavirtual {
-        font-size: 18px;
+        font-size: 20px;
+        margin: 20px 0 15px 0;
+    }
+
+    .nivel {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
     }
 
     .ingredientes {
-        padding: 0 10px;
-        margin-bottom: 60px;
+        margin-bottom: 6vh;
     }
 
     #lista-ingredientes {
-        min-height: calc(100vh - 80px);
+        min-height: calc(100vh - 160px);
         padding-bottom: 15px;
     }
 
@@ -381,9 +466,23 @@ body {
     }
 
     #botaoSalvar {
-        background-color: #fcb347;
-        color: #000000;
         padding: 6px;
-        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    .footer-item::before {
+        font-size: 20px;
+    }
+
+    .footer-item span {
+        font-size: 11px;
+    }
+
+    .footer-item .icon {
+        font-size: 20px;
+    }
+
+    .footer-item .text {
+        font-size: 11px;
     }
 }

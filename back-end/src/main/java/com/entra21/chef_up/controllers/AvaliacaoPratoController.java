@@ -1,120 +1,157 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.Receita.ReceitaResponse;
+import com.entra21.chef_up.dtos.ReceitaUsuario.ReceitaUsuarioRequest;
+import com.entra21.chef_up.dtos.ReceitaUsuario.ReceitaUsuarioResponse;
+import com.entra21.chef_up.entities.Receita;
 import com.entra21.chef_up.entities.ReceitaUsuario;
+import com.entra21.chef_up.entities.Usuario;
+import com.entra21.chef_up.repositories.ReceitaRepository;
 import com.entra21.chef_up.repositories.ReceitaUsuarioRepository;
+import com.entra21.chef_up.repositories.UsuarioRepository;
 import com.entra21.chef_up.services.ChatGptService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
-@RequestMapping("/avaliacao")
+@RequestMapping
 public class AvaliacaoPratoController {
 
-    private final Path tempDir = Paths.get("uploads/temp");
-    private final Path finalDir = Paths.get("uploads/finais");
+    private static final Logger log = LoggerFactory.getLogger(AvaliacaoPratoController.class);
 
-    @Autowired
-    private ReceitaUsuarioRepository receitaUsuarioRepository;
+    // Apenas pasta temp
+    private final Path tempDir = Paths.get(System.getProperty("user.dir"), "uploads", "temp");
 
-    // 🔸 Injetando o ChatGptService
-    @Autowired
-    private ChatGptService chatGptService;
+    private final ReceitaRepository receitaRepo;
+    private final UsuarioRepository usuarioRepo;
+    private final ReceitaUsuarioRepository receitaUsuarioRepo;
+    private final ChatGptService chatGptService;
+    private final ModelMapper mapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public AvaliacaoPratoController() throws IOException {
+    public AvaliacaoPratoController(
+            ReceitaRepository receitaRepo,
+            UsuarioRepository usuarioRepo,
+            ReceitaUsuarioRepository receitaUsuarioRepo,
+            ChatGptService chatGptService,
+            ModelMapper mapper
+    ) throws Exception {
+        this.receitaRepo        = receitaRepo;
+        this.usuarioRepo        = usuarioRepo;
+        this.receitaUsuarioRepo = receitaUsuarioRepo;
+        this.chatGptService     = chatGptService;
+        this.mapper             = mapper;
+        // cria uploads/temp se não existir
         Files.createDirectories(tempDir);
-        Files.createDirectories(finalDir);
     }
 
-    @PostMapping("/upload-temp")
-    public ResponseEntity<Map<String, String>> uploadTemp(@RequestParam("file") MultipartFile file) {
+    @PostMapping(
+            path     = "/receitas/{idReceita}/avaliar-prato",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Map<String,Object>> avaliarPrato(
+            @PathVariable Integer idReceita,
+            @RequestPart("file") MultipartFile file
+    ) {
         try {
+            // converte imagem em Base64
+            String base64 = Base64.getEncoder().encodeToString(file.getBytes());
+
+            // busca receita e mapeia DTO
+            Receita entity = receitaRepo.findById(idReceita)
+                    .orElseThrow(() -> new NoSuchElementException("Receita não encontrada"));
+            ReceitaResponse dto = mapper.map(entity, ReceitaResponse.class);
+
+            // chama ChatGPT para avaliação
+            String rawJson = chatGptService.avaliarPratoComImagem(base64, dto);
+
+            // sanitize JSON vindo do ChatGPT
+            String sanitized = rawJson
+                    .trim()
+                    .replaceAll("^```+", "")
+                    .replaceAll("```+$", "")
+                    .replaceAll("^`+", "")
+                    .replaceAll("`+$", "");
+
+            // parse do JSON
+            JsonNode root     = objectMapper.readTree(sanitized);
+            String comentario = root.path("comentario").asText();
+            int nota          = root.path("nota").asInt();
+
+            // salva arquivo na pasta temp
             String filename = UUID.randomUUID() + "-" + file.getOriginalFilename();
-            Path filePath = tempDir.resolve(filename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            Path target     = tempDir.resolve(filename);
+            Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
 
-            String tempUrl = "http://localhost:8080/avaliacao/temp/" + filename;
-            return ResponseEntity.ok(Map.of("tempUrl", tempUrl));
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(Map.of("error", "Falha ao salvar arquivo"));
-        }
-    }
-
-    @GetMapping("/temp/{filename:.+}")
-    public ResponseEntity<Resource> getTempFile(@PathVariable String filename) throws IOException {
-        Path filePath = tempDir.resolve(filename);
-        Resource resource = new UrlResource(filePath.toUri());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-    }
-
-    /**
-     * 🔸 Novo endpoint que usa ChatGptService para avaliar a imagem
-     */
-    @PostMapping("/avaliar-prato")
-    public ResponseEntity<Map<String, Object>> avaliarPrato(@RequestParam("file") MultipartFile file) {
-        try {
-            // 🔸 Converte a imagem para Base64
-            String base64Image = Base64.getEncoder().encodeToString(file.getBytes());
-
-            // 🔸 Chama o ChatGPT Service com a imagem
-            String avaliacaoTexto = chatGptService.avaliarPratoComImagem(base64Image);
-
-            // 🔹 Extração simples de pontuação (melhorar regex conforme resposta)
-            String match = avaliacaoTexto.replaceAll("\\D+", "");
-            int pontuacao = match.isEmpty() ? 0 : Integer.parseInt(match);
-
+            // retorna dados ao front
             return ResponseEntity.ok(Map.of(
-                    "avaliacaoTexto", avaliacaoTexto,
-                    "pontuacao", pontuacao
+                    "comentario", comentario,
+                    "nota",       nota,
+                    "filename",   filename
             ));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(Map.of("error", "Erro ao avaliar prato"));
+        }
+        catch (Exception ex) {
+            log.error("Erro ao avaliar prato id={}: {}", idReceita, ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of(
+                            "error",   "Falha ao avaliar prato",
+                            "details", ex.getMessage()
+                    ));
         }
     }
 
-    /**
-     * 🔹 Salvar no banco após avaliação
-     */
-    @PostMapping("/salvar-prato")
-    public ResponseEntity<Map<String, String>> salvarPrato(@RequestBody Map<String, String> body) {
+    @PostMapping(
+            path     = "/usuarios/{idUsuario}/receitas",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ReceitaUsuarioResponse> createUserRecipe(
+            @PathVariable Integer idUsuario,
+            @RequestBody ReceitaUsuarioRequest request
+    ) {
         try {
-            String avaliacaoTexto = body.get("avaliacaoTexto");
-            String pontuacaoStr = body.get("pontuacao");
-            String tempUrl = body.get("imageUrl");
-            String usuarioIdStr = body.get("usuarioId");
-            String receitaIdStr = body.get("receitaId");
+            // filename enviado pelo front
+            String filename = Paths.get(request.getFotoPrato()).getFileName().toString();
+            Path photoPath  = tempDir.resolve(filename);
 
-            String filename = tempUrl.substring(tempUrl.lastIndexOf("/") + 1);
-            Path tempFile = tempDir.resolve(filename);
-            Path finalFile = finalDir.resolve(filename);
+            if (!Files.exists(photoPath)) {
+                throw new NoSuchElementException("Imagem não encontrada em temp: " + filename);
+            }
 
-            Files.move(tempFile, finalFile, StandardCopyOption.REPLACE_EXISTING);
+            // busca entidades
+            Usuario usuario = usuarioRepo.findById(idUsuario)
+                    .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
+            Receita receita = receitaRepo.findById(request.getIdReceita())
+                    .orElseThrow(() -> new NoSuchElementException("Receita não encontrada"));
 
-            ReceitaUsuario receitaUsuario = new ReceitaUsuario();
-            receitaUsuario.setFotoPrato("/uploads/finais/" + filename);
-            receitaUsuario.setPontuacaoPrato(Integer.parseInt(pontuacaoStr));
-            receitaUsuario.setDataConclusao(java.time.LocalDateTime.now());
+            // monta e salva entidade de associação
+            ReceitaUsuario ru = new ReceitaUsuario();
+            ru.setUsuario(usuario);
+            ru.setReceita(receita);
+            ru.setDataConclusao(Optional.ofNullable(request.getDataConclusao())
+                    .orElse(LocalDateTime.now()));
+            ru.setFotoPrato("/uploads/temp/" + filename);
+            ru.setPontuacaoPrato(request.getPontuacaoPrato());
+            ru.setTextoAvaliacao(request.getTextoAvaliacao());
 
-            // 🔹 Aqui você pode setar Usuario e Receita vindos do banco
-            // receitaUsuario.setUsuario(usuarioRepository.findById(...))
-            // receitaUsuario.setReceita(receitaRepository.findById(...))
-
-            receitaUsuarioRepository.save(receitaUsuario);
-
-            return ResponseEntity.ok(Map.of("message", "Prato salvo com sucesso!"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(Map.of("error", "Erro ao salvar prato"));
+            receitaUsuarioRepo.save(ru);
+            ReceitaUsuarioResponse respDto = mapper.map(ru, ReceitaUsuarioResponse.class);
+            return ResponseEntity.status(HttpStatus.CREATED).body(respDto);
+        }
+        catch (Exception ex) {
+            log.error("Erro ao salvar prato concluído idUsuario={}: {}", idUsuario, ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }
