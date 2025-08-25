@@ -52,6 +52,7 @@ function criarCardIngrediente(ingrediente, idAssociacao) {
       <h3>${ingrediente.nome}</h3>
       <p>Categoria: ${ingrediente.categoria}</p>
       <p>Validade estimada: ${ingrediente.estimativaValidade} dias</p>
+      <p>Dica conservação: ${ingrediente.dicaConservacao}</p>
     </div>
     <div class="acoes">
       <button class="btn-deletar" data-id="${idAssociacao}" title="Remover ingrediente">🗑️</button>
