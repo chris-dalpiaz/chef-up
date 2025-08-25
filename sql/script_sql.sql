@@ -289,6 +289,7 @@ CREATE TABLE IF NOT EXISTS `chef_up`.`receita_usuario` (
   `data_conclusao` DATETIME NOT NULL,
   `foto_prato` TEXT NOT NULL,
   `pontuacao_prato` INT NULL,
+  `texto_avaliacao` TEXT NOT NULL,
   `version` INT NOT NULL,
   INDEX `fk_receita_usuario_usuarios1_idx` (`usuario_id` ASC) VISIBLE,
   INDEX `fk_receita_usuario_receitas1_idx` (`receita_id` ASC) VISIBLE,

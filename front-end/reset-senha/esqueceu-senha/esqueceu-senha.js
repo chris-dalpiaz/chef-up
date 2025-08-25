@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const emailInput = document.getElementById('mail');
+    const emailInput = document.getElementById('email');
     const submitButton = document.getElementById('enviar');
 
     // Função para validar o email
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Redireciona para a página desejada se o email for válido
         const emailValue = emailInput.value;
         if (validateEmail(emailValue)) {
-            fetch("http://localhost:8080/2/codigo", {
+            fetch("http://localhost:8080/1/codigo", {
         method: "POST",
         headers: {
             "Content-Type": "application/json", // Define que o conteúdo enviado é do tipo JSON
