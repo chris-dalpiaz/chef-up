@@ -13,35 +13,66 @@ body {
 
 
   
-#barraNavegacao {
-    margin-left: -2vh;
+/* ===== Footer ===== */
+.footer {
     position: fixed;
     bottom: 0;
-    width: 100%;
-    background-color: #ffffff;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
     display: flex;
     justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    padding: 1vh 0;
+    z-index: 1000;
 }
 
-.nav-item {
-    text-align: center;
-    color: white;
+.footer a {
     text-decoration: none;
-    flex: 1;
-    padding: 0 16px;
+    color: inherit;
 }
-  
-.nav-item .icon {
-    font-size: 20px;
-    display: block;
-    color: #B3B3B3;
+
+.footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5vh;
+    padding: 0.5vh;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
-  
-.nav-item .text {
+
+.footer-item:hover {
+    background-color: #f0f0f0;
+}
+
+.footer-item::before {
+    content: attr(data-icon);
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.footer-item span {
     font-size: 12px;
-    color: #B3B3B3;
+    font-weight: 500;
+}
+
+.footer-item.selected {
+    color: #FFA336;
+}
+
+.footer-item .icon {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.footer-item .text {
+    font-size: 12px;
+    font-weight: 500;
 }
 
 

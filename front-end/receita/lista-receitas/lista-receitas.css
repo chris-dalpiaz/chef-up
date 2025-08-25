@@ -1,21 +1,11 @@
 /* Estiliza o corpo da página */
 body {
   margin-left: 2vh;
-<<<<<<< HEAD
   margin-right: 2vh; /* Remove margens padrão */
   font-family: 'DM Sans', sans-serif; /* Define a fonte principal */
   background-color: #FFF8E1;
   padding: 1 20px; /* Espaçamento horizontal nas bordas */
-=======
-  margin-right: 2vh;
-  /* Remove margens padrão */
-  font-family: 'DM Sans', sans-serif;
-  /* Define a fonte principal */
-  background: #ffffff;
-  /* Fundo branco */
-  padding: 1 20px;
-  /* Espaçamento horizontal nas bordas */
->>>>>>> 8d784b09ef6919beb013ed394a0f2fee6ebf2d27
+  padding-bottom: 250px; /* ESPAÇO MUITO MAIOR PARA O RODAPÉ */
 }
 
 /* Estilo do título principal */
@@ -272,6 +262,7 @@ body {
 
 .secao-receitas {
   padding: 16px;
+  margin-bottom: 80px; /* ESPAÇO GIGANTE ANTES DO RODAPÉ */
 }
 
 .titulo-secao {
@@ -327,9 +318,8 @@ body {
 
 /* ===== Footer ===== */
 .footer {
-<<<<<<< HEAD
     position: fixed;
-    bottom: 0;
+    bottom: 20px;
     left: 0;
     right: 0;
     background-color: #fff;
@@ -375,59 +365,6 @@ body {
 
 .footer-item.selected {
     color: #FFA336;
-=======
-  position: fixed;
-  /* fixa o rodapé na tela, mesmo quando rolar a página */
-  bottom: 0;
-  /* posiciona o rodapé colado na parte inferior da janela */
-  left: 0;
-  /* posiciona o rodapé a partir da borda esquerda da janela */
-  width: 100%;
-  /* o rodapé ocupa toda a largura da tela */
-  background: #fff;
-  /* fundo branco para o rodapé */
-  display: flex;
-  /* usa flexbox para organizar os itens dentro do rodapé */
-  justify-content: space-around;
-  /* distribui os itens igualmente espaçados horizontalmente */
-  align-items: center;
-  /* alinha os itens verticalmente no centro */
-  padding: 8px 0;
-  /* espaço interno acima e abaixo (8px), sem espaçamento nas laterais */
-  border-top: 1px solid #ddd;
-  /* uma linha fina e cinza clara no topo do rodapé */
-}
-
-.footer-item {
-  display: flex;
-  /* cada item do rodapé também é flex container */
-  flex-direction: column;
-  /* organiza os elementos dentro do item em coluna (vertical) */
-  align-items: center;
-  /* centraliza os elementos dentro do item horizontalmente */
-  font-size: 14px;
-  /* tamanho da fonte do texto */
-  color: #888;
-  /* cor cinza para o texto padrão */
-  cursor: pointer;
-  /* cursor muda para mãozinha ao passar o mouse, indicando que é clicável */
-  transition: color 0.2s ease;
-  /* transição suave de 0.2 segundos na mudança da cor */
-}
-
-.footer-item::before {
-  content: attr(data-icon);
-  /* insere antes do conteúdo do item o valor do atributo data-icon (emoji) */
-  font-size: 22px;
-  /* tamanho maior para o emoji */
-  margin-bottom: 4px;
-  /* espaço abaixo do emoji para separar do texto */
-}
-
-.footer-item.selected {
-  color: #FFA336;
-  /* muda a cor do texto para laranja quando o item está selecionado */
->>>>>>> 8d784b09ef6919beb013ed394a0f2fee6ebf2d27
 }
 
 /* Container de receitas em grid */
@@ -436,6 +373,7 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 16px;
   padding: 20px 0;
+  margin-bottom: 100px; /* ESPAÇO GIGANTE ANTES DO RODAPÉ */
 }
 
 /* Card individual da receita */
@@ -469,8 +407,6 @@ body {
   color: #333;
   font-weight: 600;
   font-family: 'DM Sans', sans-serif;
-<<<<<<< HEAD
-=======
 }
 
 .filter-wrapper {
@@ -504,5 +440,4 @@ body {
 
 .filter-btn:focus {
   outline: none;
->>>>>>> 8d784b09ef6919beb013ed394a0f2fee6ebf2d27
 }
