@@ -27,7 +27,7 @@ input {
     font-size: clamp(14px, 3.5vw, 18px); /* Tamanho responsivo com limites */
     max-width: fit-content;
     width: auto;
-    min-padding: 8px 12px; /* Padding mínimo */
+    padding-top: 8px 12px; /* Padding mínimo */
 }
 
 .adjetivo:hover, .pronome:hover {

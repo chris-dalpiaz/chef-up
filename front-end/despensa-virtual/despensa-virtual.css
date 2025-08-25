@@ -157,6 +157,8 @@ body {
     cursor: pointer;
     transition: background-color 0.3s;
     z-index: 999;
+    border: none; /* REMOVE BORDA */
+    outline: none; /* REMOVE OUTLINE */
 }
 
 #botaoadicionar:hover {
@@ -170,6 +172,9 @@ body {
     padding: 0;
     line-height: 1;
     color: #000;
+    border: none; /* REMOVE BORDA DO SÍMBOLO */
+    outline: none; /* REMOVE OUTLINE DO SÍMBOLO */
+    box-shadow: none; /* REMOVE QUALQUER SOMBRA */
 }
 
 .modal {
@@ -360,10 +365,15 @@ body {
         height: 7vh;
         bottom: 8vh;
         right: 1.5vh;
+        border: none; /* REMOVE BORDA */
+        outline: none; /* REMOVE OUTLINE */
     }
 
     #simbolo {
         font-size: 4.5vh;
+        border: none; /* REMOVE BORDA DO SÍMBOLO */
+        outline: none; /* REMOVE OUTLINE DO SÍMBOLO */
+        box-shadow: none; /* REMOVE QUALQUER SOMBRA */
     }
 
     .modal-content {
@@ -446,10 +456,15 @@ body {
         height: 6vh;
         bottom: 6vh;
         right: 1vh;
+        border: none; /* REMOVE BORDA */
+        outline: none; /* REMOVE OUTLINE */
     }
 
     #simbolo {
         font-size: 4vh;
+        border: none; /* REMOVE BORDA DO SÍMBOLO */
+        outline: none; /* REMOVE OUTLINE DO SÍMBOLO */
+        box-shadow: none; /* REMOVE QUALQUER SOMBRA */
     }
 
     .modal-content {
