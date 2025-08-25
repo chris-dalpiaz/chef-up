@@ -1,8 +1,9 @@
 body {
     font-family: 'DM Sans';
-    background-color: #fffaf5;
+    background-color: #fff8f1 !important;
     margin-left: 2vh;
     margin-right: 2vh;
+    padding-bottom: 120px; /* espaço para não sobrepor conteúdo */
   }
 
 
@@ -13,11 +14,6 @@ body {
     box-sizing: border-box;
 }
 
-body {
-    font-family: sans-serif;
-    background-color: #f6d4d1; /* tom rosado como na imagem */
-    padding-bottom: 120px; /* espaço para não sobrepor conteúdo */
-}
 
 /* Conteúdo apenas para exemplo */
 .content {
