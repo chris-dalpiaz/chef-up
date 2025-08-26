@@ -191,13 +191,8 @@ async function carregarReceitas() {
             const foto = item?.fotoPrato; // Foto do prato
 
             if (foto) {
-<<<<<<< HEAD
-                // Se a imagem não for uma URL completa, prefixa com "/"
-                const caminho = foto.startsWith("http") ? foto : `/${foto}`;
-=======
                 // Se a imagem não for uma URL completa, prefixe com "/"
                 const caminho = `http://localhost:8080${foto}`;
->>>>>>> 05e26656b3b5a128d112c07ae3b01e78087ba637
 
                 // Adiciona o card da receita ao grid
                 grid.innerHTML += `

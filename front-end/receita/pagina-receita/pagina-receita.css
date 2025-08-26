@@ -1,158 +1,251 @@
-/* Reset e fonte */
 body {
-    margin: 0;
-    font-family: 'DM Sans', 'Roboto', Arial, sans-serif;
-    background-color: #fff;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fdf9f6;
+  font-family: 'DM Sans', 'Roboto', sans-serif;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#receita-container {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  min-width: 320px;
+  height: 980px;
+  min-height: 700px;
+  max-height: 980px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Botões fixos no topo */
+.svg-button,
+.xp-button {
+  position: absolute;
+  top: 20px;
+  z-index: 10;
+}
+
+.svg-button {
+  left: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+.svg-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.xp-button {
+  right: 20px;
+  background: #FF6B35;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+.xp-button svg circle {
+  display: none; /* Remove os três pontinhos */
+}
+
+/* Imagem da Receita */
+.imagem-receita {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.imagem-receita img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Conteúdo da Receita */
+.receita-container {
+  flex: 1;
+  padding: 30px;
+  margin-top: -20px;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  z-index: 5;
+  overflow-y: auto;
+}
+
+.receita-titulo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.receita-info {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.tab {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #FF6B35;
+  background-color: transparent;
+  font-weight: 500;
+  color: #FF6B35;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+.tab.ativo {
+  background-color: #FF6B35;
+  color: white;
+}
+
+/* Conteúdo Dinâmico */
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.conteudo p {
+  padding: 16px 20px;
+  background: #fafafa;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #444;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s;
+  font-weight: 600;
+}
+.conteudo p:hover {
+  background: rgba(255, 107, 53, 0.05);
+  border-color: rgba(255, 107, 53, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Botões de Ação */
+.botoes {
+  display: flex;
+  gap: 10px;
+  padding: 20px 0;
+  margin-top: auto;
+}
+.btn-feito,
+.btn-comecar {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.btn-feito {
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #666;
+}
+.btn-feito:hover {
+  background-color: rgba(71, 179, 168, 0.1);
+  border-color: #47B3A8;
+  color: #47B3A8;
+}
+.btn-comecar {
+  background: #FF6B35;
+  color: #fff;
+  font-weight: bold;
+}
+.btn-comecar:hover {
+  background: #E55A2B;
+  position: relative;
+  top: -1px;
+}
+
+/* Botão Favorito */
+.favorite-button {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  color: #47B3A8;
+  backdrop-filter: blur(10px);
+  margin: 0 auto;
+}
+.favorite-button:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 1);
+}
+#coracao-path[fill="#f05a28"] {
+  stroke: #f05a28;
+}
+
+/* Responsivo */
+@media (max-width: 767px) {
+  body {
+    padding: 0;
+    align-items: stretch;
   }
-   
-  /* Botão Voltar */
-  .svg-button {
-    position: fixed;
-    top: 40px;
-    left: 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
+
+  #receita-container {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
   }
-   
-  /* Botão XP */
-  .xp-button {
-    position: fixed;
-    top: 40px;
-    right: 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-  }
-   
-  /* Imagem da Receita */
-  .imagem-receita img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-  }
-   
-  /* Container da Receita */
+
   .receita-container {
-    padding: 24px 16px;
-    background-color: #fff;
-    border-radius: 20px 20px 0 0;
-    margin-top: -20px;
-    position: relative;
-    z-index: 2;
+    padding: 25px 20px;
   }
-   
-  /* Título e Info */
+
   .receita-titulo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #000;
-    margin-bottom: 8px;
+    font-size: 1.3rem;
   }
-   
-  .receita-info {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 24px;
+
+  .imagem-receita {
+    height: 250px;
   }
-   
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-   
-  .tab {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid #FFA336;
-    background-color: transparent;
-    font-weight: bold;
-    color: #FFA336;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-   
-  .tab.ativo {
-    background-color: #FFA336;
-    color: white;
-    border: none;
-  }
-   
-  /* Conteúdo Dinâmico */
-  .conteudo {
-    font-weight: bold;
-    margin-bottom: 16px;
-    font-size: 16px;
-    color: #333;
-  }
-   
-  /* Botões de Ação */
+
   .botoes {
-    margin-top: 40px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
+    flex-direction: column;
+    gap: 8px;
+    padding: 15px 0;
   }
-   
-  .btn-feito,
-  .btn-comecar {
-    flex: 1;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-  }
-   
-  .btn-feito {
-    background-color: #e0e0e0;
-    color: #333;
-  }
-   
-  .btn-comecar {
-    background-color: #f05a28;
-    color: white;
-  }
-   
-  /* Botão Favorito */
-  .favorite-button {
-    position: fixed;
-    top: 420px;
-    right: 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-  }
-   
-  /* Responsivo */
-  @media (max-width: 600px) {
-    .receita-titulo {
-      font-size: 20px;
-    }
-   
-    .tab {
-      font-size: 14px;
-      padding: 8px;
-    }
-   
-    .btn-feito,
-    .btn-comecar {
-      font-size: 14px;
-      padding: 10px;
-    }
-   
-    .favorite-button {
-      top: auto;
-      bottom: 80px;
-      right: 16px;
-    }
-  }
-   
+}
