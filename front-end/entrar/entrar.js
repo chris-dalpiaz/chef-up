@@ -8,75 +8,85 @@ function realizarLogin() {
     const email = inputEmail.value;
     const senha = inputSenha.value;
 
-    console.log(email, senha); // Exibe os valores no console para debug
+    // Exibe os valores no console para fins de depuração
+    console.log(email, senha);
 
-    // Verifica se os campos estão preenchidos
+    // Verifica se os campos estão preenchidos (sem espaços em branco - trim())
     if (!email.trim() || !senha.trim()) {
         alert("Preencha todos os campos!");
         return; // Encerra a função se algum campo estiver vazio
     }
 
+    // Envia os dados de login para a API
     fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, senha }),
+        method: "POST", // Método HTTP usado para enviar dados
+        body: JSON.stringify({ email, senha }), // Converte os dados para JSON
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json", // Informa que o corpo da requisição é JSON
         },
     })
+        // Converte a resposta da API para JSON
         .then((data) => data.json())
-        .then((response) => {
-            const usuario = response.usuario;
 
-            // Dados básicos
+        // Manipula a resposta recebida
+        .then((response) => {
+            const usuario = response.usuario; // Extrai os dados do usuário da resposta
+
+            // Armazena o token de autenticação no localStorage
             localStorage.setItem("token", response.token);
+
+            // Armazena dados básicos do usuário
             localStorage.setItem("email", usuario.email);
             localStorage.setItem("nome", usuario.nome);
             localStorage.setItem("pronome", JSON.stringify(usuario.pronome));
 
-            // Id do usuário
+            // Armazena o ID do usuário
             localStorage.setItem("id", JSON.stringify(usuario.id));
 
-            // Titulos
+            // Armazena dados adicionais do perfil
             localStorage.setItem("titulos", JSON.stringify(usuario.titulos));
-
-            // Adjetivos
             localStorage.setItem("adjetivos", JSON.stringify(usuario.adjetivos));
-
-            // Receitas concluídas
             localStorage.setItem("receitasConcluidas", JSON.stringify(usuario.receitasConcluidas));
-
-            // Progresso
             localStorage.setItem("progresso", JSON.stringify(usuario.progresso));
-
-            // Ingredientes
             localStorage.setItem("ingredientes", JSON.stringify(usuario.ingredientes));
-
-            // Avatares
             localStorage.setItem("avatares", JSON.stringify(usuario.avatares));
 
-
-            // Chamada de função e feedback
+            // Chama função para carregar dados do usuário
             carregarUsuario();
+
+            // Exibe a resposta no console
             console.log(response);
+
+            // Informa ao usuário que o login foi bem-sucedido
             alert("Login realizado com sucesso!");
+
+            // Redireciona o usuário para a próxima página
             redirecionarUsuario();
         })
+
+        // Trata erros que possam ocorrer durante o processo de login
         .catch((error) => {
-            console.log(error);
-            alert("Usuário ou senha incorretos");
+            console.log(error); // Exibe o erro no console
+            alert("Usuário ou senha incorretos"); // Informa ao usuário
         });
 }
 
+// Função que redireciona o usuário após login bem-sucedido
 function redirecionarUsuario() {
     console.log("Redirecionando...");
+    // Redireciona para a página de boas-vindas
     window.location.href = "../boas-vindas/aprenda-receitas/aprenda-receitas.html";
 }
 
 // Função que configura os eventos da página
 function configurarEventos() {
-    const botaoEntrar = document.getElementById("botao_entrar"); // Obtém o botão de login
-    botaoEntrar.addEventListener("click", realizarLogin); // Adiciona o evento de clique para chamar a função de login
+    // Obtém o botão de login pelo ID
+    const botaoEntrar = document.getElementById("botao_entrar");
+
+    // Adiciona um ouvinte de evento de clique ao botão
+    // Quando clicado, chama a função de login
+    botaoEntrar.addEventListener("click", realizarLogin);
 }
 
-// Quando a página carregar, configura os eventos
+// Quando a página terminar de carregar, configura os eventos
 window.addEventListener("load", configurarEventos);

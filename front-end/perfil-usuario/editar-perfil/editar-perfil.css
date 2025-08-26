@@ -1,15 +1,19 @@
 body {
     margin: 0;
     padding: 2vh 4vw;
-    background-color: #fffaf5;
+    background-color: #FFF8E1;
+    max-width: 1200px; /* Limita largura no desktop */
+    margin: 0 auto; /* Centraliza o conteúdo */
+    padding: 2vh max(4vw, 20px); /* Padding mínimo de 20px */
 }
 
-h1{
+h1 {
     display: flex;
     justify-content: center;
+    font-size: clamp(1.5rem, 4vw, 2.5rem); /* Tamanho responsivo */
 }
 
-input{
+input {
     margin-left: 0;
 }
 
@@ -20,43 +24,182 @@ input{
     border-radius: 15px;
     border: 1px solid #fffaf5;
     padding: 0.5vh 1vw;
-    font-size: 3.5vw;
+    font-size: clamp(14px, 3.5vw, 18px); /* Tamanho responsivo com limites */
     max-width: fit-content;
-    width: auto; /* ajusta ao conteúdo */
-
+    width: auto;
+    padding-top: 8px 12px; /* Padding mínimo */
 }
-.adjetivo:hover, .pronome:hover{
+
+.adjetivo:hover, .pronome:hover {
     background-color: #FFE4C2;
     border: 1px solid #F58700;
-    transition: 0.3s; 
+    transition: 0.3s;
 }
 
 .tag_usuario {
     display: flex;
-    flex-direction: row;  /* já é padrão, mas deixei explícito */
-    flex-wrap: wrap;      /* quebra linha se não couber */
-    gap: 0.5vh;           /* espaçamento entre botões */
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: clamp(4px, 0.5vh, 8px); /* Gap responsivo */
     align-items: center;
+    justify-content: center; /* Centraliza no desktop */
 }
 
-
-.botao_comum{
+.botao_comum {
     margin: 0;
     justify-content: center;
-    margin-top: 110px;
+    margin-top: clamp(60px, 110px, 120px); /* Margem responsiva */
 }
 
-.bloqueado{
+.bloqueado {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
 }
 
 .adjetivo.ativo, .pronome.ativo {
-  background-color: #ff9800;
-  color: white;
-  border: none;
-  box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
-  transition: background-color 0.3s ease;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
+    transition: background-color 0.3s ease;
 }
 
+/* ===== MEDIA QUERIES PARA RESPONSIVIDADE ===== */
+
+/* Mobile (até 480px) */
+@media (max-width: 480px) {
+    body {
+        padding: 2vh 3vw;
+    }
+    
+    .adjetivo, .pronome {
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 12px;
+    }
+    
+    .tag_usuario {
+        gap: 6px;
+        justify-content: flex-start;
+    }
+    
+    .botao_comum {
+        margin-top: 80px;
+    }
+}
+
+/* Tablet (481px até 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    body {
+        padding: 2vh 6vw;
+        max-width: 100%;
+    }
+    
+    .adjetivo, .pronome {
+        font-size: 16px;
+        padding: 10px 16px;
+    }
+    
+    .tag_usuario {
+        gap: 8px;
+        justify-content: center;
+    }
+    
+    .botao_comum {
+        margin-top: 100px;
+    }
+}
+
+/* Desktop pequeno (769px até 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        max-width: 900px;
+        padding: 3vh 40px;
+    }
+    
+    .adjetivo, .pronome {
+        font-size: 16px;
+        padding: 10px 18px;
+    }
+    
+    .tag_usuario {
+        gap: 10px;
+        justify-content: center;
+    }
+}
+
+/* Desktop grande (1025px+) */
+@media (min-width: 1025px) {
+    body {
+        max-width: 1000px; /* Mais estreito no desktop */
+        padding: 3vh 40px;
+    }
+    
+    .adjetivo, .pronome {
+        font-size: 17px;
+        padding: 12px 20px;
+        border-radius: 18px;
+    }
+    
+    .tag_usuario {
+        gap: 12px;
+        justify-content: center;
+        max-width: 800px; /* Limita ainda mais a largura dos botões */
+        margin: 0 auto;
+    }
+    
+    .botao_comum {
+        margin-top: 120px;
+    }
+    
+    /* Layout desktop: email igual ao nome do usuário */
+    .container-email-input {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        max-width: 500px;
+        margin: 20px auto;
+    }
+    
+    .email-label {
+        font-size: 16px;
+        font-weight: 400;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    input[type="email"], input[type="text"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #E6E6E6;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+    
+    input[type="email"]:focus, input[type="text"]:focus {
+        outline: none;
+        border-color: #F58700;
+        box-shadow: 0 0 5px rgba(245, 135, 0, 0.3);
+    }
+}
+
+/* Desktop extra grande (1440px+) */
+@media (min-width: 1440px) {
+    body {
+        max-width: 1100px;
+        padding: 4vh 60px;
+    }
+    
+    .tag_usuario {
+        max-width: 900px;
+    }
+    
+    /* Mantém o layout vertical igual ao nome */
+    .container-email-input {
+        max-width: 550px;
+    }
+}
