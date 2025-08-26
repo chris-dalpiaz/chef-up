@@ -9,11 +9,13 @@ function carregarUsuario() {
         // Exibe uma mensagem no console informando que o usuário não está autenticado
         console.log("Usuário não autenticado");
 
+
         // Redireciona o usuário para a página de splash (tela inicial do site)
         window.location.href = "../../splash/splash.html";
 
         // Encerra a execução da função para evitar que o restante do código seja executado
-        return;
+        return; 
+      
     } else {
         // Se o token existir, significa que o usuário está autenticado
         // Exibe uma mensagem no console confirmando que o usuário foi carregado

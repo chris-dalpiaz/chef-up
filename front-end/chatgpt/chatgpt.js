@@ -171,3 +171,9 @@ window.addEventListener('load', () => {
   carregarEvento();  // só depois ativa os eventos
 });
 
+window.addEventListener('beforeunload', function (e) {
+  console.warn('⚠️ Página está tentando recarregar!');
+  console.trace(); // mostra a origem da chamada
+  e.preventDefault();
+  e.returnValue = '';
+});
