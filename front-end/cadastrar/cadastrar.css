@@ -98,6 +98,117 @@ label {
   font-size: 14px;
 }
 
+/* ===== ZOOM 200% - MEDIA QUERY ESPECIAL ===== */
+/* Detecta zoom de 200% através da resolução efetiva da tela */
+@media screen and (-webkit-device-pixel-ratio: 2) and (max-resolution: 191dpi),
+       screen and (min-resolution: 192dpi) and (max-resolution: 300dpi) {
+  
+  body {
+    padding: 10px; /* Reduz padding para economizar espaço */
+    font-size: 14px; /* Reduz tamanho base da fonte */
+  }
+
+  .tittles {
+    margin-top: 20px; /* Reduz margem superior */
+    min-height: 40vh; /* Reduz altura mínima */
+    max-width: 300px; /* Reduz largura máxima */
+  }
+
+  .tittle {
+    font-size: 18px; /* Reduz tamanho do título */
+    margin-bottom: -5px;
+  }
+
+  .subtittle {
+    font-size: 12px; /* Reduz subtítulo */
+    margin-bottom: 15px;
+  }
+
+  .formulario {
+    width: 280px; /* Reduz largura do formulário */
+    padding: 15px; /* Reduz padding */
+    gap: 8px; /* Reduz espaçamento entre elementos */
+    border-radius: 8px; /* Ajusta bordas */
+  }
+
+  label {
+    font-size: 12px; /* Reduz tamanho da label */
+    padding: 0.5%;
+  }
+
+  .formulario input {
+    padding: 8px; /* Reduz padding dos inputs */
+    font-size: 12px; /* Reduz tamanho da fonte */
+    border-radius: 4px;
+  }
+
+  .botao {
+    top: 90%; /* Ajusta posição do botão */
+    max-width: 300px; /* Reduz largura máxima */
+    width: 85%;
+    margin-top: 15px;
+  }
+
+  .botao button {
+    padding: 10px; /* Reduz padding do botão */
+    font-size: 14px; /* Reduz tamanho da fonte */
+    border-radius: 8px;
+  }
+
+  #aviso {
+    font-size: 11px; /* Reduz tamanho do aviso */
+    margin-top: 10px;
+  }
+}
+
+/* ===== ZOOM 200% + MOBILE (para zoom em dispositivos móveis) ===== */
+@media screen and (-webkit-device-pixel-ratio: 2) and (max-width: 480px) {
+  
+  body {
+    padding: 8px;
+  }
+
+  .tittles {
+    margin-top: 10px;
+    width: 98%;
+    min-height: 35vh;
+  }
+
+  .formulario {
+    width: 95%; /* Usa quase toda a largura disponível */
+    padding: 12px;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 11px;
+  }
+
+  .formulario input {
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .botao {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .botao button {
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  #aviso {
+    font-size: 10px;
+  }
+}
+
 /* Tablet (largura entre 768px e 1024px) */
 @media (max-width: 1024px) and (min-width: 768px) {
   .tittles {
