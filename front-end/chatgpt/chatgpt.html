@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verificação Receita</title>
+    <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
+    <script src="chatgpt.js"></script>
+    <script src="../default.js"></script>
     <link rel="stylesheet" href="../default.css">
     <link rel="stylesheet" href="chatgpt.css">
-    <script src="../default.js" defer></script>
-    <script src="chatgpt.js" defer></script>
     <!-- Fonte padrão -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Roboto&display=swap" rel="stylesheet">
 </head>
@@ -19,19 +20,9 @@
     </header>
     <label for="input_file">Envie a imagem para avaliar a receita</label>
     <input type="file" accept="image/*" id="input_file">
-    <section class="info">
-        <div>
-            <p id="text"></p>
-        </div>
-        <div class="estrelas" id="star">
-
-
-        </div>
-    </section>
-
-
     <div class="botao">
-        <button id="botao_avaliar" type="button">Avaliar</button>
+        <button type="button" id="botao_avaliar">Avaliar</button>
     </div>
 </body>
+
 </html>
