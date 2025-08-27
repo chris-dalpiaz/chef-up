@@ -83,6 +83,7 @@ public class AvaliacaoPratoController {
             // sanitize JSON vindo do ChatGPT
             String sanitized = rawJson
                     .trim()
+                    .replaceFirst("(?i)^json\\s*", "") // remove prefixo "json" (case-insensitive)
                     .replaceAll("^```+", "")
                     .replaceAll("```+$", "")
                     .replaceAll("^`+", "")

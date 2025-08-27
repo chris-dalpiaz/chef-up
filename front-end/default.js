@@ -33,6 +33,7 @@ async function carregarProgresso() {
     try {
         // Recupera o token JWT salvo no localStorage
         const token = localStorage.getItem("token");
+        const userId = parseInt(localStorage.getItem('id'), 10);
 
         // Verifica se o token existe
         if (!token) {
@@ -41,7 +42,7 @@ async function carregarProgresso() {
         }
 
         // Faz a requisição à API com o token Bearer
-        const response = await fetch("http://localhost:8080/usuarios/1/progresso", {
+        const response = await fetch(`http://localhost:8080/usuarios/${userId}/progresso`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`, // Autenticação via token
