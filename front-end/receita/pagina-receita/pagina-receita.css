@@ -1,251 +1,161 @@
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #FFF8E1;
-  font-family: 'DM Sans', 'Roboto', sans-serif;
-  padding: 10px;
-  box-sizing: border-box;
+body{
+  max-width: none;
 }
-
+/* ===== Container Principal ===== */
 #receita-container {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  min-width: 320px;
-  height: 980px;
-  min-height: 700px;
-  max-height: 980px;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  background: white;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  gap: 2rem;
+  margin-bottom: 10vh; /* espaço para o rodapé fixo */
 }
 
-/* Botões fixos no topo */
+/* ===== Navegação Superior ===== */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .svg-button,
 .xp-button {
-  position: absolute;
-  top: 20px;
-  z-index: 10;
-}
-
-.svg-button {
-  left: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: none;
   border: none;
-  padding: 8px;
+  cursor: pointer;
+  padding: 1rem;
   border-radius: 50%;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s;
-}
-.svg-button:hover {
-  background: rgba(0, 0, 0, 0.1);
-  transform: scale(1.1);
+  transition: background-color 0.3s ease;
 }
 
-.xp-button {
-  right: 20px;
-  background: #FF6B35;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-}
-.xp-button svg circle {
-  display: none; /* Remove os três pontinhos */
+.svg-button:hover,
+.xp-button:hover {
+  background-color: #FFE0B2;
 }
 
-/* Imagem da Receita */
-.imagem-receita {
-  width: 100%;
-  height: 300px;
-  overflow: hidden;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-}
-.imagem-receita img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Conteúdo da Receita */
-.receita-container {
-  flex: 1;
-  padding: 30px;
-  margin-top: -20px;
-  background: white;
-  border-radius: 20px 20px 0 0;
-  position: relative;
-  z-index: 5;
-  overflow-y: auto;
-}
-
-.receita-titulo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-  line-height: 1.3;
+.imagem-receita{
+  align-items: center;
   text-align: center;
+  align-content: center;
+}
+
+/* ===== Imagem da Receita ===== */
+.imagem-receita img {
+  width: 50%;
+  height: auto;
+  border-radius: 2rem;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Título e Informações ===== */
+.receita-titulo {
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 .receita-info {
-  font-size: 14px;
-  color: #777;
   text-align: center;
-  margin-bottom: 24px;
+  font-size: 1.8rem;
+  color: #4A2C00;
+  margin-bottom: 2rem;
 }
 
-/* Tabs */
+/* ===== Tabs ===== */
 .tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-.tab {
-  flex: 1;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid #FF6B35;
-  background-color: transparent;
-  font-weight: 500;
-  color: #FF6B35;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-size: 14px;
-}
-.tab.ativo {
-  background-color: #FF6B35;
-  color: white;
-}
-
-/* Conteúdo Dinâmico */
-.conteudo {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.conteudo p {
-  padding: 16px 20px;
-  background: #fafafa;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #444;
-  border: 1px solid #f0f0f0;
-  transition: all 0.3s;
-  font-weight: 600;
-}
-.conteudo p:hover {
-  background: rgba(255, 107, 53, 0.05);
-  border-color: rgba(255, 107, 53, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Botões de Ação */
-.botoes {
-  display: flex;
-  gap: 10px;
-  padding: 20px 0;
-  margin-top: auto;
-}
-.btn-feito,
-.btn-comecar {
-  flex: 1;
-  padding: 12px 20px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 16px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  transition: all 0.3s;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
-.btn-feito {
-  background: transparent;
-  border: 1px solid #ccc;
-  color: #666;
+
+.tab {
+  background-color: #FFE0B2;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-.btn-feito:hover {
-  background-color: rgba(71, 179, 168, 0.1);
-  border-color: #47B3A8;
-  color: #47B3A8;
-}
-.btn-comecar {
-  background: #FF6B35;
-  color: #fff;
+
+.tab.ativo {
+  background-color: #F58700;
+  color: white;
   font-weight: bold;
 }
-.btn-comecar:hover {
-  background: #E55A2B;
-  position: relative;
-  top: -1px;
+
+.tab:hover {
+  background-color: #f9c87a;
 }
 
-/* Botão Favorito */
+/* ===== Conteúdo Dinâmico ===== */
+.conteudo {
+  font-size: 1.8rem;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+/* ===== Botões de Ação ===== */
+.botoes {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-feito{
+    background-color: #5ccb5f;
+}
+
+.btn-feito:hover {
+  background-color: rgb(72, 209, 77);
+}
+
+.btn-comecar:hover {
+  background-color: #e5942a;
+}
+
+/* ===== Botão Favorito ===== */
 .favorite-button {
-  background: rgba(255, 255, 255, 0.9);
+  background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: all 0.3s;
-  color: #47B3A8;
-  backdrop-filter: blur(10px);
-  margin: 0 auto;
+  display: block;
+  margin: 2rem auto;
+  font-size: 2.5rem;
+  transition: transform 0.3s ease;
 }
+
 .favorite-button:hover {
   transform: scale(1.1);
-  background: rgba(255, 255, 255, 1);
-}
-#coracao-path[fill="#f05a28"] {
-  stroke: #f05a28;
 }
 
-/* Responsivo */
-@media (max-width: 767px) {
-  body {
-    padding: 0;
-    align-items: stretch;
-  }
-
-  #receita-container {
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  .receita-container {
-    padding: 25px 20px;
-  }
-
+/* ===== Responsividade ===== */
+@media (max-width: 768px) {
   .receita-titulo {
-    font-size: 1.3rem;
+    font-size: 2.4rem;
   }
 
-  .imagem-receita {
-    height: 250px;
+  .receita-info {
+    font-size: 1.6rem;
   }
 
-  .botoes {
-    flex-direction: column;
-    gap: 8px;
-    padding: 15px 0;
+  .tab {
+    font-size: 1.4rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .conteudo {
+    font-size: 1.6rem;
+  }
+
+  .btn-feito,
+  .btn-comecar {
+    font-size: 1.8rem;
+    padding: 0.8rem 1.5rem;
   }
 }

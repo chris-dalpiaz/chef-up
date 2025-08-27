@@ -90,6 +90,7 @@ async function carregarReceitas() {
 
 function configurarEventos() {
   carregarReceitas();
+  carregarProgresso();
 
   // Seleciona todos os itens do footer e adiciona um ouvinte de evento de clique
   document.querySelectorAll('.footer-item').forEach(item => {

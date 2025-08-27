@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Editar Avatar</title>
   <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
+  <script src="../../default.js"></script>
   <script src="editar-imagem.js" defer></script>
-  
   <link rel="stylesheet" href="../../default.css" />
   <link rel="stylesheet" href="editar-imagem.css" />
   <link
@@ -19,6 +19,17 @@
   <header>
     <h1>Alterar Avatar</h1>
   </header>
+
+  <!-- Barra de Progresso -->
+  <section class="barra_progresso">
+    <div class="nivel"><span>0</span></div> <!-- JS insere nível -->
+    <div class="barra_container">
+      <div class="barra_bg">
+        <div class="barra_xp" style="width: 0%;"></div> <!-- JS insere XP -->
+      </div>
+      <p class="pontos_xp">0 / 100</p> <!-- JS insere texto XP -->
+    </div>
+  </section>
 
   <section class="avatar_inicial">
     <div class="subtittle">

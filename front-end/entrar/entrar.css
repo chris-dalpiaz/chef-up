@@ -1,12 +1,5 @@
-/* Estilo base (desktop) */
-body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: #fff8f1;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+body{
+  max-width: none;
 }
 
 .tittles {
@@ -31,27 +24,18 @@ body {
     margin-bottom: 20px;
 }
 
-.formulario {
-    display: flex;
-    flex-direction: column;
-    width: 350px;           /* Largura fixa para maior espaço */
-    padding: 25px;          /* Preenchimento interno maior */
-    background-color: #fff; /* Fundo branco */
-    border-radius: 10px;    /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
-    margin: 0 auto;         /* Centraliza horizontalmente */
-    gap: 10px;              /* Espaçamento entre os elementos */
+label {
+  margin-top: 0;          /* Remove margem negativa extrema */
+  font-weight: bold;
+  text-align: left;
+  padding: 1%;
 }
 
-label {
-    margin-top: 0;          /* Remove margem negativa extrema */
-    font-weight: bold;
-    text-align: left;
-    padding: 1%;
+label, p{
+  font-size: 1.2rem;
 }
 
 input {
-    width: 100%;
     padding: 12px;
     margin-top: 5px;
     border-radius: 6px;
@@ -101,7 +85,7 @@ input {
 #aviso {
     text-align: center;
     margin-top: 15px;
-    font-size: 14px;
+    font-size: 1.5rem;
 }
 
 /* ===== ZOOM 200% - MEDIA QUERY ESPECIAL ===== */

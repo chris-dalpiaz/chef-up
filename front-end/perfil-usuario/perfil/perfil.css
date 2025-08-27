@@ -1,24 +1,3 @@
-body {
-    margin: 0;
-    padding: 2vh 5vw;
-    color: #4A2C00; /* Dark brown/orange for text */
-    background-color: #FFF8E1; /* Very light creamy orange */
-    font-family: 'DM Sans','Roboto',sans-serif;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-h1, h2 {
-    margin: 0 0 2vh 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #4A2C00; /* Primary orange */
-    font-weight: bold;
-    font-size: 2rem;
-}
-
 .perfil {
     display: flex;
     gap: 2vh;
@@ -28,83 +7,38 @@ h1, h2 {
 
 .foto_usuario img,
 .personagem {
-    width: 120px;
-    height: 120px;
-    border-radius: 20px;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 2rem;
     object-fit: cover;
-    background-color: #FFECB3; /* Light orange/creamy */
-    border: 3px solid #fff; /* White border */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: #FFECB3;
+    /* Light orange/creamy */
+    border: 0.3rem solid #fff;
+    /* White border */
+    box-shadow: 0 4rem 1.2rem rgba(0, 0, 0, 0.08);
 }
 
 .nome_usuario {
-    font-size: 22px;
+    font-size: 2.2rem;
     font-weight: 600;
     margin: 0;
     line-height: 1.2;
-    color: #4A2C00; /* Primary orange */
 }
 
 .titulo_usuario {
-    font-size: 16px;
-    color: #8D6E63; /* Medium brown/orange for text */
+    font-size: 1.6rem;
+    color: #8D6E63;
+    /* Medium brown/orange for text */
     margin: 0;
     font-style: italic;
 }
 
-.adjetivo {
-    background-color: #F58700; /* Very light orange */
-    padding: 0.4vh 1vw;
-    font-size: 14px;
-    white-space: nowrap;
-    color: #4A2C00; /* Primary orange */
-    font-weight: bolder;
-}
-
-.barra_progresso {
-    background-color: #fff; /* White background */
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.06);
-    padding: 1.5vh;
-    margin-bottom: 3vh;
-    display: flex;
-    align-items: center;
-    gap: 1vh;
-}
-
-.nivel {
-    background-color: #F58700; /* Primary orange */
-    color: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.barra_bg {
-    background-color: #FFE0B2; /* Light orange */
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.barra_xp {
-    background-color: #5ccb5f; /* Primary orange */
-    height: 100%;
-    transition: width 0.3s ease;
-    border-radius: 4px;
-}
 
 .grid_pratos {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1vw;
+    gap: 2vh;
     margin-bottom: 8vh;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .grid_pratos img {
@@ -112,7 +46,7 @@ h1, h2 {
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s ease;
     cursor: pointer;
 }
@@ -127,7 +61,8 @@ h1, h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Menos escuro, mais suave */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Menos escuro, mais suave */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -136,7 +71,12 @@ h1, h2 {
 }
 
 .modal-conteudo {
-    background-color: #FFF8E1; /* Mesmo fundo da página */
+    background-color: #FFF8E1;
+    /* Mesmo fundo da página */
+    max-height: 90%;
+    /* <-- impede de passar da tela */
+    overflow-y: auto;
+    /* <-- ativa scroll vertical quando necessário */
     padding: 28px;
     border-radius: 16px;
     max-width: 500px;
@@ -149,20 +89,21 @@ h1, h2 {
 
 .modal-conteudo img {
     max-width: 100%;
-    border-radius: 12px;
-    margin-bottom: 20px;
+    border-radius: 1.2rem;
+    margin-bottom: 2rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .modal-conteudo h2 {
-    margin: 0 0 12px;
+    margin: 0 0 1.2rem;
     font-size: 1.8rem;
-    color: #4A2C00; /* Laranja mais vibrante */
+    color: #4A2C00;
+    /* Laranja mais vibrante */
     font-weight: bold;
 }
 
 .modal-conteudo p {
-    margin: 6px 0;
+    margin: 0.6rem 0;
     font-size: 1rem;
     color: #4a4a4a;
     line-height: 1.5;
@@ -170,8 +111,8 @@ h1, h2 {
 
 .modal-conteudo .fechar {
     position: absolute;
-    top: 12px;
-    right: 10px;
+    top: 1.2rem;
+    right: 1rem;
     font-size: 1.5rem;
     cursor: pointer;
     color: #F58700;
@@ -183,25 +124,25 @@ h1, h2 {
 }
 
 .estrelas img {
-    width: 20px;
-    height: 20px;
-    margin-right: 2px;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.2rem;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 
 /* Botões de navegação */
 .navegacao {
-    margin-top: 16px;
+    margin-top: 1.6rem;
     display: flex;
     justify-content: center;
     gap: 12px;
 }
 
 .navegacao button {
-    padding: 8px 16px;
+    padding: 0.8rem 1.6rem;
     font-size: 1rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 0.8rem;
     background-color: #F58700;
     color: #fff;
     cursor: pointer;

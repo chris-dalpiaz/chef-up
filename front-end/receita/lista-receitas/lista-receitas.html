@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Receitas</title>
   <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
-  <script src="lista-receitas.js"></script>
-  <script src="../default.js"></script>
-  <link rel="stylesheet" href="lista-receitas.css">
+  <script src="../../default.js"></script>
   <!-- CSS PADRÃO E FONTE -->
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../../default.css">
+  <link rel="stylesheet" href="lista-receitas.css">
+
 </head>
 
 <body>
@@ -27,7 +27,7 @@
       <input type="text" placeholder="Buscar receitas" />
 
       <div class="filter-wrapper">
-        <button class="filter-btn" aria-label="Filtrar">
+        <button class="filter-btn filtro-personalizado" aria-label="Filtrar">
           <!-- Ícone SVG de filtros -->
           <svg class="filter-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -53,6 +53,17 @@
       <div class="category selected" data-icon="🔥" data-nome="Popular">
       </div>
     </div>
+
+    <!-- Barra de Progresso -->
+    <section class="barra_progresso">
+      <div class="nivel"><span>0</span></div> <!-- JS insere nível -->
+      <div class="barra_container">
+        <div class="barra_bg">
+          <div class="barra_xp" style="width: 0%;"></div> <!-- JS insere XP -->
+        </div>
+        <p class="pontos_xp">0 / 100</p> <!-- JS insere texto XP -->
+      </div>
+    </section>
 
     <div class="receitas_container"></div>
 
