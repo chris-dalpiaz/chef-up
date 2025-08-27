@@ -111,44 +111,7 @@ async function carregarAdjetivos() {
     }
 }
 
-// Função que carrega o progresso do usuário (nível e XP)
-async function carregarProgresso() {
-    try {
-        // Recupera o token JWT salvo no localStorage
-        const token = localStorage.getItem("token");
-
-        // Verifica se o token existe
-        if (!token) {
-            console.warn("Token não encontrado. Usuário não autenticado.");
-            return;
-        }
-
-        // Faz a requisição à API com o token Bearer
-        const response = await fetch("http://localhost:8080/usuarios/1/progresso", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`, // Autenticação via token
-                "Content-Type": "application/json"
-            }
-        });
-
-        // Verifica se a resposta foi bem-sucedida
-        if (!response.ok) {
-            console.error("Erro ao buscar progresso:", response.status);
-            return;
-        }
-
-        // Converte a resposta para JSON
-        const progresso = await response.json();
-
-        // Atualiza os elementos visuais com os dados recebidos
-        document.querySelector(".nivel span").textContent = progresso.nivel; // Exibe o nível
-        document.querySelector(".barra_xp").style.width = progresso.xp + "%"; // Atualiza a barra de XP
-        document.querySelector(".pontos_xp").textContent = `${progresso.xp} / 100`; // Exibe os pontos de XP
-    } catch (error) {
-        console.error("Erro ao carregar progresso:", error);
-    }
-}async function carregarReceitas() {
+async function carregarReceitas() {
     try {
         const token = localStorage.getItem("token");
         const idUsuario = localStorage.getItem("id");

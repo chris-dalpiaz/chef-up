@@ -225,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function configurarEventos() {
   carregarIngredientes();         // Carrega os ingredientes da despensa virtual do usuário
   configurarModalAdicionar();    // Configura o modal para adicionar novos ingredientes
+  carregarProgresso();
 }
 
 // Adiciona um ouvinte de evento à janela que será executado quando a página for totalmente carregada

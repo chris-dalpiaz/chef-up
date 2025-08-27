@@ -122,6 +122,7 @@ async function salvarAvatar() {
 async function configurarEventos() {
   // Carrega os avatares disponíveis e desbloqueados
   await carregarAvatares();
+  carregarProgresso();
 
   // Adiciona evento ao botão para salvar o avatar selecionado
   document.querySelector("button").addEventListener("click", salvarAvatar);

@@ -1,11 +1,5 @@
-/* Estiliza o corpo da página */
 body {
-  margin-left: 2vh;
-  margin-right: 2vh; /* Remove margens padrão */
-  font-family: 'DM Sans', sans-serif; /* Define a fonte principal */
-  background-color: #FFF8E1;
-  padding: 1 20px; /* Espaçamento horizontal nas bordas */
-  padding-bottom: 250px; /* ESPAÇO MUITO MAIOR PARA O RODAPÉ */
+  max-width: 200rem;
 }
 
 /* Estilo do título principal */
@@ -24,10 +18,9 @@ body {
 
 /* Container centralizado com largura máxima */
 .container {
-  max-width: 500px;
-  /* Limita a largura */
-  margin: 0 auto;
-  /* Centraliza horizontalmente */
+  align-items: center;
+  text-align: center;
+  align-content: center;
 }
 
 /* Barra de busca com estilo moderno */
@@ -74,25 +67,20 @@ body {
   /* Remove contorno ao focar */
 }
 
-/* Botão de filtro ao lado da barra de busca */
 .filter-btn {
+  all: unset;
   background: #faf5f4;
-  /* Fundo claro */
-  border: none;
-  /* Sem borda */
   border-radius: 50%;
-  /* Formato circular */
   width: 40px;
-  /* Largura fixa */
   height: 40px;
-  /* Altura fixa */
   padding: 8px;
-  /* Espaçamento interno */
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-  /* Sombra leve */
   cursor: pointer;
-  /* Cursor de clique */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 /* Container horizontal de categorias */
 .categories {
@@ -252,14 +240,6 @@ body {
   color: #333;
 }
 
-/* receitas */
-body {
-  font-family: 'DM Sans', sans-serif;
-  background-color: #FFF8E1;
-  margin: 0;
-  padding: 0;
-}
-
 .secao-receitas {
   padding: 16px;
   margin-bottom: 80px; /* ESPAÇO GIGANTE ANTES DO RODAPÉ */
@@ -316,57 +296,6 @@ body {
   margin: 0;
 }
 
-/* ===== Footer ===== */
-.footer {
-    position: fixed;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    background-color: #fff;
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: space-around;
-    padding: 1vh 0;
-    z-index: 1000;
-}
-
-.footer a {
-    text-decoration: none;
-    color: inherit;
-}
-
-.footer-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5vh;
-    padding: 0.5vh;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #888;
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
-
-.footer-item:hover {
-    background-color: #f0f0f0;
-}
-
-.footer-item::before {
-    content: attr(data-icon);
-    font-size: 22px;
-    margin-bottom: 4px;
-}
-
-.footer-item span {
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.footer-item.selected {
-    color: #FFA336;
-}
-
 /* Container de receitas em grid */
 .receitas_container {
   display: grid;
@@ -416,28 +345,34 @@ body {
 
 .filter-options {
   position: absolute;
-  top: 30px;
+  top: 100%; /* logo abaixo do botão */
   right: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #ddd;
   border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  font-size: 14px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
 }
 
-.filter-options.hidden {
+.filter-options label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.filter-options input {
+  margin-right: 8px;
+}
+
+.hidden {
   display: none;
 }
 
-.filter-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.filter-btn:focus {
-  outline: none;
+.filter-wrapper {
+  position: relative; /* necessário para o position absolute do dropdown */
+  display: inline-block;
 }
