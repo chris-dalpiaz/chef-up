@@ -7,19 +7,19 @@ public class CodigoVerificacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idcodigo_verificacao;
     private Integer codigo;
 
     @OneToOne()
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public Integer getId() {
-        return id;
+    public Integer getIdcodigo_verificacao() {
+        return idcodigo_verificacao;
     }
 
-    public void setId(Integer idcodigo_verificacao) {
-        this.id = idcodigo_verificacao;
+    public void setIdcodigo_verificacao(Integer idcodigo_verificacao) {
+        this.idcodigo_verificacao = idcodigo_verificacao;
     }
 
     public Integer getCodigo() {

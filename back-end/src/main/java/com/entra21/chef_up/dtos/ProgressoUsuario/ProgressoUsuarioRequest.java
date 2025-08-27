@@ -6,7 +6,6 @@ public class ProgressoUsuarioRequest {
 
     private Integer idUsuario;
 
-    private Integer nivel;
 
     private Integer xp;
 
@@ -20,13 +19,6 @@ public class ProgressoUsuarioRequest {
         this.idUsuario = idUsuario;
     }
 
-    public Integer getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(Integer nivel) {
-        this.nivel = nivel;
-    }
 
     public Integer getXp() {
         return xp;

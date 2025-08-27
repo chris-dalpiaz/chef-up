@@ -31,7 +31,7 @@ function carregarUsuario() {
 // Função que carrega o progresso do usuário (nível e XP)
 async function carregarProgresso() {
     try {
-        // Recupera o token JWT salvo no localStorage
+        // Recupera o token JWT e o id do usuario salvo no localStorage
         const token = localStorage.getItem("token");
         const userId = parseInt(localStorage.getItem('id'), 10);
 
@@ -59,10 +59,17 @@ async function carregarProgresso() {
         // Converte a resposta para JSON
         const progresso = await response.json();
 
+        const xpTotal = progresso.xp;
+
+        const nivel = Math.floor(xpTotal / 100);
+
+        const xpLevel = xpTotal % 100;
+
+
         // Atualiza os elementos visuais com os dados recebidos
-        document.querySelector(".nivel span").textContent = progresso.nivel; // Exibe o nível
-        document.querySelector(".barra_xp").style.width = progresso.xp + "%"; // Atualiza a barra de XP
-        document.querySelector(".pontos_xp").textContent = `${progresso.xp} / 100`; // Exibe os pontos de XP
+        document.querySelector(".nivel span").textContent = nivel; // Exibe o nível
+        document.querySelector(".barra_xp").style.width = xpLevel + "%"; // Atualiza a barra de XP
+        document.querySelector(".pontos_xp").textContent = `${xpLevel} / 100`; // Exibe os pontos de XP
     } catch (error) {
         console.error("Erro ao carregar progresso:", error);
     }
