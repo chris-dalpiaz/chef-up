@@ -6,8 +6,10 @@ import com.entra21.chef_up.repositories.CodigoVerificacaoRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/{idUsuario}/codigo")
+@RequestMapping("/codigos")
 public class CodigoVerificacaoController {
 
     private final UsuarioRepository usuarioRepository;
@@ -21,14 +23,19 @@ public class CodigoVerificacaoController {
     }
 
     @GetMapping
-    public CodigoVerificacaoResponse getCodigoVerificao(@PathVariable Integer idUsuario) {
+    public List<CodigoVerificacaoResponse> listCodigos() {
+        return codigoVerificacaoService.listAll();
+    }
+
+    @GetMapping("/{idUsuario}")
+    public CodigoVerificacaoResponse getCodigoVerificacao(@PathVariable Integer idUsuario) {
         return codigoVerificacaoService.getByUsuarioId(idUsuario);
     }
 
     @PostMapping
     public CodigoVerificacaoResponse gerarCodigo(@PathVariable Integer idUsuario) {
 
-        int codigo = (int) (Math.random() * 9999);
+        Integer codigo = (int) (Math.random() * 9999);
 
         return codigoVerificacaoService.create(codigo, idUsuario);
     }

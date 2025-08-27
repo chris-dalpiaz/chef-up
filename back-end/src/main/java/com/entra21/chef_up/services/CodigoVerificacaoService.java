@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CodigoVerificacaoService {
@@ -61,5 +63,12 @@ public class CodigoVerificacaoService {
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND)
                 );
+    }
+
+    public List<CodigoVerificacaoResponse> listAll() {
+        return codigoVerificacaoRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 }
