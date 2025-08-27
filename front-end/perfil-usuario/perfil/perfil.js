@@ -148,21 +148,16 @@ async function carregarProgresso() {
     } catch (error) {
         console.error("Erro ao carregar progresso:", error);
     }
-}
-
-// Função que carrega as receitas concluídas pelo usuário
-async function carregarReceitas() {
+}async function carregarReceitas() {
     try {
-        const token = localStorage.getItem("token"); // Recupera o token
-        const idUsuario = localStorage.getItem("id"); // Recupera o ID do usuário
+        const token = localStorage.getItem("token");
+        const idUsuario = localStorage.getItem("id");
 
-        // Verifica se os dados necessários estão disponíveis
         if (!token || !idUsuario) {
             console.warn("Token ou ID do usuário não encontrado.");
             return;
         }
 
-        // Faz requisição para buscar receitas concluídas
         const response = await fetch(`http://localhost:8080/usuarios/${idUsuario}/receitas`, {
             method: "GET",
             headers: {
@@ -171,35 +166,39 @@ async function carregarReceitas() {
             }
         });
 
-        // Verifica se a resposta foi bem-sucedida
         if (!response.ok) {
             console.error("Erro ao buscar receitas concluídas:", response.status);
             return;
         }
 
-        const receitas = await response.json(); // Converte a resposta para JSON
-        const grid = document.querySelector(".grid_pratos"); // Seleciona o container das receitas
-        grid.innerHTML = ""; // Limpa o conteúdo anterior
-
-        // Se o retorno for um único objeto, transforma em array
+        const receitas = await response.json();
         const listaReceitas = Array.isArray(receitas) ? receitas : [receitas];
+        const grid = document.querySelector(".grid_pratos");
+        grid.innerHTML = "";
 
-        // Itera sobre as receitas e renderiza cada uma
         listaReceitas.forEach(item => {
-            const receita = item?.receita; // Dados da receita
-            const nome = receita?.nome || "Receita"; // Nome da receita
-            const foto = item?.fotoPrato; // Foto do prato
+            const receita = item?.receita;
+            const nome = receita?.nome || "Receita";
+            const foto = item?.fotoPrato;
+            const idReceitaConcluida = item?.id;
 
-            if (foto) {
-                // Se a imagem não for uma URL completa, prefixe com "/"
-                const caminho = `http://localhost:8080${foto}`;
+            if (foto && idReceitaConcluida) {
+                const caminhoImagem = foto.startsWith("http")
+                    ? foto
+                    : `http://localhost:8080${foto}`;
 
-                // Adiciona o card da receita ao grid
-                grid.innerHTML += `
-                    <div class="receita_item">
-                        <img src="${caminho}" alt="${nome}">
-                    </div>
-                `;
+                const div = document.createElement("div");
+                div.className = "receita_item";
+                div.innerHTML = `<img src="${caminhoImagem}" alt="${nome}">`;
+
+                // Ao clicar, abre alerta/modal com os dados da receita
+                div.addEventListener("click", () => {
+                    const index = listaReceitas.findIndex(r => r.id === item.id);
+                    abrirAlertaReceitaComNavegacao(listaReceitas, index);
+                });
+                
+
+                grid.appendChild(div);
             }
         });
 
@@ -207,6 +206,64 @@ async function carregarReceitas() {
         console.error("Erro ao carregar receitas:", error);
     }
 }
+
+
+function gerarEstrelas(pontuacao) {
+    const estrelas = [];
+    for (let i = 0; i < 5; i++) {
+        const estrela = i < pontuacao
+            ? '<img src="../../../back-end/img/icones/nota-estrela.svg" alt="estrela cheia">'
+            : '<img src="../../../back-end/img/icones/nota-estrela-vazia.svg" alt="estrela vazia">';
+        estrelas.push(estrela);
+    }
+    return estrelas.join("");
+}
+
+
+function abrirAlertaReceitaComNavegacao(listaReceitas, indexInicial) {
+    let indexAtual = indexInicial;
+
+    const modal = document.createElement("div");
+    modal.className = "modal-feed";
+    document.body.appendChild(modal);
+
+    function renderModal(index) {
+        const item = listaReceitas[index];
+        const receita = item.receita;
+        const nome = receita?.nome || "Receita";
+        const descricao = receita?.descricao || "";
+        const avaliacao = item?.textoAvaliacao || "";
+        const pontuacao = item?.pontuacaoPrato || 0;
+        const imagem = item?.fotoPrato ? `http://localhost:8080${item.fotoPrato}` : "../../img/comida-placeholder.jpg";
+        const data = new Date(item.dataConclusao).toLocaleDateString("pt-BR", {
+            day: "2-digit", month: "long", year: "numeric"
+        });
+
+        modal.innerHTML = `
+            <div class="modal-conteudo">
+                <span class="fechar">&times;</span>
+                <img src="${imagem}" alt="${nome}" />
+                <h2>${nome}</h2>
+                <p>${descricao}</p>
+                <p>${avaliacao}</p>
+                <p><strong>Concluído em:</strong> ${data}</p>
+                <div class="estrelas">${gerarEstrelas(pontuacao)}</div>
+                <div class="navegacao">
+                    <button id="anterior" ${index === 0 ? "disabled" : ""}>←</button>
+                    <button id="proximo" ${index === listaReceitas.length - 1 ? "disabled" : ""}>→</button>
+                </div>
+            </div>
+        `;
+
+        modal.querySelector(".fechar").addEventListener("click", () => modal.remove());
+        modal.querySelector("#anterior")?.addEventListener("click", () => renderModal(--indexAtual));
+        modal.querySelector("#proximo")?.addEventListener("click", () => renderModal(++indexAtual));
+    }
+
+    renderModal(indexAtual);
+}
+
+
 
 // Função que carrega o avatar ativo do usuário e exibe na interface
 async function carregarAvatar() {

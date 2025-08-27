@@ -177,10 +177,10 @@ input:focus{
 .pontos_xp {
     position: absolute;
     left: 0;
-    top: calc(100% + var(--bar-space));
+    top: calc(30% + var(--bar-space));
     margin: 0;
     font-size: 14px;
-    color: #333;
+    color: #4A2C00;
 }
 
 /* ===== Rodapé ===== */
