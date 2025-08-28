@@ -155,7 +155,7 @@ function exibirAvaliacao(comentario, nota) {
   const totalEstrelas = 5;
   for (let i = 1; i <= totalEstrelas; i++) {
     const img = document.createElement('img');
-    img.src = '../../back-end/img/icones/nota-estrela.svg';
+    img.src = 'http://localhost:8080/img/icones/nota-estrela.svg';
     img.alt = i <= nota ? 'Estrela preenchida' : 'Estrela vazia';
     img.classList.add('estrela');
     if (i > nota) img.style.opacity = '0.3';
