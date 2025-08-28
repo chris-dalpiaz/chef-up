@@ -10,3 +10,12 @@
     filter: grayscale(100%);
     opacity: 0.3;
   }
+
+  .avaliacao-estrelas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  
