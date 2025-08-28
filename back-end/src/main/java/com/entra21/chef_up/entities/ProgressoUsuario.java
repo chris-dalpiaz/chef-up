@@ -15,8 +15,6 @@ public class ProgressoUsuario {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    private Integer nivel;
-
     private Integer xp;
 
     private LocalDateTime atualizadoEm;
@@ -46,14 +44,6 @@ public class ProgressoUsuario {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Integer getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(Integer nivel) {
-        this.nivel = nivel;
     }
 
     public Integer getXp() {

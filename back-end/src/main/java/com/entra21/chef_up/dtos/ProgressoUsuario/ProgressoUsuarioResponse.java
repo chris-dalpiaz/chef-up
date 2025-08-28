@@ -6,19 +6,9 @@ import java.time.LocalDateTime;
 
 public class ProgressoUsuarioResponse {
 
-    private Integer nivel;
-
     private Integer xp;
 
     private LocalDateTime atualizadoEm;
-
-    public Integer getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(Integer nivel) {
-        this.nivel = nivel;
-    }
 
     public Integer getXp() {
         return xp;
