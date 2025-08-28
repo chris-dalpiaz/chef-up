@@ -5,9 +5,20 @@ meta {
 }
 
 post {
-  url: 
-  body: none
-  auth: inherit
+  url: http://localhost:8080/receitas/1/etapas/1/ingredientes
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTYzNDUxMDksImV4cCI6MTc1NjM0ODcwOX0.EKd5tOPEQoCPlpcnPbAMrrV5RFGOQQgWJUSbSEPbCZk
+}
+
+body:json {
+  {
+    "idIngredienteReceita": 1,
+    "idEtapaReceita": 1
+  }
 }
 
 settings {

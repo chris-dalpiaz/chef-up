@@ -24,7 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class IngredienteEtapaReceitaService {
 
-    private static final String ERROR_STEP_NOT_FOUND = "Etapa não encontrada para a receita informada";
+    private static final String ERROR_STEP_NOT_FOUND = "Etapa não encontrada";
+    private static final String ERROR_STEP_RECIPE_NOT_FOUND = "Etapa não encontrada para a receita informada";
     private static final String ERROR_INGREDIENT_NOT_FOUND = "Ingrediente não encontrado";
     private static final String ERROR_INGREDIENT_NOT_IN_RECIPE = "Ingrediente não pertence à receita informada";
     private static final String ERROR_RECIPE_NOT_FOUND = "Receita não encontrada";
@@ -45,13 +46,15 @@ public class IngredienteEtapaReceitaService {
     }
 
     public List<IngredienteEtapaReceitaResponse> listIngredientsByStep(Integer recipeId, Integer stepId) {
-        // Verifica se a etapa existe e pertence à receita
-        Optional<EtapaReceita> etapa = stepRepository.findById(stepId);
-        if (etapa.isEmpty()) {
+
+        Optional<EtapaReceita> etapaOpt = stepRepository.findById(stepId);
+        if (etapaOpt.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_STEP_NOT_FOUND);
         }
 
-        if (!etapa.get().getReceita().getId().equals(recipeId)) {
+        EtapaReceita etapa = etapaOpt.get();
+
+        if (etapa.getReceita() == null || !etapa.getReceita().getId().equals(recipeId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERROR_STEP_NOT_OWNED);
         }
 
@@ -93,7 +96,7 @@ public class IngredienteEtapaReceitaService {
     public IngredienteEtapaReceitaResponse create(Integer recipeId, Integer stepId, IngredienteEtapaReceitaRequest request) {
         // Verifica se a etapa existe
         EtapaReceita etapa = stepRepository.findById(stepId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_STEP_NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_STEP_RECIPE_NOT_FOUND));
 
         // Verifica se a etapa pertence à receita informada
         if (!etapa.getReceita().getId().equals(recipeId)) {
@@ -122,7 +125,7 @@ public class IngredienteEtapaReceitaService {
     public IngredienteEtapaReceitaResponse update(Integer recipeId, Integer stepId, Integer ingredienteEtapaId, IngredienteEtapaReceitaRequest request) {
         // Busca a etapa da receita
         EtapaReceita etapa = stepRepository.findById(stepId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_STEP_NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_STEP_RECIPE_NOT_FOUND));
 
         // Verifica se a etapa pertence à receita informada
         if (!etapa.getReceita().getId().equals(recipeId)) {
