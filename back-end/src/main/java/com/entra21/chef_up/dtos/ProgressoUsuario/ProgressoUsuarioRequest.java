@@ -6,8 +6,6 @@ public class ProgressoUsuarioRequest {
 
     private Integer idUsuario;
 
-    private Integer nivel;
-
     private Integer xp;
 
     private LocalDateTime atualizadoEm;
@@ -18,14 +16,6 @@ public class ProgressoUsuarioRequest {
 
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public Integer getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(Integer nivel) {
-        this.nivel = nivel;
     }
 
     public Integer getXp() {

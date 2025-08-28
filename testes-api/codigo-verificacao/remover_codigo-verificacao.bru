@@ -1,0 +1,15 @@
+meta {
+  name: remover_codigo-verificacao
+  type: http
+  seq: 24
+}
+
+delete {
+  url: http://localhost:8080/codigos
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

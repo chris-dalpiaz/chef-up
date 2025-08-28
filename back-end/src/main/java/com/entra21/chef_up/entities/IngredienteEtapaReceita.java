@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class IngredienteEtapaReceita {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -13,7 +14,7 @@ public class IngredienteEtapaReceita {
     private IngredienteReceita ingredienteReceita;
 
     @ManyToOne()
-    @JoinColumn(name = "etapa_receita")
+    @JoinColumn(name = "etapa_receita_id")
     private EtapaReceita etapaReceita;
 
     public Integer getId() {
