@@ -36,6 +36,8 @@ async function processarPrato() {
     botao.classList.add('carregando');
   }
 
+  let sucesso = false; // ← controle de sucesso
+
   const inputFile = document.getElementById('input_file');
   if (!inputFile?.files.length) {
     alert('Insira a imagem do prato');
@@ -102,6 +104,8 @@ async function processarPrato() {
     setTimeout(() => {
       alert('Receita concluída salva com sucesso!');
     }, 100);
+
+    sucesso = true; // ← marca como sucesso
   }
   catch (err) {
     console.error('processarPrato error:', err);
@@ -110,8 +114,8 @@ async function processarPrato() {
   finally {
     desbloquearBotao(botao);
 
-    if (botao) {
-      botao.removeEventListener('click', aoClicarBotao); // remove corretamente
+    if (sucesso && botao) {
+      botao.removeEventListener('click', aoClicarBotao);
       botao.textContent = 'Voltar à tela inicial';
       botao.classList.remove('carregando');
       botao.classList.add('botao-voltar');
@@ -121,6 +125,7 @@ async function processarPrato() {
     }
   }
 }
+
 
 // *********************************************
 // Função auxiliar para desbloquear botão
