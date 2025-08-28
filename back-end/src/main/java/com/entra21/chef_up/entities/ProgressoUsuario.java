@@ -15,6 +15,7 @@ public class ProgressoUsuario {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+
     private Integer xp;
 
     private LocalDateTime atualizadoEm;
@@ -45,6 +46,7 @@ public class ProgressoUsuario {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
 
     public Integer getXp() {
         return xp;

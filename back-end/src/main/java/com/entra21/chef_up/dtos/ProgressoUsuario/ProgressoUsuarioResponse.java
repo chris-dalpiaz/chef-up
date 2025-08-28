@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class ProgressoUsuarioResponse {
 
+
     private Integer xp;
 
     private LocalDateTime atualizadoEm;

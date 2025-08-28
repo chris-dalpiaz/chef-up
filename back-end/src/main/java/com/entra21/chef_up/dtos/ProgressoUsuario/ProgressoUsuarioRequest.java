@@ -6,6 +6,7 @@ public class ProgressoUsuarioRequest {
 
     private Integer idUsuario;
 
+
     private Integer xp;
 
     private LocalDateTime atualizadoEm;
@@ -17,6 +18,7 @@ public class ProgressoUsuarioRequest {
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
+
 
     public Integer getXp() {
         return xp;

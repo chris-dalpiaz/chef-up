@@ -159,7 +159,7 @@ async function carregarReceitas() {
                     const index = listaReceitas.findIndex(r => r.id === item.id);
                     abrirAlertaReceitaComNavegacao(listaReceitas, index);
                 });
-                
+
 
                 grid.appendChild(div);
             }
@@ -173,13 +173,20 @@ async function carregarReceitas() {
 
 function gerarEstrelas(pontuacao) {
     const estrelas = [];
+
     for (let i = 0; i < 5; i++) {
-        const estrela = i < pontuacao
-            ? '<img src="../../../back-end/img/icones/nota-estrela.svg" alt="estrela cheia">'
-            : '<img src="../../../back-end/img/icones/nota-estrela-vazia.svg" alt="estrela vazia">';
+        const classeOpacidade = i < pontuacao ? 'estrela-cheia' : 'estrela-vazia';
+
+        const estrela = `<img 
+      src="../../../back-end/img/icones/nota-estrela.svg" 
+      alt="${i < pontuacao ? 'estrela cheia' : 'estrela vazia'}" 
+      class="estrela ${classeOpacidade}"
+    >`;
+
         estrelas.push(estrela);
     }
-    return estrelas.join("");
+
+    return estrelas.join('');
 }
 
 

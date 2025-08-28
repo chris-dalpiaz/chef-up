@@ -4,9 +4,31 @@
     width: 5%;
     height: 5%;
     transition: filter 0.3s ease, opacity 0.3s ease;
+    margin-right: 0.2rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
   }
   
   .estrela.vazia {
     filter: grayscale(100%);
     opacity: 0.3;
   }
+
+  .avaliacao-estrelas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  
+  button.carregando {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.botao-voltar {
+  opacity: 1 !important;
+  cursor: pointer !important;
+  background-color: #4caf50;
+  color: white;
+}
