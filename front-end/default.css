@@ -1,45 +1,68 @@
 a {
-  color: inherit; /* Herda a cor do elemento pai */
-  text-decoration: none; /* Remove o sublinhado */
-  font: inherit; /* Herda a fonte do elemento pai */
+  color: inherit;
+  /* Herda a cor do elemento pai */
+  text-decoration: none;
+  /* Remove o sublinhado */
+  font: inherit;
+  /* Herda a fonte do elemento pai */
 }
 
 body {
-  font-family: 'DM Sans';
+  font-family: 'DM Sans', 'Roboto', sans-serif;
   background-color: #FFF8E1;
-  margin-left: 2vh;
-  margin-right: 2vh;
+  color: #331e00;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  max-width: 80rem;
+  padding: 2vh 5vh;
 }
 
-h1 {
-  font-size: 32px;
+h1,
+h2 {
+  margin: 0 0 2 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 3rem;
 }
+
 
 h3 {
-  font-size: 23px;
-  text-align: center;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 2rem;
 }
 
 label,
 p {
-  font-size: 18px;
+  font-size: 2rem;
 }
 
 button {
   font-family: 'DM Sans';
   background-color: #F58700;
   border: none;
-  
-  padding: 1em 2em;
-  border-radius: 2vh;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
   cursor: pointer;
   text-align: center;
   align-items: center;
-  font-size: 18px;
-  max-width: 414px;
+  font-size: 2rem;
+  max-width: 41rem;
   width: 93.76%;
-  font-weight:650;
- 
+  font-weight: 65rem;
+  color: #fff;
+  font-size: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  transition: background-color 0.3s ease;
+  background-color: #f9c87a;
 }
 
 .botao {
@@ -49,26 +72,23 @@ button {
   align-items: center;
   /* Alinha verticalmente */
   flex-direction: column;
-  
-  
 }
 
 input {
-  width: 90%;
-  padding: 15px 15px;
-  border-radius: 1vh;
+  padding: 1.5rem 1.5rem;
+  border-radius: 1rem;
   margin: 10px;
   border: 1px solid #ccc;
 }
 
-input:focus{
+input:focus {
   border-color: #f58700;
   outline: none;
-  transition: 0.3s; 
+  transition: 0.3s;
 }
 
 #botaocriar {
-  margin-top: 5vh;
+  margin-top: 5rem;
 }
 
 .formulario {
@@ -78,141 +98,188 @@ input:focus{
 
 .nome_usuario {
   font-weight: bolder;
-  font-size: 20px;
+  font-size: 2rem;
 }
 
 .titulo_usuario {
-  font-size: 14px;
+  font-size: 1.5rem;
 }
 
 .adjetivos_usuario {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5vh;
-  font-size: 14px;
+  gap: 0.5rem;
+  font-size: 1.5rem;
   text-align: center;
   align-items: center;
-  padding-top: 1vh;
+  padding-top: 1rem;
+  border-radius: 0.7rem;
 }
 
 .adjetivo {
-  background-color: #FFE4C2;
-  /* cor bege clara */
-  border: 2px solid #F58700;
-  border-radius: 15px;
-  padding: 6px 12px;
-  font-size: 14px;
+  background-color: #F58700;
+  /* Very light orange */
+  padding: 0.4vh 1vw;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  color: white;
+  /* Primary orange */
+  font-weight: bolder;
+  border-radius: 0.7rem;
 }
 
-.botao-bloqueado{
+
+.botao-bloqueado {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 /* ===== Barra de progresso ===== */
-:root{
-  --bar-height: 17px;   /* altura da barra (ajuste se quiser) */
-  --bar-space: 8px;     /* espaço entre barra e texto */
+:root {
+  --bar-height: 1.7rem;
+  /* altura da barra (ajuste se quiser) */
+  --bar-space: 0.8rem;
+  /* espaço entre barra e texto */
 }
 
-/* container principal */
 .barra_progresso {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 3vh 0;
+  background-color: #fff;
+  /* White background */
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  padding: 1.5vh;
+  margin-bottom: 3vh;
+  display: flex;
+  align-items: center;
+  gap: 1vh;
 }
 
-/* losango (nível) */
 .nivel {
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    background-color: #2bb3a3;
-    color: #000000;
-    font-weight: bold;
-    transform: rotate(45deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  flex-shrink: 0;
+  color: #4A2C00;
+  background-color: #F58700;
+  /* Primary orange */
+  color: white;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.6rem;
+  transform: rotate(45deg);
+}
+
+.barra_bg {
+  background-color: #FFE0B2;
+  /* Light orange */
+  height: 0.8rem;
+  border-radius: 0.4rem;
+  overflow: hidden;
 }
 
 /* número dentro do losango fica na posição correta */
 .nivel span {
-    transform: rotate(-45deg);
-    font-size: 12px;
-    font-weight: bold;
+  transform: rotate(-45deg);
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 /* aqui o container da barra tem SÓ a altura da barra */
 .barra_container {
-    flex: 1;
-    position: relative;
-    height: var(--bar-height);
-}
-
-/* fundo da barra e overflow para a barra de xp */
-.barra_bg {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color: #E6E6E6;
-    border-radius: 20px;
-    overflow: hidden;
+  flex: 1;
+  position: relative;
+  height: var(--bar-height);
 }
 
 /* barra preenchida (XP) */
 .barra_xp {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: var(--xp, 0%);
-    background-color: #fcb347;
-    border-radius: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 0.4rem;
+  transition: width 0.3s ease;
+  background-color: #5ccb5f;
+  border-radius: 20px;
 }
 
 /* pontos embaixo da barra — removidos do fluxo para não aumentar a altura do container */
 .pontos_xp {
-    position: absolute;
-    left: 0;
-    top: calc(100% + var(--bar-space));
-    margin: 0;
-    font-size: 14px;
-    color: #333;
+  position: absolute;
+  left: 0;
+  top: calc(60% + var(--bar-space));
+  margin: 0;
+  font-size: 1.4rem;
+  color: #4A2C00;
 }
 
 /* ===== Rodapé ===== */
 .footer {
-  position: fixed; /* fixa o rodapé na tela, mesmo quando rolar a página */
-  bottom: 0;       /* posiciona o rodapé colado na parte inferior da janela */
-  left: 0;         /* posiciona o rodapé a partir da borda esquerda da janela */
-  width: 100%;     /* o rodapé ocupa toda a largura da tela */
-  background: #fff; /* fundo branco para o rodapé */
-  display: flex;   /* usa flexbox para organizar os itens dentro do rodapé */
-  justify-content: space-around; /* distribui os itens igualmente espaçados horizontalmente */
-  align-items: center; /* alinha os itens verticalmente no centro */
-  padding: 8px 0;  /* espaço interno acima e abaixo (8px), sem espaçamento nas laterais */
-  border-top: 1px solid #ddd; /* uma linha fina e cinza clara no topo do rodapé */
+  z-index: 9;
+  position: fixed;
+  /* fixa o rodapé na tela, mesmo quando rolar a página */
+  bottom: 0;
+  /* posiciona o rodapé colado na parte inferior da janela */
+  left: 0;
+  /* posiciona o rodapé a partir da borda esquerda da janela */
+  width: 100%;
+  /* o rodapé ocupa toda a largura da tela */
+  background: #fff;
+  /* fundo branco para o rodapé */
+  display: flex;
+  /* usa flexbox para organizar os itens dentro do rodapé */
+  justify-content: space-around;
+  /* distribui os itens igualmente espaçados horizontalmente */
+  align-items: center;
+  /* alinha os itens verticalmente no centro */
+  padding: 0.8rem 0;
+  /* espaço interno acima e abaixo (8px), sem espaçamento nas laterais */
+  border-top: 0.1rem solid #ddd;
+  /* uma linha fina e cinza clara no topo do rodapé */
 }
 
 .footer-item {
-  display: flex;              /* cada item do rodapé também é flex container */
-  flex-direction: column;    /* organiza os elementos dentro do item em coluna (vertical) */
-  align-items: center;       /* centraliza os elementos dentro do item horizontalmente */
-  font-size: 14px;           /* tamanho da fonte do texto */
-  color: #888;               /* cor cinza para o texto padrão */
-  cursor: pointer;           /* cursor muda para mãozinha ao passar o mouse, indicando que é clicável */
-  transition: color 0.2s ease; /* transição suave de 0.2 segundos na mudança da cor */
+  display: flex;
+  /* cada item do rodapé também é flex container */
+  flex-direction: column;
+  /* organiza os elementos dentro do item em coluna (vertical) */
+  align-items: center;
+  /* centraliza os elementos dentro do item horizontalmente */
+  font-size: 1.4rem;
+  /* tamanho da fonte do texto */
+  color: #888;
+  /* cor cinza para o texto padrão */
+  cursor: pointer;
+  /* cursor muda para mãozinha ao passar o mouse, indicando que é clicável */
+  transition: color 0.2s ease;
+  /* transição suave de 0.2 segundos na mudança da cor */
 }
 
 .footer-item::before {
-  content: attr(data-icon); /* insere antes do conteúdo do item o valor do atributo data-icon (emoji) */
-  font-size: 22px;          /* tamanho maior para o emoji */
-  margin-bottom: 4px;       /* espaço abaixo do emoji para separar do texto */
+  content: attr(data-icon);
+  /* insere antes do conteúdo do item o valor do atributo data-icon (emoji) */
+  font-size: 2.2rem;
+  /* tamanho maior para o emoji */
+  margin-bottom: 0.4rem;
+  /* espaço abaixo do emoji para separar do texto */
 }
 
 .footer-item.selected {
-  color: #FFA336; /* muda a cor do texto para laranja quando o item está selecionado */
+  color: #FFA336;
+  /* muda a cor do texto para laranja quando o item está selecionado */
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  width: 50rem;           /* Largura fixa para maior espaço */
+  padding: 2rem 2rem 2rem 2rem;
+  background-color: #fff; /* Fundo branco */
+  border-radius: 10px;    /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+  margin: 0 auto;         /* Centraliza horizontalmente */
+  gap: 10px;              /* Espaçamento entre os elementos */
 }

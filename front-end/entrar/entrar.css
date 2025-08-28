@@ -1,12 +1,5 @@
-/* Estilo base (desktop) */
-body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: #fff8f1;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+body{
+  max-width: none;
 }
 
 .tittles {
@@ -31,27 +24,18 @@ body {
     margin-bottom: 20px;
 }
 
-.formulario {
-    display: flex;
-    flex-direction: column;
-    width: 350px;           /* Largura fixa para maior espaço */
-    padding: 25px;          /* Preenchimento interno maior */
-    background-color: #fff; /* Fundo branco */
-    border-radius: 10px;    /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
-    margin: 0 auto;         /* Centraliza horizontalmente */
-    gap: 10px;              /* Espaçamento entre os elementos */
+label {
+  margin-top: 0;          /* Remove margem negativa extrema */
+  font-weight: bold;
+  text-align: left;
+  padding: 1%;
 }
 
-label {
-    margin-top: 0;          /* Remove margem negativa extrema */
-    font-weight: bold;
-    text-align: left;
-    padding: 1%;
+label, p{
+  font-size: 1.2rem;
 }
 
 input {
-    width: 100%;
     padding: 12px;
     margin-top: 5px;
     border-radius: 6px;
@@ -101,7 +85,176 @@ input {
 #aviso {
     text-align: center;
     margin-top: 15px;
-    font-size: 14px;
+    font-size: 1.5rem;
+}
+
+/* ===== ZOOM 200% - MEDIA QUERY ESPECIAL ===== */
+/* Detecta zoom de 200% através da resolução efetiva da tela */
+@media screen and (-webkit-device-pixel-ratio: 2) and (max-resolution: 191dpi),
+       screen and (min-resolution: 192dpi) and (max-resolution: 300dpi) {
+  
+  body {
+    padding: 10px; /* Reduz padding para economizar espaço */
+    font-size: 14px; /* Reduz tamanho base da fonte */
+  }
+
+  .tittles {
+    margin-top: 20px; /* Reduz margem superior */
+    min-height: 40vh; /* Reduz altura mínima */
+    max-width: 300px; /* Reduz largura máxima */
+  }
+
+  .tittle {
+    font-size: 18px; /* Reduz tamanho do título */
+    margin-bottom: -5px;
+  }
+
+  .subtittle {
+    font-size: 12px; /* Reduz subtítulo */
+    margin-bottom: 15px;
+  }
+
+  .formulario {
+    width: 280px; /* Reduz largura do formulário */
+    padding: 15px; /* Reduz padding */
+    gap: 8px; /* Reduz espaçamento entre elementos */
+    border-radius: 8px; /* Ajusta bordas */
+  }
+
+  label {
+    font-size: 12px; /* Reduz tamanho da label */
+    padding: 0.5%;
+  }
+
+  input {
+    padding: 8px; /* Reduz padding dos inputs */
+    font-size: 12px; /* Reduz tamanho da fonte */
+    border-radius: 4px;
+    box-sizing: border-box; /* Garante que não ultrapasse a largura */
+  }
+
+  .esqueci-senha {
+    margin: 8px 0; /* Reduz margem */
+  }
+
+  .esqueci-senha a {
+    font-size: 11px; /* Reduz tamanho do link */
+  }
+
+  .botao {
+    top: 88%; /* Ajusta posição do botão */
+    max-width: 300px; /* Reduz largura máxima */
+    width: 85%;
+    margin-top: 15px;
+  }
+
+  .botao button {
+    padding: 10px; /* Reduz padding do botão */
+    font-size: 13px; /* Reduz tamanho da fonte */
+    border-radius: 8px;
+  }
+
+  #aviso {
+    font-size: 10px; /* Reduz tamanho do aviso */
+    margin-top: 10px;
+  }
+}
+
+/* ===== ZOOM 200% + MOBILE (para zoom em dispositivos móveis) ===== */
+@media screen and (-webkit-device-pixel-ratio: 2) and (max-width: 480px) {
+  
+  body {
+    padding: 8px;
+  }
+
+  .tittles {
+    margin-top: 10px;
+    width: 98%;
+    min-height: 30vh;
+  }
+
+  .tittle {
+    font-size: 16px;
+  }
+
+  .subtittle {
+    font-size: 10px;
+  }
+
+  .formulario {
+    width: 95%; /* Usa quase toda a largura disponível */
+    padding: 12px;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 10px;
+  }
+
+  input {
+    padding: 6px;
+    font-size: 10px;
+  }
+
+  .esqueci-senha {
+    margin: 5px 0;
+  }
+
+  .esqueci-senha a {
+    font-size: 9px;
+  }
+
+  .botao {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .botao button {
+    padding: 8px;
+    font-size: 11px;
+    border-radius: 6px;
+  }
+
+  #aviso {
+    font-size: 9px;
+  }
+}
+
+/* ===== ZOOM 200% + TABLET ===== */
+@media screen and (-webkit-device-pixel-ratio: 2) and (min-width: 481px) and (max-width: 1024px) {
+  
+  .tittles {
+    margin-top: 15px;
+    min-height: 35vh;
+  }
+
+  .formulario {
+    width: 260px;
+    padding: 12px;
+  }
+
+  input {
+    padding: 7px;
+    font-size: 11px;
+  }
+
+  .esqueci-senha a {
+    font-size: 10px;
+  }
+
+  .botao {
+    top: 85%;
+    max-width: 280px;
+  }
+
+  .botao button {
+    padding: 9px;
+    font-size: 12px;
+  }
 }
 
 /* Tablet (largura entre 768px e 1024px) */

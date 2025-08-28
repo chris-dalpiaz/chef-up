@@ -28,11 +28,21 @@ public class ReceitaUsuario {
 
     private String textoAvaliacao;
 
+    private Integer xp;
+
     @Version
     private Integer version;
 
     public String getTextoAvaliacao() {
         return textoAvaliacao;
+    }
+
+    public Integer getXp() {
+        return xp;
+    }
+
+    public void setXp(Integer xp) {
+        this.xp = xp;
     }
 
     public void setTextoAvaliacao(String textoAvaliacao) {

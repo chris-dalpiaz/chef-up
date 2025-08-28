@@ -2,8 +2,8 @@
 // Configurações
 // *********************************************
 const API_BASE = 'http://localhost:8080';
-const token    = localStorage.getItem('token');
-const userId   = parseInt(localStorage.getItem('id'), 10);
+const token = localStorage.getItem('token');
+const userId = parseInt(localStorage.getItem('id'), 10);
 
 // *********************************************
 // Utilitário: lê JSON ou lança erro detalhado
@@ -58,18 +58,18 @@ async function processarPrato() {
 
   try {
     // 3) upload da imagem para avaliação
-    const file     = inputFile.files[0];
+    const file = inputFile.files[0];
     const formData = new FormData();
     formData.append('file', file);
 
     console.log('Enviando POST /receitas/.../avaliar-prato');
     const avaliarResp = await fetch(
       `${API_BASE}/receitas/${receitaId}/avaliar-prato`, {
-        method:  'POST',
-        mode:    'cors',
-        headers: { Authorization: `Bearer ${token}` },
-        body:    formData
-      }
+      method: 'POST',
+      mode: 'cors',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData
+    }
     );
 
     // parse do JSON ou erro detalhado
@@ -86,9 +86,9 @@ async function processarPrato() {
       .replace(/Z$/, '');
 
     const payload = {
-      idReceita:      receitaId,
-      dataConclusao,             
-      fotoPrato:      `/uploads/temp/${filename}`,
+      idReceita: receitaId,
+      dataConclusao,
+      fotoPrato: `/uploads/temp/${filename}`,
       pontuacaoPrato: nota,
       textoAvaliacao: comentario
     };
@@ -99,14 +99,14 @@ async function processarPrato() {
     console.log('Enviando POST /usuarios/.../receitas');
     const salvarResp = await fetch(
       `${API_BASE}/usuarios/${userId}/receitas`, {
-        method:  'POST',
-        mode:    'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization:  `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      }
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    }
     );
 
     // parse do JSON ou erro detalhado (poderá ser {} se o body for vazio)
@@ -116,7 +116,10 @@ async function processarPrato() {
     );
 
     console.log('Resposta salvar-prato JSON:', salvarJson);
-    alert('Receita concluída salva com sucesso!');
+    exibirAvaliacao(comentario, nota);
+    setTimeout(() => {
+      alert('Receita concluída salva com sucesso!');
+    }, 100);
   }
   catch (err) {
     console.error('processarPrato error:', err);
@@ -125,12 +128,52 @@ async function processarPrato() {
 }
 
 // *********************************************
+// Função para exibir avaliação e estrelas
+// *********************************************
+function exibirAvaliacao(comentario, nota) {
+  const textoEl = document.getElementById('text');
+  const estrelasEl = document.getElementById('star');
+
+  if (!textoEl || !estrelasEl) {
+    console.warn('Elementos #text ou #star não encontrados no DOM');
+    return;
+  }
+
+  textoEl.textContent = comentario;
+  estrelasEl.innerHTML = ''; // limpa estrelas anteriores
+
+  const totalEstrelas = 5;
+  for (let i = 1; i <= totalEstrelas; i++) {
+    const img = document.createElement('img');
+    img.src = '../../back-end/img/icones/nota-estrela.svg';
+    img.alt = i <= nota ? 'Estrela preenchida' : 'Estrela vazia';
+    img.classList.add('estrela');
+    if (i > nota) img.style.opacity = '0.3'; // visual de estrela "vazia"
+    estrelasEl.appendChild(img);
+  }
+}
+
+// *********************************************
 // Hook do botão
 // *********************************************
 function carregarEvento() {
-  document
-    .getElementById('botao_avaliar')
-    ?.addEventListener('click', processarPrato);
+  const botao = document.getElementById('botao_avaliar');
+  if (botao) {
+    botao.addEventListener('click', function (e) {
+      e.preventDefault(); // impede comportamento padrão
+      processarPrato();   // chama a função principal
+    });
+  }
 }
 
-window.addEventListener('load', carregarEvento);
+
+window.addEventListener('load', () => {
+  carregarEvento();  // só depois ativa os eventos
+});
+
+window.addEventListener('beforeunload', function (e) {
+  console.warn('⚠️ Página está tentando recarregar!');
+  console.trace(); // mostra a origem da chamada
+  e.preventDefault();
+  e.returnValue = '';
+});

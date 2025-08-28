@@ -1,36 +1,44 @@
 body {
-    margin: 0;
-    padding: 2vh 4vw;
-    background-color: #FFF8E1;
-    max-width: 1200px; /* Limita largura no desktop */
-    margin: 0 auto; /* Centraliza o conteúdo */
-    padding: 2vh max(4vw, 20px); /* Padding mínimo de 20px */
+    max-width: 120rem;
+    /* Limita largura no desktop */
+    margin: 0 auto;
+    /* Centraliza o conteúdo */
+    padding: 2vh max(4vw, 20px);
+    /* Padding mínimo de 20px */
+    text-align: center;
+    align-items: center;
 }
 
 h1 {
     display: flex;
     justify-content: center;
-    font-size: clamp(1.5rem, 4vw, 2.5rem); /* Tamanho responsivo */
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    /* Tamanho responsivo */
 }
 
 input {
     margin-left: 0;
 }
 
-.adjetivo, .pronome {
+.adjetivo,
+.pronome {
+    color: #331e00;
     background-color: #E6E6E6;
     border: none;
     font-weight: 400;
     border-radius: 15px;
     border: 1px solid #fffaf5;
     padding: 0.5vh 1vw;
-    font-size: clamp(14px, 3.5vw, 18px); /* Tamanho responsivo com limites */
+    font-size: clamp(14px, 3.5vw, 18px);
+    /* Tamanho responsivo com limites */
     max-width: fit-content;
     width: auto;
-    min-padding: 8px 12px; /* Padding mínimo */
+    padding-top: 8px 12px;
+    /* Padding mínimo */
 }
 
-.adjetivo:hover, .pronome:hover {
+.adjetivo:hover,
+.pronome:hover {
     background-color: #FFE4C2;
     border: 1px solid #F58700;
     transition: 0.3s;
@@ -40,15 +48,34 @@ input {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: clamp(4px, 0.5vh, 8px); /* Gap responsivo */
+    gap: clamp(4px, 0.5vh, 8px);
+    /* Gap responsivo */
     align-items: center;
-    justify-content: center; /* Centraliza no desktop */
+    justify-content: center;
+    /* Centraliza no desktop */
 }
 
-.botao_comum {
-    margin: 0;
-    justify-content: center;
-    margin-top: clamp(60px, 110px, 120px); /* Margem responsiva */
+#btn_avatar{
+    background-color: #5ccb5f;
+}
+
+#btn_avatar:hover{
+    background-color: #7cd67e;
+}
+
+button{
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+#alterar_avatar{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#salvar{
+    margin-top: 3rem;
 }
 
 .bloqueado {
@@ -57,12 +84,17 @@ input {
     pointer-events: none;
 }
 
-.adjetivo.ativo, .pronome.ativo {
+.adjetivo.ativo,
+.pronome.ativo {
     background-color: #ff9800;
     color: white;
     border: none;
     box-shadow: 0 0 5px rgba(255, 152, 0, 0.6);
     transition: background-color 0.3s ease;
+}
+
+.cadastro, .email{
+    text-align: left;
 }
 
 /* ===== MEDIA QUERIES PARA RESPONSIVIDADE ===== */
@@ -72,21 +104,19 @@ input {
     body {
         padding: 2vh 3vw;
     }
-    
-    .adjetivo, .pronome {
+
+    .adjetivo,
+    .pronome {
         font-size: 16px;
         padding: 8px 12px;
         border-radius: 12px;
     }
-    
+
     .tag_usuario {
         gap: 6px;
         justify-content: flex-start;
     }
-    
-    .botao_comum {
-        margin-top: 80px;
-    }
+
 }
 
 /* Tablet (481px até 768px) */
@@ -95,20 +125,18 @@ input {
         padding: 2vh 6vw;
         max-width: 100%;
     }
-    
-    .adjetivo, .pronome {
+
+    .adjetivo,
+    .pronome {
         font-size: 16px;
         padding: 10px 16px;
     }
-    
+
     .tag_usuario {
         gap: 8px;
         justify-content: center;
     }
-    
-    .botao_comum {
-        margin-top: 100px;
-    }
+
 }
 
 /* Desktop pequeno (769px até 1024px) */
@@ -117,12 +145,13 @@ input {
         max-width: 900px;
         padding: 3vh 40px;
     }
-    
-    .adjetivo, .pronome {
+
+    .adjetivo,
+    .pronome {
         font-size: 16px;
         padding: 10px 18px;
     }
-    
+
     .tag_usuario {
         gap: 10px;
         justify-content: center;
@@ -132,27 +161,27 @@ input {
 /* Desktop grande (1025px+) */
 @media (min-width: 1025px) {
     body {
-        max-width: 1000px; /* Mais estreito no desktop */
+        max-width: 1000px;
+        /* Mais estreito no desktop */
         padding: 3vh 40px;
     }
-    
-    .adjetivo, .pronome {
+
+    .adjetivo,
+    .pronome {
         font-size: 17px;
         padding: 12px 20px;
         border-radius: 18px;
     }
-    
+
     .tag_usuario {
         gap: 12px;
         justify-content: center;
-        max-width: 800px; /* Limita ainda mais a largura dos botões */
+        max-width: 800px;
+        /* Limita ainda mais a largura dos botões */
         margin: 0 auto;
     }
-    
-    .botao_comum {
-        margin-top: 120px;
-    }
-    
+
+
     /* Layout desktop: email igual ao nome do usuário */
     .container-email-input {
         display: flex;
@@ -162,15 +191,16 @@ input {
         max-width: 500px;
         margin: 20px auto;
     }
-    
+
     .email-label {
         font-size: 16px;
         font-weight: 400;
         color: #333;
         margin-bottom: 5px;
     }
-    
-    input[type="email"], input[type="text"] {
+
+    input[type="email"],
+    input[type="text"] {
         width: 100%;
         padding: 12px 16px;
         border: 2px solid #E6E6E6;
@@ -179,8 +209,9 @@ input {
         transition: border-color 0.3s ease;
         box-sizing: border-box;
     }
-    
-    input[type="email"]:focus, input[type="text"]:focus {
+
+    input[type="email"]:focus,
+    input[type="text"]:focus {
         outline: none;
         border-color: #F58700;
         box-shadow: 0 0 5px rgba(245, 135, 0, 0.3);
@@ -193,11 +224,11 @@ input {
         max-width: 1100px;
         padding: 4vh 60px;
     }
-    
+
     .tag_usuario {
         max-width: 900px;
     }
-    
+
     /* Mantém o layout vertical igual ao nome */
     .container-email-input {
         max-width: 550px;

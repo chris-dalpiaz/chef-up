@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Receita</title>
+  <link rel="shortcut icon" href="http://localhost:8080/img/logos/favicon-64x64.png" type="image/x-icon">
+ 
+
+  <!-- Fontes e Estilos -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans&family=Roboto&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../default.css" />
+  <link rel="stylesheet" href="pagina-receita.css" />
+
+  <!-- Script da Página -->
+  <script src="pagina-receita.js" defer></script>
+</head>
+
+<body>
+  <div id="receita-container">
+
+    <!-- Navegação -->
+    <div class="nav">
+      <button class="svg-button" type="button" onclick="voltar()">
+        <!-- SVG Voltar -->
+      </button>
+
+      <button class="xp-button" type="button" onclick="abrirXP()">
+        <!-- SVG XP (sem os três pontinhos) -->
+      </button>
+    </div>
+
+    <!-- Imagem da Receita -->
+    <div class="imagem-receita">
+      <img src="" alt="Imagem da Receita" />
+    </div>
+
+    <!-- Conteúdo da Receita -->
+    <div class="receita-container content">
+      <h1 class="receita-titulo">Carregando...</h1>
+      <p class="receita-info">-- minutos • -- porções</p>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab ativo">Utensílios</button>
+        <button class="tab">Ingredientes</button>
+      </div>
+
+      <!-- Conteúdo Dinâmico -->
+      <div class="conteudo"></div>
+
+      <!-- Botões de Ação -->
+      <div class="botoes">
+        <button class="btn-feito" id="btn-feito">✔ Feito</button>
+        <button class="btn-comecar">Começar</button>
+      </div>
+
+      <!-- Botão Favorito -->
+      <button class="favorite-button" onclick="toggleFavorito()" aria-label="Favoritar">
+        <!-- SVG Coração -->
+      </button>
+    </div>
+
+  </div>
+</body>
+</html>
