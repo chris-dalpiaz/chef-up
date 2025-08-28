@@ -157,3 +157,15 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+.estrela {
+    transition: opacity 0.3s ease;
+  }
+  
+  .estrela-vazia {
+    opacity: 0.3;
+  }
+  
+  .estrela-cheia {
+    opacity: 1;
+  }
