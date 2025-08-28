@@ -21,3 +21,14 @@
     margin-top: 8px;
   }
   
+  button.carregando {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.botao-voltar {
+  opacity: 1 !important;
+  cursor: pointer !important;
+  background-color: #4caf50;
+  color: white;
+}
