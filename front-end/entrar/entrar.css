@@ -55,33 +55,6 @@ input {
     color: black;
 }
 
-.botao {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 93%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 414px;
-    width: 90%;
-}
-
-.botao button {
-    background-color: #ff8c00;
-    color: rgb(5, 5, 5);
-    border: none;
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 16px;
-    width: 100%;
-    cursor: pointer;
-}
-
-.botao button:hover {
-    background-color: #e57a00;
-}
-
 #aviso {
     text-align: center;
     margin-top: 15px;

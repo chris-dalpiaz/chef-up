@@ -22,25 +22,19 @@ function configurarEventos() {
     // Obtém o elemento com ID "pular" do DOM (Document Object Model)
     const botaoPular = document.getElementById("pular");
 
-    // Obtém o elemento com ID "pular1"
-    const botaoPular1 = document.getElementById("pular1");
-
     // Obtém o elemento com ID "proximo1"
     const botaoProximo1 = document.getElementById("proximo1");
 
     // Obtém o elemento com ID "proximo2"
     const botaoProximo2 = document.getElementById("proximo2");
 
+    // Obtém o elemento com ID "proximo3"
+    const botaoProximo3 = document.getElementById("proximo3");
+
     // Verifica se o botão "pular" existe na página
     if (botaoPular) {
         // Adiciona um ouvinte de evento de clique que chama a função de redirecionamento para o perfil
         botaoPular.addEventListener("click", redirecionarPerfil);
-    }
-
-    // Verifica se o botão "pular1" existe
-    if (botaoPular1) {
-        // Adiciona o evento de clique para redirecionar ao perfil
-        botaoPular1.addEventListener("click", redirecionarPerfil);
     }
 
     // Verifica se o botão "proximo1" existe
@@ -53,6 +47,12 @@ function configurarEventos() {
     if (botaoProximo2) {
         // Adiciona o evento de clique para redirecionar à página de experiência com amigos
         botaoProximo2.addEventListener("click", irParaExperiencieComAmigos);
+    }
+
+    // Verifica se o botão "proximo3" existe
+    if (botaoProximo3) {
+        // Adiciona o evento de clique para redirecionar ao perfil
+        botaoProximo3.addEventListener("click", redirecionarPerfil);
     }
 }
 
