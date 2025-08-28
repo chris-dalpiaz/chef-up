@@ -7,7 +7,11 @@ meta {
 get {
   url: http://localhost:8080/receitas/1/etapas/1/ingredientes
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTYzNDQzNTEsImV4cCI6MTc1NjM0Nzk1MX0.4cgvThn6ggyx5JhjidWVHi10shzqUFezvzY8gBgoobg
 }
 
 settings {
