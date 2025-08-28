@@ -586,8 +586,10 @@ INSERT INTO ingrediente_receita (receita_id, ingrediente_id, unidade_medida, qua
 
 -- 9. etapas da receita (depende de receita)
 -- 1. Macarrão à Bolonhesa
+INSERT INTO etapa_receita (ordem, conteudo, receita_id, imagem_etapa, version) VALUES
+(1, 'Cozinhar o macarrão até ficar al dente.', 1, "http://localhost:8080/img/etapa-receita/alho-oleo.jpg" , 0);
+
 INSERT INTO etapa_receita (ordem, conteudo, receita_id, version) VALUES
-(1, 'Cozinhar o macarrão até ficar al dente.', 1, 0),
 (2, 'Refogar a carne moída com alho e cebola.', 1, 0),
 (3, 'Adicionar o molho de tomate e cozinhar por 10 minutos.', 1, 0),
 (4, 'Misturar o molho ao macarrão e servir.', 1, 0);
