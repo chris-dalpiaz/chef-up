@@ -29,19 +29,17 @@ function carregarEvento() {
         // Redireciona para a página desejada se o email for válido
         const emailValue = emailInput.value;
         if (validateEmail(emailValue)) {
-            fetch("http://localhost:8080/codigos/2", {
+            fetch("http://localhost:8080/codigos", {
         method: "POST",
         headers: {
             "Content-Type": "application/json", // Define que o conteúdo enviado é do tipo JSON
         },
         body: JSON.stringify({ email: emailValue })  // Enviando o e-mail
     })
-    .then(async (data) => {
-        const text = await data.text();
-        return text ? JSON.parse(text) : {};
-    })
+    .then((response) => response.json())
     .then((response) => {
-        console.log(response);
+        console.log("Codigo: "+response);
+        alert("pausa de teste");
         window.location.href = "../validacao-codigo/validacao-codigo.html";
     })
     .catch((error) => {

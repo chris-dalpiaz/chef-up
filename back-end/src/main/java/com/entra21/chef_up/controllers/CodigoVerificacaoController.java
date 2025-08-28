@@ -1,11 +1,14 @@
 package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.dtos.CodigoVerificacao.CodigoVerificacaoResponse;
+import com.entra21.chef_up.dtos.CodigoVerificacao.EmailRequest;
+import com.entra21.chef_up.entities.CodigoVerificacao;
 import com.entra21.chef_up.services.CodigoVerificacaoService;
 import com.entra21.chef_up.repositories.CodigoVerificacaoRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,10 +36,18 @@ public class CodigoVerificacaoController {
     }
 
     @PostMapping
-    public CodigoVerificacaoResponse gerarCodigo(@PathVariable Integer idUsuario) {
+    public CodigoVerificacaoResponse gerarCodigo(@RequestBody EmailRequest request) {
 
         Integer codigo = (int) (Math.random() * 9999);
 
-        return codigoVerificacaoService.create(codigo, idUsuario);
+        return codigoVerificacaoService.create(codigo, request.getEmail());
+    }
+
+    @DeleteMapping
+    public List<CodigoVerificacao> deletarCodigos() {
+        List<CodigoVerificacao> list = codigoVerificacaoRepository.findAll();
+        codigoVerificacaoRepository.deleteAll();
+
+        return list;
     }
 }

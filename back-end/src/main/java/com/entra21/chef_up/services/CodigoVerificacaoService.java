@@ -1,7 +1,6 @@
 package com.entra21.chef_up.services;
 
 import com.entra21.chef_up.dtos.CodigoVerificacao.CodigoVerificacaoResponse;
-import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.CodigoVerificacao;
 import com.entra21.chef_up.entities.Usuario;
 import com.entra21.chef_up.repositories.CodigoVerificacaoRepository;
@@ -36,15 +35,31 @@ public class CodigoVerificacaoService {
         return codigoVerificacaoRepository.findByUsuarioId(idUsuario).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERROR_USER_NOT_FOUND));
     }
 
-    public CodigoVerificacaoResponse create(Integer codigo, Integer idUsuario) {
-        CodigoVerificacao code = new CodigoVerificacao();
-        Optional<Usuario> user = usuarioRepository.findById(idUsuario);
+    public CodigoVerificacaoResponse create(Integer codigo, String emailUsuario) {
+        Optional<Usuario> userOptional = usuarioRepository.findByEmail(emailUsuario);
 
-        code.setCodigo(codigo);
-        code.setUsuario(user.get());
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado.");
+        }
 
-        CodigoVerificacao saved = codigoVerificacaoRepository.save(code);
-        return toResponse(saved);
+        Usuario user = userOptional.get();
+
+        if (codigoVerificacaoRepository.findByUsuarioId(user.getId()).isPresent()) {
+            CodigoVerificacao alter = codigoVerificacaoRepository.findByUsuarioId(user.getId()).get();
+
+            alter.setCodigo(codigo);
+
+            CodigoVerificacao saved = codigoVerificacaoRepository.save(alter);
+            return toResponse(saved);
+        } else {
+            CodigoVerificacao code = new CodigoVerificacao();
+
+            code.setCodigo(codigo);
+            code.setUsuario(user);
+
+            CodigoVerificacao saved = codigoVerificacaoRepository.save(code);
+            return toResponse(saved);
+        }
     }
 
     public CodigoVerificacaoResponse toResponse(CodigoVerificacao codigoVerificacao) {
