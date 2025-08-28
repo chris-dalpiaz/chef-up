@@ -89,6 +89,7 @@ async function carregarReceitas() {
 }
 
 function configurarEventos() {
+  carregarUsuario();
   carregarReceitas();
   carregarProgresso();
 

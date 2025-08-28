@@ -4,7 +4,9 @@ import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaResponse;
 import com.entra21.chef_up.dtos.IngredienteReceita.IngredienteReceitaResponse;
 
 public class IngredienteEtapaReceitaResponse {
+
     private IngredienteReceitaResponse ingredienteReceita;
+
     private EtapaReceitaResponse etapaReceita;
 
     public IngredienteReceitaResponse getIngredienteReceita() {

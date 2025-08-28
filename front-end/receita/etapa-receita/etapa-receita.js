@@ -5,7 +5,7 @@ let etapas = [];
 let etapaAtual = 0;
 
 // Função para carregar as etapas da receita
-async function  carregarEtapasReceita() {
+async function carregarEtapasReceita() {
   // Recupera o token de autenticação armazenado localmente
   const token = localStorage.getItem("token");
 
@@ -46,33 +46,47 @@ async function  carregarEtapasReceita() {
   }
 }
 
-// Função que exibe uma etapa específica da receita
-function mostrarEtapa(index) {
-  // Obtém a etapa correspondente ao índice fornecido
+async function mostrarEtapa(index) {
   const etapa = etapas[index];
-
-  // Se a etapa não existir (índice inválido), encerra a função
   if (!etapa) return;
 
-  // Atualiza o número da etapa na interface, com dois dígitos (ex: 01, 02)
+  const receitaId = new URLSearchParams(window.location.search).get("id");
+
   document.getElementById("etapa-numero").textContent = etapa.ordem.toString().padStart(2, "0");
-
-  // Atualiza o conteúdo da etapa (instruções, descrição, etc.)
   document.getElementById("etapa-conteudo").textContent = etapa.conteudo;
-
-  // Limpa a lista de ingredientes (para quando for adicionado ingredientes nas etapas)
   document.getElementById("etapa-ingredientes").innerHTML = "";
 
-  // Atualiza os "dots" da barra de progresso para refletir a etapa atual
+  // 🔹 Corrigido: aguarda os ingredientes da etapa
+  const ingredientes = await carregarIngredientesDaEtapa(receitaId, etapa.id);
+
+  ingredientes.forEach(item => {
+    const li = document.createElement("li");
+    const nome = item.ingredienteReceita.ingrediente.nome;
+    const quantidade = item.ingredienteReceita.quantidade;
+    const unidade = item.ingredienteReceita.unidadeMedida;
+
+    li.textContent = `${quantidade} ${unidade} de ${nome}`;
+    document.getElementById("etapa-ingredientes").appendChild(li);
+  });
+
+  // Atualiza a imagem da etapa, se existir
+  const imagemEl = document.getElementById("imagem-etapa");
+  if (etapa.imagemEtapa) {
+    imagemEl.src = etapa.imagemEtapa;
+    imagemEl.style.display = "block";
+  } else {
+    imagemEl.src = "";
+    imagemEl.style.display = "none";
+  }
+
   const dots = document.querySelectorAll(".dot");
   dots.forEach((dot, i) => {
-    // Ativa os pontos até o índice atual
     dot.classList.toggle("active", i <= index);
   });
 
-  // Atualiza a variável que indica a etapa atual
   etapaAtual = index;
 }
+
 
 // Função que avança para a próxima etapa da receita
 function proximaEtapa() {
@@ -97,6 +111,25 @@ function proximaEtapa() {
   }
 }
 
+async function carregarIngredientesDaEtapa(receitaId, etapaId) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch(`http://localhost:8080/receitas/${receitaId}/etapas/${etapaId}/ingredientes`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!res.ok) throw new Error("Erro ao buscar ingredientes");
+
+    const ingredientes = await res.json();
+    return ingredientes;
+  } catch (error) {
+    console.error("Erro ao carregar ingredientes da etapa:", error);
+    return [];
+  }
+}
+
+
 // Função que renderiza a barra de progresso com base na quantidade de etapas
 function renderizarBarraProgresso() {
   // Obtém o elemento da barra de progresso
@@ -119,7 +152,8 @@ function voltar() {
 }
 
 //Função que configura e inicializa os eventos js
-function configurarEventos(){
+function configurarEventos() {
+  carregarUsuario();
   carregarEtapasReceita();
 }
 
