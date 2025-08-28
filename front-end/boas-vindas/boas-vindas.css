@@ -1,0 +1,76 @@
+body{
+    align-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.card {
+    position: relative;
+    width: min(60rem, 85vw);
+    height: clamp(60rem, 80vh, 750px);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.dots {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #47B3A8;
+    opacity: .5;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #000;
+}
+
+#texto {
+    max-width: 650px;
+    margin: 12px 0 24px;
+    font-size: 1rem;
+    color: #444;
+}
+
+#instrucao {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.botoes {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+#proximo1, #proximo2, #proximo3 {
+    background: #47B3A8;
+    color: #fff;
+    font-weight: bold;
+}
+
+#pular {
+    font-size: 1.4rem;
+    background: transparent;
+    text-decoration: underline;
+    color: #555;
+}

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+function carregarEvento() {
     const emailInput = document.getElementById('email');
     const submitButton = document.getElementById('enviar');
 
@@ -29,19 +29,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Redireciona para a página desejada se o email for válido
         const emailValue = emailInput.value;
         if (validateEmail(emailValue)) {
-            fetch("http://localhost:8080/1/codigo", {
+            fetch("http://localhost:8080/codigos", {
         method: "POST",
         headers: {
             "Content-Type": "application/json", // Define que o conteúdo enviado é do tipo JSON
         },
+        body: JSON.stringify({ email: emailValue })  // Enviando o e-mail
     })
-        .then((data) => data.json()) // converte a resposta da API para JSON
-        .then((response) => {
-            console.log(response); // exibe a resposta no console
-            window.location.href = "../validacao-codigo/validacao-codigo.html";
-        });
+    .then((response) => response.json())
+    .then((response) => {
+        console.log("Codigo: "+response);
+        alert("pausa de teste");
+        window.location.href = "../validacao-codigo/validacao-codigo.html";
+    })
+    .catch((error) => {
+        console.error("Erro ao processar resposta da API:", error);
+    });
         } else {
             alert("Por favor, insira um email válido.");
         }
     });
-});
+}
+
+window.addEventListener('load',
+    carregarEvento);

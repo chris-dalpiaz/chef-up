@@ -1,5 +1,7 @@
 package com.entra21.chef_up.controllers;
 
+import com.entra21.chef_up.dtos.IngredienteEtapaReceita.IngredienteEtapaReceitaRequest;
+import com.entra21.chef_up.dtos.IngredienteEtapaReceita.IngredienteEtapaReceitaResponse;
 import com.entra21.chef_up.dtos.Receita.ReceitaRequest;
 import com.entra21.chef_up.dtos.Receita.ReceitaResponse;
 import com.entra21.chef_up.dtos.EtapaReceita.EtapaReceitaRequest;
@@ -18,14 +20,11 @@ import java.util.List;
 @RequestMapping("/receitas")
 public class ReceitaController {
 
-    private final ReceitaRepository receitaRepository;
-    private final EtapaReceitaRepository etapaReceitaRepository;
-    private final UtensilioReceitaRepository utensilioReceitaRepository;
-    private final IngredienteReceitaRepository ingredienteReceitaRepository;
     private final ReceitaService receitaService;
     private final EtapaReceitaService etapaReceitaService;
     private final IngredienteReceitaService ingredienteReceitaService;
     private final UtensilioReceitaService utensilioReceitaService;
+    private final IngredienteEtapaReceitaService ingredienteEtapaReceitaService;
 
     public ReceitaController(ReceitaRepository receitaRepository,
                              EtapaReceitaRepository etapaReceitaRepository,
@@ -34,15 +33,12 @@ public class ReceitaController {
                              ReceitaService receitaService,
                              EtapaReceitaService etapaReceitaService,
                              IngredienteReceitaService ingredienteReceitaService,
-                             UtensilioReceitaService utensilioReceitaService) {
-        this.receitaRepository = receitaRepository;
-        this.etapaReceitaRepository = etapaReceitaRepository;
-        this.utensilioReceitaRepository = utensilioReceitaRepository;
-        this.ingredienteReceitaRepository = ingredienteReceitaRepository;
+                             UtensilioReceitaService utensilioReceitaService, IngredienteEtapaReceitaService ingredienteEtapaReceitaService) {
         this.receitaService = receitaService;
         this.etapaReceitaService = etapaReceitaService;
         this.ingredienteReceitaService = ingredienteReceitaService;
         this.utensilioReceitaService = utensilioReceitaService;
+        this.ingredienteEtapaReceitaService = ingredienteEtapaReceitaService;
     }
 
     /**
@@ -174,5 +170,42 @@ public class ReceitaController {
     public IngredienteReceitaResponse deleteRecipeIngredient(@PathVariable Integer idReceita,
                                                              @PathVariable Integer idIngredienteReceita) {
         return ingredienteReceitaService.delete(idReceita, idIngredienteReceita);
+    }
+
+    /* ---------- Ingredientes da Etapa da Receita ---------- */
+
+    @GetMapping("/{idReceita}/etapas/{idEtapaReceita}/ingredientes")
+    public List<IngredienteEtapaReceitaResponse> listRecipeStepIngredients(@PathVariable Integer idReceita,
+                                                                       @PathVariable Integer idEtapaReceita) {
+        return ingredienteEtapaReceitaService.listIngredientsByStep(idReceita, idEtapaReceita);
+    }
+
+    @GetMapping("/{idReceita}/etapas/{idEtapaReceita}/ingredientes/{idIngrediente}")
+    public IngredienteEtapaReceitaResponse getRecipeStepIngredient(@PathVariable Integer idReceita,
+                                                               @PathVariable Integer idEtapaReceita,
+                                                               @PathVariable Integer idIngrediente) {
+        return ingredienteEtapaReceitaService.getById(idReceita, idEtapaReceita, idIngrediente);
+    }
+
+    @PostMapping("/{idReceita}/etapas/{idEtapaReceita}/ingredientes")
+    public IngredienteEtapaReceitaResponse createRecipeStepIngredient(@PathVariable Integer idReceita,
+                                                                      @PathVariable Integer idEtapaReceita,
+                                                                      @RequestBody IngredienteEtapaReceitaRequest request) {
+        return ingredienteEtapaReceitaService.create(idReceita, idEtapaReceita, request);
+    }
+
+    @PutMapping("/{idReceita}/etapas/{idEtapaReceita}/ingredientes/{idIngrediente}")
+    public IngredienteEtapaReceitaResponse updateRecipeStepIngredient(@PathVariable Integer idReceita,
+                                                             @PathVariable Integer idEtapaReceita,
+                                                             @PathVariable Integer idIngrediente,
+                                                             @RequestBody IngredienteEtapaReceitaRequest request) {
+        return ingredienteEtapaReceitaService.update(idReceita, idEtapaReceita, idIngrediente, request);
+    }
+
+    @DeleteMapping("/{idReceita}/etapas/{idEtapaReceita}/ingredientes/{idIngrediente}")
+    public IngredienteEtapaReceitaResponse deleteRecipeStepIngredient(@PathVariable Integer idReceita,
+                                                                      @PathVariable Integer idEtapaReceita,
+                                                                      @PathVariable Integer idIngrediente) {
+        return ingredienteEtapaReceitaService.delete(idReceita, idEtapaReceita, idIngrediente);
     }
 }

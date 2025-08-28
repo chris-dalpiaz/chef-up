@@ -17,6 +17,17 @@ public class EtapaReceita {
     @JoinColumn(name = "receita_id")
     private Receita receita;
 
+
+    private String imagemEtapa;
+
+    public String getImagemEtapa() {
+        return imagemEtapa;
+    }
+
+    public void setImagemEtapa(String imagemEtapa) {
+        this.imagemEtapa = imagemEtapa;
+    }
+
     @Version
     private Integer version;
 

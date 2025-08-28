@@ -1,0 +1,25 @@
+meta {
+  name: criar_ingrediente-etapa-receita
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/receitas/1/etapas/3/ingredientes
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTYzNDUxMDksImV4cCI6MTc1NjM0ODcwOX0.EKd5tOPEQoCPlpcnPbAMrrV5RFGOQQgWJUSbSEPbCZk
+}
+
+body:json {
+  {
+    "idIngredienteReceita": 2
+  }
+}
+
+settings {
+  encodeUrl: true
+}
