@@ -33,7 +33,7 @@ async function parseJsonOrThrow(resp, etapa) {
 // *********************************************
 async function processarPrato() {
   console.log('>>> Iniciando processarPrato');
-
+  botao.classList.add('carregando');
   // 1) validações iniciais
   const inputFile = document.getElementById('input_file');
   if (!inputFile?.files.length) {
