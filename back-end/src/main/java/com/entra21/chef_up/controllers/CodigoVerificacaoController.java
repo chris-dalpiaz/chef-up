@@ -2,13 +2,15 @@ package com.entra21.chef_up.controllers;
 
 import com.entra21.chef_up.dtos.CodigoVerificacao.CodigoVerificacaoResponse;
 import com.entra21.chef_up.dtos.CodigoVerificacao.EmailRequest;
+import com.entra21.chef_up.dtos.CodigoVerificacao.ValidacaoRequest;
+import com.entra21.chef_up.dtos.CodigoVerificacao.ValidacaoResponse;
 import com.entra21.chef_up.entities.CodigoVerificacao;
+import com.entra21.chef_up.entities.Usuario;
 import com.entra21.chef_up.services.CodigoVerificacaoService;
 import com.entra21.chef_up.repositories.CodigoVerificacaoRepository;
 import com.entra21.chef_up.repositories.UsuarioRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -49,5 +51,23 @@ public class CodigoVerificacaoController {
         codigoVerificacaoRepository.deleteAll();
 
         return list;
+    }
+
+    @PostMapping("/validacao")
+    public ValidacaoResponse validacaoCodigo(@RequestBody ValidacaoRequest validacaoRequest) {
+        Usuario user = usuarioRepository.findByEmail(validacaoRequest.getEmail()).get();
+        CodigoVerificacao codeVerification = codigoVerificacaoRepository.findByUsuarioId(user.getId()).get();
+
+        Integer codeConverted = Integer.parseInt(validacaoRequest.getDigitCode());
+
+        ValidacaoResponse validacaoResponse = new ValidacaoResponse();
+
+        if (codeConverted == codeVerification.getCodigo()) {
+            validacaoResponse.setCodigoValido(true);
+            return validacaoResponse;
+        } else {
+            validacaoResponse.setCodigoValido(false);
+            return validacaoResponse;
+        }
     }
 }

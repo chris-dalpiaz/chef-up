@@ -39,6 +39,9 @@ function carregarEvento() {
     .then((response) => response.json())
     .then((response) => {
         console.log("Codigo: "+response);
+
+        localStorage.setItem('email', emailValue);
+
         alert("pausa de teste");
         window.location.href = "../validacao-codigo/validacao-codigo.html";
     })
