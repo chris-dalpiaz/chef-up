@@ -11,18 +11,14 @@ const userId = parseInt(localStorage.getItem('id'), 10);
 async function parseJsonOrThrow(resp, etapa) {
   const ct = resp.headers.get('content-type') || '';
 
-  // respostas não-ok
   if (!resp.ok) {
     const txt = await resp.text().catch(() => '');
     throw new Error(`[${etapa}] HTTP ${resp.status} — ${txt || 'sem corpo'}`);
   }
 
-  // content-type não JSON
   if (!ct.includes('application/json')) {
     const txt = await resp.text().catch(() => '');
-    throw new Error(
-      `[${etapa}] content-type inválido: ${ct} → ${txt.slice(0, 200)}`
-    );
+    throw new Error(`[${etapa}] content-type inválido: ${ct} → ${txt.slice(0, 200)}`);
   }
 
   return resp.json();
@@ -34,57 +30,51 @@ async function parseJsonOrThrow(resp, etapa) {
 async function processarPrato() {
   console.log('>>> Iniciando processarPrato');
 
-  // 1) validações iniciais
+  const botao = document.getElementById('botao_avaliar');
+  if (botao) {
+    botao.disabled = true;
+    botao.classList.add('carregando');
+  }
+
+  let sucesso = false; // ← controle de sucesso
+
   const inputFile = document.getElementById('input_file');
   if (!inputFile?.files.length) {
     alert('Insira a imagem do prato');
+    desbloquearBotao(botao);
     return;
   }
   if (!token || !userId) {
     alert('Usuário não autenticado');
+    desbloquearBotao(botao);
     return;
   }
 
-  // 2) extrai ID da receita da URL
-  const receitaId = parseInt(
-    new URLSearchParams(window.location.search).get('id'),
-    10
-  );
+  const receitaId = parseInt(new URLSearchParams(window.location.search).get('id'), 10);
   console.log('receitaId=', receitaId);
   if (!receitaId) {
     alert('ID da receita não encontrado na URL');
+    desbloquearBotao(botao);
     return;
   }
 
   try {
-    // 3) upload da imagem para avaliação
     const file = inputFile.files[0];
     const formData = new FormData();
     formData.append('file', file);
 
     console.log('Enviando POST /receitas/.../avaliar-prato');
-    const avaliarResp = await fetch(
-      `${API_BASE}/receitas/${receitaId}/avaliar-prato`, {
+    const avaliarResp = await fetch(`${API_BASE}/receitas/${receitaId}/avaliar-prato`, {
       method: 'POST',
       mode: 'cors',
       headers: { Authorization: `Bearer ${token}` },
       body: formData
-    }
-    );
+    });
 
-    // parse do JSON ou erro detalhado
-    const { comentario, nota, filename } = await parseJsonOrThrow(
-      avaliarResp,
-      'avaliar-prato'
-    );
-
+    const { comentario, nota, filename } = await parseJsonOrThrow(avaliarResp, 'avaliar-prato');
     console.log('JSON avaliação:', { comentario, nota, filename });
 
-    // 4) monta payload de salvar
-    const dataConclusao = new Date()
-      .toISOString()
-      .replace(/Z$/, '');
-
+    const dataConclusao = new Date().toISOString().replace(/Z$/, '');
     const payload = {
       idReceita: receitaId,
       dataConclusao,
@@ -95,10 +85,8 @@ async function processarPrato() {
 
     console.log('Payload salvar-prato:', payload);
 
-    // 5) persiste conclusão da receita
     console.log('Enviando POST /usuarios/.../receitas');
-    const salvarResp = await fetch(
-      `${API_BASE}/usuarios/${userId}/receitas`, {
+    const salvarResp = await fetch(`${API_BASE}/usuarios/${userId}/receitas`, {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -106,24 +94,46 @@ async function processarPrato() {
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(payload)
-    }
-    );
+    });
 
-    // parse do JSON ou erro detalhado (poderá ser {} se o body for vazio)
-    const salvarJson = await parseJsonOrThrow(
-      salvarResp,
-      'salvar-prato'
-    );
-
+    const salvarJson = await parseJsonOrThrow(salvarResp, 'salvar-prato');
     console.log('Resposta salvar-prato JSON:', salvarJson);
+
     exibirAvaliacao(comentario, nota);
+
     setTimeout(() => {
       alert('Receita concluída salva com sucesso!');
     }, 100);
+
+    sucesso = true; // ← marca como sucesso
   }
   catch (err) {
     console.error('processarPrato error:', err);
     alert('Erro no processamento:\n' + err.message);
+  }
+  finally {
+    desbloquearBotao(botao);
+
+    if (sucesso && botao) {
+      botao.removeEventListener('click', aoClicarBotao);
+      botao.textContent = 'Voltar à tela inicial';
+      botao.classList.remove('carregando');
+      botao.classList.add('botao-voltar');
+      botao.onclick = () => {
+        window.location.href = '../perfil-usuario/perfil/perfil.html';
+      };
+    }
+  }
+}
+
+
+// *********************************************
+// Função auxiliar para desbloquear botão
+// *********************************************
+function desbloquearBotao(botao) {
+  if (botao) {
+    botao.disabled = false;
+    botao.classList.remove('carregando');
   }
 }
 
@@ -140,17 +150,23 @@ function exibirAvaliacao(comentario, nota) {
   }
 
   textoEl.textContent = comentario;
-  estrelasEl.innerHTML = ''; // limpa estrelas anteriores
+  estrelasEl.innerHTML = '';
 
   const totalEstrelas = 5;
   for (let i = 1; i <= totalEstrelas; i++) {
     const img = document.createElement('img');
-    img.src = '../../back-end/img/icones/nota-estrela.svg';
+    img.src = 'http://localhost:8080/img/icones/nota-estrela.svg';
     img.alt = i <= nota ? 'Estrela preenchida' : 'Estrela vazia';
     img.classList.add('estrela');
-    if (i > nota) img.style.opacity = '0.3'; // visual de estrela "vazia"
+    if (i > nota) img.style.opacity = '0.3';
     estrelasEl.appendChild(img);
   }
+}
+
+
+function aoClicarBotao(e) {
+  e.preventDefault();
+  processarPrato();
 }
 
 // *********************************************
@@ -159,21 +175,17 @@ function exibirAvaliacao(comentario, nota) {
 function carregarEvento() {
   const botao = document.getElementById('botao_avaliar');
   if (botao) {
-    botao.addEventListener('click', function (e) {
-      e.preventDefault(); // impede comportamento padrão
-      processarPrato();   // chama a função principal
-    });
+    botao.addEventListener('click', aoClicarBotao);
   }
 }
 
-
 window.addEventListener('load', () => {
-  carregarEvento();  // só depois ativa os eventos
+  carregarEvento();
 });
 
 window.addEventListener('beforeunload', function (e) {
   console.warn('⚠️ Página está tentando recarregar!');
-  console.trace(); // mostra a origem da chamada
+  console.trace();
   e.preventDefault();
   e.returnValue = '';
 });

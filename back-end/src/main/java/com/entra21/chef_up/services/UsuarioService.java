@@ -101,7 +101,6 @@ public class UsuarioService {
         user.setDataCadastro(LocalDateTime.now());
 
         ProgressoUsuario progress = new ProgressoUsuario();
-        progress.setNivel(1);
         progress.setXp(0);
         progress.setAtualizadoEm(LocalDateTime.now());
 

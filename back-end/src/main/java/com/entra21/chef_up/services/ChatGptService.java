@@ -42,7 +42,7 @@ public class ChatGptService {
         prompt.append("Compare o prato da imagem com os dados da receita fornecida e escreva uma avaliação em terceira pessoa. ");
         prompt.append("Destaque pontos positivos e negativos, como apresentação, cor, textura, sabor, ingredientes, utensílios usados, e se o prato está condizente com a receita. ");
         prompt.append("Forneça uma nota definitiva de 0 a 5 (número inteiro). ");
-        prompt.append("Retorne o resultado apenas em JSON com os campos:\n");
+        prompt.append("Retorne apenas um JSON válido, sem texto explicativo antes ou depois. Retorne o resultado apenas em JSON com os campos:\n");
         prompt.append("{\"comentario\": \"avaliacao completa referindo-se a si mesmo como inteligência articificial, caso o prato não condiz com receita, retorne nota 0\", \"nota\": numero}\n\n");
 
         prompt.append("=== Dados da Receita ===\n");

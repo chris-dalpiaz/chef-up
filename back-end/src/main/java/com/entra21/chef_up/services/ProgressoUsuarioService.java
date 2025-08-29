@@ -50,7 +50,6 @@ public class ProgressoUsuarioService {
         ProgressoUsuario progress = findByUserIdOrThrow(userId);
 
         progress.setXp(request.getXp());
-        progress.setNivel(request.getNivel());
         progress.setAtualizadoEm(LocalDateTime.now());
 
         ProgressoUsuario updated = progressRepository.save(progress);

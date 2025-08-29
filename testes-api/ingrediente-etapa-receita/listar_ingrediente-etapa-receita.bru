@@ -1,0 +1,19 @@
+meta {
+  name: listar_ingrediente-etapa-receita
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/receitas/1/etapas/1/ingredientes
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqQGoiLCJpYXQiOjE3NTYzNDQ1MzEsImV4cCI6MTc1NjM0ODEzMX0.kqvlWhP0StrWVKHMJFvKnRUp7J5Cg__sjcWR0_NKa3c
+}
+
+settings {
+  encodeUrl: true
+}

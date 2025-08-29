@@ -13,7 +13,6 @@ body {
   color: #331e00;
   margin-left: 1rem;
   margin-right: 1rem;
-  max-width: 80rem;
   padding: 2vh 5vh;
 }
 
@@ -37,13 +36,18 @@ h3 {
   font-size: 2rem;
 }
 
+#back_btn{
+  all: unset;
+
+}
+
 label,
 p {
   font-size: 2rem;
 }
 
 button {
-  font-family: 'DM Sans';
+  font-family: 'DM Sans', 'Roboto', sans-serif;
   background-color: #F58700;
   border: none;
   padding: 1rem 2rem;

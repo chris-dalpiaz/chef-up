@@ -1,116 +1,208 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #FFF8E1;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+/* ===== Reset básico ===== */
+* {
+  box-sizing: content-box;
+  padding: 0;
+}
+
+/* ===== Container principal ===== */
+.container {
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'DM Sans', 'Roboto', sans-serif;
+  color: #331e00;
+}
+
+/* ===== Cabeçalho ===== */
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.instructions {
+  font-size: 2.4rem;
+  font-weight: bold;
+}
+
+/* ===== Área do telefone ===== */
+.phone {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ===== Navegação superior ===== */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #F58700;
+  display: flex;
+  align-items: center;
+}
+
+.back-btn svg {
+  stroke: #F58700;
+}
+
+
+/* ===== Barra de progresso ===== */
+.progress {
+  display: flex;
+  flex: 1;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: #FFE0B2;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: #5ccb5f;
+}
+
+/* ===== Conteúdo da etapa ===== */
+.content {
+  text-align: center;
+}
+
+#etapa-numero {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #331e00;
+  margin-bottom: 3rem;
+}
+
+#etapa-conteudo {
+  font-size: 2rem;
+  margin-bottom: 3rem;
+}
+
+#etapa-ingredientes {
+  padding-left: 2rem;
+  list-style: none;
+  padding: 0;
+  font-size: 1.6rem;
+  color: #4A2C00;
+}
+
+#etapa-ingredientes li {
+  margin-bottom: 0.5rem;
+}
+
+/* ===== Barra inferior ===== */
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.list-btn,
+.next-btn {
+  color: unset;
+  flex: 1;
+  border: none;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.next-btn {
+  background-color: #F58700;
+  color: white;
+}
+
+.list-btn {
+  background-color: #E6E6E6;
+}
+
+.next-btn:hover {
+  background-color: #f9c87a;
+}
+
+.list-btn:hover {
+  background-color: #f5f5f5;
+  color: rgb(170, 170, 170);
+  transition: color 0.3s ease;
+}
+
+/* ===== Ingredientes da etapa ===== */
+#etapa-ingredientes {
+  list-style: none;
+  padding: 0;
+  font-size: 1.6rem;
+  color: #4A2C00;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+#etapa-ingredientes li {
+  margin-bottom: 0.8rem;
+  padding: 0.6rem 1rem;
+  background-color: #FFF3E0;
+  border-left: 4px solid #F58700;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease;
+}
+
+#etapa-ingredientes li:hover {
+  background-color: #FFE0B2;
+}
+
+#imagem-etapa {
+  padding-left: 3rem;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 0.8rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+/* ===== Responsividade ===== */
+@media (max-width: 600px) {
   .container {
-    text-align: center;
+    padding: 1rem;
   }
-  
-  .instructions {
-    font-size: 14px;
-    color: white;
-    position: absolute;
-    top: 10px;
+
+  #etapa-numero {
+    font-size: 3rem;
   }
-  
-  .phone {
-    width: 430px;
-    height: 932px;
-    background: white;
-    border-radius: 0;
-    padding: 25px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+
+  #etapa-conteudo,
+  #etapa-ingredientes li {
+    font-size: 1.6rem;
   }
-  
-  .nav {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-  }
-  
-  .back-btn {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  
-  .progress {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin: 45px 0;
-  }
-  
-  .dot {
-    width: 20px;
-    height: 10px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    transition: background 0.3s ease;
-  }
-  
-  .dot.active {
-    background: #00a651;
-  }
-  
-  .content {
-    text-align: left;
-  }
-  
-  .content h1 {
-    font-size: 48px;
-    font-weight: bold;
-    margin: 20px 0 10px 0;
-    font-family: 'Arial Black', Arial, sans-serif;
-  }
-  
-  .content p {
-    font-size: 18px;
-    line-height: 1.5;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  
-  .content ul {
-    font-size: 16px;
-    line-height: 1.4;
-    padding-left: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  
-  .bottom-bar {
-    display: flex;
-    justify-content: space-between;
-    margin-top: auto;
-  }
-  
-  .list-btn {
-    background: none;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 50px;
-  }
-  
+
+  .list-btn,
   .next-btn {
-    background: rgb(255, 145, 0);
-    color: rgb(0, 0, 0);
-    border: none;
-    padding: 16px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    width: 256px;
+    font-size: 1.4rem;
+    padding: 0.8rem;
   }
-  
+
+  .dot {
+    width: 1rem;
+    height: 1rem;
+  }
+}

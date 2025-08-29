@@ -15,7 +15,6 @@ public class ProgressoUsuario {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    private Integer nivel;
 
     private Integer xp;
 
@@ -48,13 +47,6 @@ public class ProgressoUsuario {
         this.usuario = usuario;
     }
 
-    public Integer getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(Integer nivel) {
-        this.nivel = nivel;
-    }
 
     public Integer getXp() {
         return xp;

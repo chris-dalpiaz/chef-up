@@ -1,0 +1,21 @@
+meta {
+  name: criar_codigo-verificacao
+  type: http
+  seq: 24
+}
+
+post {
+  url: http://localhost:8080/codigos
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "emailValue": "j@j"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

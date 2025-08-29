@@ -7,6 +7,16 @@ public class EtapaReceitaRequest {
 
     private String conteudo;
 
+    private String imagemEtapa;
+
+    public String getImagemEtapa() {
+        return imagemEtapa;
+    }
+
+    public void setImagemEtapa(String imagemEtapa) {
+        this.imagemEtapa = imagemEtapa;
+    }
+
     public Integer getIdReceita() {
         return idReceita;
     }

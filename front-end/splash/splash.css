@@ -8,7 +8,7 @@
 
 #logo {
   max-width: 100%; /* Ajusta o tamanho da imagem */
-  width: 300px;    /* Largura inicial para desktop */
+  width: 42rem;    /* Largura inicial para desktop */
 }
 
 /* Tablet (largura entre 768px e 1024px) */

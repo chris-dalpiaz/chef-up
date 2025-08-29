@@ -18,8 +18,8 @@ public class CodigoVerificacao {
         return id;
     }
 
-    public void setId(Integer idcodigo_verificacao) {
-        this.id = idcodigo_verificacao;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getCodigo() {
