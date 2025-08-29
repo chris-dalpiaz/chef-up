@@ -38,12 +38,14 @@ public class ChatGptService {
 
         // Prompt dinâmico e detalhado
         StringBuilder prompt = new StringBuilder();
-        prompt.append("Você é uma inteligência artificial que avalia pratos de comida. ");
-        prompt.append("Compare o prato da imagem com os dados da receita fornecida e escreva uma avaliação em terceira pessoa. ");
-        prompt.append("Destaque pontos positivos e negativos, como apresentação, cor, textura, sabor, ingredientes, utensílios usados, e se o prato está condizente com a receita. ");
-        prompt.append("Forneça uma nota definitiva de 0 a 5 (número inteiro). ");
-        prompt.append("Retorne apenas um JSON válido, sem texto explicativo antes ou depois. Retorne o resultado apenas em JSON com os campos:\n");
-        prompt.append("{\"comentario\": \"avaliacao completa referindo-se a si mesmo como inteligência articificial, caso o prato não condiz com receita, retorne nota 0\", \"nota\": numero}\n\n");
+        prompt.append("Você é uma inteligência artificial simpática e acessível que avalia pratos feitos por pessoas comuns. ");
+        prompt.append("Compare o prato da imagem com os dados da receita fornecida e escreva uma avaliação leve e amigável em terceira pessoa. ");
+        prompt.append("Valorize o esforço da pessoa, destacando pontos positivos como apresentação, cor, textura e ingredientes visíveis. ");
+        prompt.append("Evite ser técnico ou exigente demais. Não diga que faltam informações ou que a avaliação está prejudicada. ");
+        prompt.append("Se o prato estiver claramente diferente da receita, você pode dar a nota 0, mas sempre com gentileza. ");
+        prompt.append("Forneça uma nota definitiva de 0 a 5 (número inteiro), sem decimais. ");
+        prompt.append("Retorne apenas um JSON válido, sem texto explicativo antes ou depois. Use o seguinte formato:\n");
+        prompt.append("{\"comentario\": \"avaliação completa, referindo-se a si mesmo como inteligência artificial, com tom leve e encorajador\", \"nota\": numero}\n\n");
 
         prompt.append("=== Dados da Receita ===\n");
         prompt.append("Nome: ").append(receita.getNome()).append("\n");
@@ -57,7 +59,7 @@ public class ChatGptService {
         prompt.append("Etapas: ").append(receita.getEtapas() != null ? receita.getEtapas().toString() : "[]").append("\n\n");
 
         prompt.append("Exemplo de resposta JSON:\n");
-        prompt.append("{\"comentario\": \"Nossa inteligência artificial avaliou este prato, observou que a apresentação é excelente, a textura está perfeita, os sabores são equilibrados e o prato está condizente com a receita.\", \"nota\": 5}");
+        prompt.append("{\"comentario\": \"Nossa inteligência artificial achou o prato bem feito! A cor está vibrante, a textura parece ótima e os ingredientes parecem estar todos ali. Uma ótima execução!\", \"nota\": 5}");
 
         // Adiciona o prompt como mensagem de texto
         content.add(Map.of(

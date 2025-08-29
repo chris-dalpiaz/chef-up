@@ -178,7 +178,7 @@ function gerarEstrelas(pontuacao) {
         const classeOpacidade = i < pontuacao ? 'estrela-cheia' : 'estrela-vazia';
 
         const estrela = `<img 
-      src="../../../back-end/img/icones/nota-estrela.svg" 
+      src="http://localhost:8080/img/icones/nota-estrela.svg" 
       alt="${i < pontuacao ? 'estrela cheia' : 'estrela vazia'}" 
       class="estrela ${classeOpacidade}"
     >`;
