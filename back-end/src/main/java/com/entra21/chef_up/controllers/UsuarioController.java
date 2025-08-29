@@ -14,10 +14,14 @@ import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioRequest;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
+import com.entra21.chef_up.entities.ReceitaUsuario;
 import com.entra21.chef_up.repositories.*;
 import com.entra21.chef_up.services.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -270,6 +274,25 @@ public class UsuarioController {
     @PostMapping("/{idUsuario}/titulos")
     public TituloUsuarioResponse createUserTitle(@PathVariable Integer idUsuario,
                                                  @RequestBody TituloUsuarioRequest request) {
+
+        List<ReceitaUsuario> list = receitaUsuarioRepository.findByUsuarioId(idUsuario);
+        int quant = list.size();
+
+        Integer tituloCalculadoId;
+        if (quant >= 100) {
+            tituloCalculadoId = 4; // Mestre da Cozinha
+        } else if (quant >= 50) {
+            tituloCalculadoId = 3; // Chef Avançado
+        } else if (quant >= 10) {
+            tituloCalculadoId = 2; // Chef Intermediário
+        } else if (quant >= 1) {
+            tituloCalculadoId = 1; // Chef Iniciante
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário ainda não concluiu nenhuma receita");
+        }
+        request.setIdTitulo(tituloCalculadoId);
+
+
         return tituloUsuarioService.create(idUsuario, request);
     }
 

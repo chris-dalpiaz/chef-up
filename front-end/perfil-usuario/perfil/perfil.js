@@ -305,6 +305,8 @@ function listarDados() {
 function configurarEventos() {
     carregarUsuario(); // Função externa que provavelmente inicializa dados do usuário
     listarDados();     // Atualiza a interface com os dados carregados
+    atualizarTitulos(); // Função que adiciona os titúlos do usuário
+   
 }
 
 // Executa a função de configuração quando a página terminar de carregar

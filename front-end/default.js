@@ -73,4 +73,35 @@ async function carregarProgresso() {
     } catch (error) {
         console.error("Erro ao carregar progresso:", error);
     }
-}
+
+    async function atualizarTitulos() {
+        const token = localStorage.getItem("token");
+        const userId = parseInt(localStorage.getItem('id'), 10);
+        // Verifica se o token existe
+        if (!token) {
+            console.warn("Token não encontrado. Usuário não autenticado.");
+            return;
+        }
+        const response = await fetch(`http://localhost:8080/usuarios/${userId}/receitas`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`, // Autenticação via token
+                "Content-Type": "application/json"
+            }
+        });
+        const data = await response.json(); // ← converte a resposta para JSON
+        const quantidade = Array.isArray(data) ? data.length : 0; // ← conta os itens
+        console.log("Quantidade de receitas concluídas:", quantidade);
+
+        let tituloId;
+        if (quantidade >= 1) {
+            tituloId = 1; // Exemplo: "Chef Supremo"
+        } else if (quantidade >= 10) {
+            tituloId = 2; // Exemplo: "Chef Intermediário"
+        } else if (quantidade >= 50) {
+            tituloId = 3; // Exemplo: "Aprendiz de Chef"
+        } else if (quantidade >= 50) {
+            tituloId = 4;
+
+        }
+    }
