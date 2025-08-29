@@ -15,14 +15,18 @@ import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
 import com.entra21.chef_up.entities.ReceitaUsuario;
+import com.entra21.chef_up.entities.TituloUsuario;
 import com.entra21.chef_up.repositories.*;
 import com.entra21.chef_up.services.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Injeção de dependência dos repositórios.
@@ -275,9 +279,11 @@ public class UsuarioController {
     public TituloUsuarioResponse createUserTitle(@PathVariable Integer idUsuario,
                                                  @RequestBody TituloUsuarioRequest request) {
 
-        List<ReceitaUsuario> list = receitaUsuarioRepository.findByUsuarioId(idUsuario);
+        List<ReceitaUsuario> list = Optional.ofNullable(receitaUsuarioRepository.findByUsuarioId(idUsuario))
+                .orElse(Collections.emptyList());
         int quant = list.size();
 
+// Define título com base na quantidade
         Integer tituloCalculadoId;
         if (quant >= 100) {
             tituloCalculadoId = 4; // Mestre da Cozinha
@@ -288,11 +294,18 @@ public class UsuarioController {
         } else if (quant >= 1) {
             tituloCalculadoId = 1; // Chef Iniciante
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário ainda não concluiu nenhuma receita");
+
+            return new TituloUsuarioResponse("Usuário ainda não concluiu nenhuma receita");
         }
+
+        boolean jaPossui = tituloUsuarioRepository.existsByUsuarioIdAndTituloId(idUsuario, tituloCalculadoId);
+
+        if (jaPossui) {
+            // Caso já tenha, apenas retorna a informação sem duplicar
+            return new TituloUsuarioResponse("Usuário já possui este título");
+        }
+
         request.setIdTitulo(tituloCalculadoId);
-
-
         return tituloUsuarioService.create(idUsuario, request);
     }
 

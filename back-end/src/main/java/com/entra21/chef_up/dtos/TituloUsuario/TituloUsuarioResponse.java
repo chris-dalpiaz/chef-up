@@ -15,6 +15,13 @@ public class TituloUsuarioResponse {
 
     private Boolean estaAtivo;
 
+    public TituloUsuarioResponse(String s) {
+    }
+
+    // Construtor vazio (necessário para frameworks)
+    public TituloUsuarioResponse() {
+    }
+
     public Integer getId() {
         return id;
     }

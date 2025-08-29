@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TituloUsuarioRepository extends JpaRepository<TituloUsuario, Integer> {
     List<TituloUsuario> findByUsuarioId(Integer idUsuario);
+    boolean existsByUsuarioIdAndTituloId(Integer usuarioId, Integer tituloId);
 }
