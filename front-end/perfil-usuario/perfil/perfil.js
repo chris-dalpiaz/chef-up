@@ -291,6 +291,46 @@ async function carregarAvatar() {
     }
 }
 
+async function atualizarTitulos() {
+    try {
+        const token = localStorage.getItem("token");
+        const idUsuario = localStorage.getItem("id");
+
+        if (!token || !idUsuario) {
+            console.warn("Token ou ID do usuário não encontrado.");
+            return;
+        }
+
+        // Monta o request body
+        const requestBody = {
+            idTitulo: null,    // backend sobrescreve com o calculado
+            estaAtivo: false    // exemplo se tiver esse campo
+        };
+
+        const response = await fetch(`http://localhost:8080/usuarios/${idUsuario}/titulos`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Erro na atualização de títulos:", errorText);
+            return;
+        }
+
+        const data = await response.json();
+        console.log("Título atualizado:");
+
+    } catch (error) {
+        console.error("Erro ao atualizar títulos:", error);
+    }
+}
+
+
 // Função que chama todas as funções de carregamento de dados do usuário
 function listarDados() {
     carregarAvatar();     // Carrega e exibe o avatar
@@ -305,6 +345,8 @@ function listarDados() {
 function configurarEventos() {
     carregarUsuario(); // Função externa que provavelmente inicializa dados do usuário
     listarDados();     // Atualiza a interface com os dados carregados
+    atualizarTitulos(); // Função que adiciona os titúlos do usuário
+   
 }
 
 // Executa a função de configuração quando a página terminar de carregar
