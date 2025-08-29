@@ -58,11 +58,15 @@ public class CodigoVerificacaoController {
         Usuario user = usuarioRepository.findByEmail(validacaoRequest.getEmail()).get();
         CodigoVerificacao codeVerification = codigoVerificacaoRepository.findByUsuarioId(user.getId()).get();
 
-        Integer codeConverted = Integer.parseInt(validacaoRequest.getDigitCode());
+        String codeConverted = validacaoRequest.getDigitCode();
+        String codeDTB = String.format("%04d", codeVerification.getCodigo());
 
         ValidacaoResponse validacaoResponse = new ValidacaoResponse();
 
-        if (codeConverted == codeVerification.getCodigo()) {
+        System.out.println("Código escrito: " +codeConverted);
+        System.out.println("Código da banco: "+codeVerification.getCodigo());
+
+        if (codeConverted.equals(codeDTB)) {
             validacaoResponse.setCodigoValido(true);
             return validacaoResponse;
         } else {
