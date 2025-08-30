@@ -343,3 +343,114 @@ INSERT INTO ingrediente_etapa_receita (etapa_receita_id, ingrediente_receita_id,
 INSERT INTO etapa_receita (receita_id, ordem, conteudo, imagem_etapa, version) VALUES
 (3, 4, 'Bata até ficar homogêneo, aproximadamente 2 – 3 min. Pronto para desfrutar imediatamente.',
 "http://localhost:8080/img/etapa-receita/smoothie-do-despertar-etapa4.jpg" , 0);
+
+
+
+-- ================== LASANHA ITALIANA -- CATEGORIA 1: Massas ==================
+
+-- ===== UTENSÍLIOS  (Tabela geral de utensílios - disponível pra todas as receitas) =====
+INSERT INTO utensilio (nome, version) VALUES
+-- ('Tábua de corte', 0), -- 15
+-- ('Faca', 0), -- 16
+('Frigideira grande', 0), -- 18
+('Colher de pau', 0); -- 19
+
+-- ===== INGREDIENTES (Tabela geral de ingredientes - disponível pra todas as receitas) =====
+INSERT INTO ingrediente (nome, categoria, estimativa_validade, dica_conservacao, version) VALUES
+('Cebola', 0, 30, 'Armazenar em local fresco, seco e ventilado, longe da luz direta.', 0), -- 23
+('Cenoura', 0, 15, 'Guardar na geladeira em saco plástico perfurado para manter a umidade.', 0), -- 24
+('Carne moída', 1, 3, 'Conservar refrigerada e consumir rapidamente ou congelar por até 3 meses.', 0), -- 25
+-- ('Azeite'), -- 16
+('Pimenta', 0, 180, 'Manter em pote fechado, ao abrigo da luz e umidade.', 0), -- 26
+('Alho', 0, 60, 'Guardar em local seco e arejado, longe da luz direta.', 0), -- 27
+('Extrato de tomate', 0, 7, 'Após aberto, conservar na geladeira e consumir em até uma semana.', 0), -- 28
+-- Manteiga sem sal id 2
+-- orégano id 13
+-- farinha id 1
+-- sal id 8
+('Massa de lasanha', 0, 365, 'Armazenar em local seco e fresco, bem fechado.', 0), -- 29
+('Queijo Parmesão', 1, 20, 'Conservar refrigerado, bem embalado para evitar ressecamento.', 0), -- 30
+('Leite', 1, 7, 'Manter refrigerado e consumir até a data de validade. Após aberto, consumir em até 3 dias.', 1); -- 31
+
+-- ===== DADOS DA RECEITA =====
+INSERT INTO receita (nome, descricao, tempo_preparo_segundos, dificuldade, xp_ganho, categoria_id, 
+imagem_receita, version) VALUES
+('Lasanha Italiana', 'Uma lasanha clássica italiana com camadas generosas de molho bolonhesa, béchamel cremoso e crosta dourada de parmesão — perfeita para qualquer ocasião.',
+ 2400, 'Fácil', 30, 1, 'http://localhost:8080/img/receitas/lasanha-italiana.png', 0);
+-- ===== INGREDIENTES DA RECEITA =====
+INSERT INTO ingrediente_receita (receita_id, ingrediente_id, unidade_medida, quantidade, version) VALUES
+(4, 23, 'unidade', 1, 0), -- Cebola          - 25
+(4, 24, 'unidade', 2, 0), -- Cenoura             - 26
+(4, 25, 'gramas', 500, 0), -- Carne moída            - 27
+(4, 16, 'pitada', 1, 0), -- Azeite        - 28
+(4, 26, 'a gosto', 1,  0), -- Pimenta         - 29
+(4, 27, 'dente', 1,  0), -- Alho         - 30
+(4, 28, 'gramas', 800,  0), -- Extrato de tomate         - 31
+(4, 2, 'gramas', 2,  0), -- Manteiga sem sal         - 32
+(4, 13, 'colher de chá', 2,  0), -- Orégano         - 33
+(4, 1, 'gramas', 40,  0), -- Farinha         - 34
+(4, 29, 'gramas', 150,  0), -- Massa de lasanha         - 35
+(4, 8, 'a gosto', 1,  0), -- Sal        - 36
+(4, 30, 'gramas', 60,  0), -- Queijo parmesão         - 37
+(4, 31, 'mililitros', 500,  0); -- Leite         - 38
+
+-- ===== UTENSÍLIOS DA RECEITA =====
+INSERT INTO utensilio_receita (receita_id, utensilio_id, version) VALUES
+(4, 15, 0),  -- Tábua de corte - 22
+(4, 16, 0), -- Faca - 23
+(4, 18, 0), -- Frigideira grande - 24
+(4, 19, 0); -- Colher de pau - 25
+
+-- ===== ETAPA 1 DA RECEITA ===== 19
+INSERT INTO etapa_receita (receita_id, ordem, conteudo, imagem_etapa, version) VALUES
+(4, 1, 'Para a receita de lasanha, descasque e pique finamente o alho.  
+Descasque e corte a cebola e as cenouras em cubos. Aqueça um pouco de azeite em uma panela grande 
+e frite a cebola, a cenoura e o alho. Adicione a carne picada e doure uniformemente, usando uma 
+colher de pau para quebrá-la à medida que avança. Tempere a gosto com sal e pimenta. Em seguida, 
+adicione os tomates picados e tempere novamente com sal e pimenta. Tampe e cozinhe em fogo médio por aprox. 
+15–20 min. Junte o orégano seco.',
+"http://localhost:8080/img/etapa-receita/lasanha-italiana-etapa1.jpg" , 0);
+
+INSERT INTO ingrediente_etapa_receita (etapa_receita_id, ingrediente_receita_id, version) VALUES
+(19, 30, 0), -- Alho
+(19, 25, 0), -- Cebola
+(19, 26, 0), -- Cenoura
+(19, 27, 0), -- Carne moída
+(19, 28, 0), -- Azeite
+(19, 31, 0), -- Extrato de tomate
+(19, 33, 0), -- Orégano
+(19, 36, 0), -- Sal
+(19, 29, 0); -- Pimenta
+
+-- ===== ETAPA 2 DA RECEITA ===== 20
+INSERT INTO etapa_receita (receita_id, ordem, conteudo, imagem_etapa, version) VALUES
+(4, 2, 'Pré-aqueça o forno para a lasanha a 200 ° C / 390 ° F ou 220 ° C / 430 ° F em fogo superior 
+/ inferior. Para o molho bechamel, derreta a manteiga em uma panela pequena. Adicione a farinha e 
+doure mexendo sempre. Aos poucos, adicione o leite frio, mexendo sempre, depois reduza o fogo e 
+cozinhe por aprox. 5–8 min. Tempere a gosto com noz-moscada, sal e pimenta.',
+"http://localhost:8080/img/etapa-receita/lasanha-italiana-etapa2.jpg" , 0);
+
+INSERT INTO ingrediente_etapa_receita (etapa_receita_id, ingrediente_receita_id, version) VALUES
+(20, 32, 0), -- Manteiga sem sal
+(20, 34, 0), -- Farinha
+(20, 38, 0), -- Leite
+(20, 36, 0); -- Sal
+
+-- ===== ETAPA 3 DA RECEITA ===== 21
+INSERT INTO etapa_receita (receita_id, ordem, conteudo, imagem_etapa, version) VALUES
+(4, 3, 'Cubra a base da caçarola com azeite e depois com uma camada de bechamel. 
+Agora coloque as folhas de lasanha primeiro, depois o molho à bolonhesa e o bechamel em sucessão. 
+Repita até que todos os ingredientes tenham se esgotado, finalizando com bechamel por cima.',
+"http://localhost:8080/img/etapa-receita/lasanha-italiana-etapa3.jpg" , 0);
+
+INSERT INTO ingrediente_etapa_receita (etapa_receita_id, ingrediente_receita_id, version) VALUES
+(21, 35, 0); -- Massa de lasanha
+
+-- ===== ETAPA 4 DA RECEITA ===== 22
+INSERT INTO etapa_receita (receita_id, ordem, conteudo, imagem_etapa, version) VALUES
+(4, 4, 'Rale o parmesão sobre a última camada, transfira a lasanha para o forno pré-aquecido na prateleira 
+do meio e leve ao forno por aprox. 30–40 min., ou até que o topo esteja dourado. Sirva na assadeira quente.',
+"http://localhost:8080/img/etapa-receita/lasanha-italiana-etapa4.jpg" , 0);
+
+INSERT INTO ingrediente_etapa_receita (etapa_receita_id, ingrediente_receita_id, version) VALUES
+(22, 37, 0); -- Queijo parmesão
