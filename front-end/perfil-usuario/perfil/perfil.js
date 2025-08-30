@@ -330,6 +330,42 @@ async function atualizarTitulos() {
     }
 }
 
+async function atribuirAvataresPadrao() {
+    try {
+        const token = localStorage.getItem("token");     // Recupera o token de autenticação
+        const idUsuario = localStorage.getItem("id");    // Recupera o ID do usuário
+
+        // Verifica se os dados necessários estão disponíveis
+        if (!token || !idUsuario) {
+            console.warn("Token ou ID do usuário não encontrado.");
+            return;
+        }
+
+        // Faz requisição para atribuir os avatares padrão
+        const response = await fetch(`http://localhost:8080/${idUsuario}/avatares`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,       // Envia o token no cabeçalho
+                "Content-Type": "application/json"
+            }
+        });
+
+        // Verifica se a resposta foi bem-sucedida
+        if (!response.ok) {
+            console.error("Erro ao atribuir avatares padrão:", response.status);
+            return;
+        }
+
+        const avatarData = await response.json(); // Converte a resposta para JSON
+        console.log("Avatares atribuídos com sucesso:", avatarData);
+
+        // Se quiser atualizar a interface com os avatares atribuídos:
+        carregarAvatar(); // Chama sua função existente para atualizar o avatar ativo
+
+    } catch (error) {
+        console.error("Erro na requisição de atribuição de avatares:", error);
+    }
+}
 
 // Função que chama todas as funções de carregamento de dados do usuário
 function listarDados() {
@@ -345,7 +381,8 @@ function listarDados() {
 function configurarEventos() {
     carregarUsuario(); // Função externa que provavelmente inicializa dados do usuário
     listarDados();     // Atualiza a interface com os dados carregados
-    atualizarTitulos(); // Função que adiciona os titúlos do usuário
+    atualizarTitulos();
+    atribuirAvataresPadrao; // Função que adiciona os titúlos do usuário
    
 }
 
