@@ -42,7 +42,6 @@ function carregarEvento() {
 
         localStorage.setItem('email', emailValue);
 
-        alert("pausa de teste");
         window.location.href = "../validacao-codigo/validacao-codigo.html";
     })
     .catch((error) => {
