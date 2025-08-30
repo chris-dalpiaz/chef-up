@@ -1,6 +1,7 @@
 package com.entra21.chef_up.dtos.AvatarUsuario;
 
 import com.entra21.chef_up.dtos.Avatar.AvatarResponse;
+import com.entra21.chef_up.entities.AvatarUsuario;
 
 public class AvatarUsuarioResponse {
 
@@ -9,6 +10,12 @@ public class AvatarUsuarioResponse {
     private AvatarResponse avatar;
 
     private Boolean estaAtivo;
+
+    public AvatarUsuarioResponse() {
+    }
+
+    public AvatarUsuarioResponse(AvatarUsuario novo) {
+    }
 
     public Integer getId() {
         return id;

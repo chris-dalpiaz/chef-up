@@ -178,7 +178,7 @@ function gerarEstrelas(pontuacao) {
         const classeOpacidade = i < pontuacao ? 'estrela-cheia' : 'estrela-vazia';
 
         const estrela = `<img 
-      src="../../../back-end/img/icones/nota-estrela.svg" 
+      src="http://localhost:8080/img/icones/nota-estrela.svg" 
       alt="${i < pontuacao ? 'estrela cheia' : 'estrela vazia'}" 
       class="estrela ${classeOpacidade}"
     >`;
@@ -291,6 +291,82 @@ async function carregarAvatar() {
     }
 }
 
+async function atualizarTitulos() {
+    try {
+        const token = localStorage.getItem("token");
+        const idUsuario = localStorage.getItem("id");
+
+        if (!token || !idUsuario) {
+            console.warn("Token ou ID do usuário não encontrado.");
+            return;
+        }
+
+        // Monta o request body
+        const requestBody = {
+            idTitulo: null,    // backend sobrescreve com o calculado
+            estaAtivo: false    // exemplo se tiver esse campo
+        };
+
+        const response = await fetch(`http://localhost:8080/usuarios/${idUsuario}/titulos`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Erro na atualização de títulos:", errorText);
+            return;
+        }
+
+        const data = await response.json();
+        console.log("Título atualizado:");
+
+    } catch (error) {
+        console.error("Erro ao atualizar títulos:", error);
+    }
+}
+
+async function atribuirAvataresPadrao() {
+    try {
+        const token = localStorage.getItem("token");     // Recupera o token de autenticação
+        const idUsuario = localStorage.getItem("id");    // Recupera o ID do usuário
+
+        // Verifica se os dados necessários estão disponíveis
+        if (!token || !idUsuario) {
+            console.warn("Token ou ID do usuário não encontrado.");
+            return;
+        }
+
+        // Faz requisição para atribuir os avatares padrão
+        const response = await fetch(`http://localhost:8080/${idUsuario}/avatares`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,       // Envia o token no cabeçalho
+                "Content-Type": "application/json"
+            }
+        });
+
+        // Verifica se a resposta foi bem-sucedida
+        if (!response.ok) {
+            console.error("Erro ao atribuir avatares padrão:", response.status);
+            return;
+        }
+
+        const avatarData = await response.json(); // Converte a resposta para JSON
+        console.log("Avatares atribuídos com sucesso:", avatarData);
+
+        // Se quiser atualizar a interface com os avatares atribuídos:
+        carregarAvatar(); // Chama sua função existente para atualizar o avatar ativo
+
+    } catch (error) {
+        console.error("Erro na requisição de atribuição de avatares:", error);
+    }
+}
+
 // Função que chama todas as funções de carregamento de dados do usuário
 function listarDados() {
     carregarAvatar();     // Carrega e exibe o avatar
@@ -305,6 +381,9 @@ function listarDados() {
 function configurarEventos() {
     carregarUsuario(); // Função externa que provavelmente inicializa dados do usuário
     listarDados();     // Atualiza a interface com os dados carregados
+    atualizarTitulos();
+    atribuirAvataresPadrao; // Função que adiciona os titúlos do usuário
+   
 }
 
 // Executa a função de configuração quando a página terminar de carregar

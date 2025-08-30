@@ -14,11 +14,16 @@ import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioRequest;
 import com.entra21.chef_up.dtos.TituloUsuario.TituloUsuarioResponse;
 import com.entra21.chef_up.dtos.Usuario.UsuarioRequest;
 import com.entra21.chef_up.dtos.Usuario.UsuarioResponse;
+import com.entra21.chef_up.entities.*;
 import com.entra21.chef_up.repositories.*;
 import com.entra21.chef_up.services.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Injeção de dependência dos repositórios.
@@ -34,6 +39,7 @@ public class UsuarioController {
     private final UsuarioRepository usuarioRepository;
     private final AdjetivoUsuarioRepository adjetivoUsuarioRepository;
     private final AvatarUsuarioRepository avatarUsuarioRepository;
+    private final AvatarRepository avatarRepository;
     private final IngredienteUsuarioRepository ingredienteUsuarioRepository;
     private final ReceitaUsuarioRepository receitaUsuarioRepository;
     private final ReceitaRepository receitaRepository;
@@ -48,7 +54,7 @@ public class UsuarioController {
     public UsuarioController(ProgressoUsuarioService progressoUsuarioService,
                              UsuarioRepository usuarioRepository,
                              AdjetivoUsuarioRepository adjetivoUsuarioRepository,
-                             AvatarUsuarioRepository avatarUsuarioRepository,
+                             AvatarUsuarioRepository avatarUsuarioRepository, AvatarRepository avatarRepository,
                              IngredienteUsuarioRepository ingredienteUsuarioRepository,
                              ReceitaUsuarioRepository receitaUsuarioRepository,
                              ReceitaRepository receitaRepository,
@@ -63,6 +69,7 @@ public class UsuarioController {
         this.usuarioRepository = usuarioRepository;
         this.adjetivoUsuarioRepository = adjetivoUsuarioRepository;
         this.avatarUsuarioRepository = avatarUsuarioRepository;
+        this.avatarRepository = avatarRepository;
         this.ingredienteUsuarioRepository = ingredienteUsuarioRepository;
         this.receitaUsuarioRepository = receitaUsuarioRepository;
         this.receitaRepository = receitaRepository;
@@ -154,9 +161,42 @@ public class UsuarioController {
     }
 
     @PostMapping("/{idUsuario}/avatares")
-    public AvatarUsuarioResponse createUserAvatar(@PathVariable Integer idUsuario,
-                                                  @RequestBody AvatarUsuarioRequest request) {
-        return avatarUsuarioService.create(idUsuario, request);
+    public List<AvatarUsuarioResponse> atribuirAvataresPadrao(@PathVariable Integer idUsuario) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // IDs dos avatares padrão
+        List<Integer> idsAvataresPadrao = List.of(1, 2, 3);
+
+        // Verifica quais avatares o usuário já possui
+        List<AvatarUsuario> existentes = Optional.ofNullable(avatarUsuarioRepository.findByUsuarioId(idUsuario))
+                .orElse(Collections.emptyList());
+
+        Set<Integer> idsExistentes = existentes.stream()
+                .map(a -> a.getAvatar().getId())
+                .collect(Collectors.toSet());
+
+        List<AvatarUsuarioResponse> responses = new ArrayList<>();
+
+        for (Integer idAvatar : idsAvataresPadrao) {
+            // Se já possui, ignora
+            if (idsExistentes.contains(idAvatar)) {
+                continue;
+            }
+
+            Avatar avatar = avatarRepository.findById(idAvatar)
+                    .orElseThrow(() -> new RuntimeException("Avatar não encontrado: " + idAvatar));
+
+            AvatarUsuario novo = new AvatarUsuario();
+            novo.setUsuario(usuario);
+            novo.setAvatar(avatar);
+            novo.setEstaAtivo(false); // Nenhum ativo por padrão
+
+            avatarUsuarioRepository.save(novo);
+            responses.add(new AvatarUsuarioResponse(novo));
+        }
+
+        return responses;
     }
 
     @PutMapping("/{idUsuario}/avatares/{idAvatarUsuario}")
@@ -270,6 +310,34 @@ public class UsuarioController {
     @PostMapping("/{idUsuario}/titulos")
     public TituloUsuarioResponse createUserTitle(@PathVariable Integer idUsuario,
                                                  @RequestBody TituloUsuarioRequest request) {
+
+        List<ReceitaUsuario> list = Optional.ofNullable(receitaUsuarioRepository.findByUsuarioId(idUsuario))
+                .orElse(Collections.emptyList());
+        int quant = list.size();
+
+// Define título com base na quantidade
+        Integer tituloCalculadoId;
+        if (quant >= 100) {
+            tituloCalculadoId = 4; // Mestre da Cozinha
+        } else if (quant >= 50) {
+            tituloCalculadoId = 3; // Chef Avançado
+        } else if (quant >= 10) {
+            tituloCalculadoId = 2; // Chef Intermediário
+        } else if (quant >= 1) {
+            tituloCalculadoId = 1; // Chef Iniciante
+        } else {
+
+            return new TituloUsuarioResponse("Usuário ainda não concluiu nenhuma receita");
+        }
+
+        boolean jaPossui = tituloUsuarioRepository.existsByUsuarioIdAndTituloId(idUsuario, tituloCalculadoId);
+
+        if (jaPossui) {
+            // Caso já tenha, apenas retorna a informação sem duplicar
+            return new TituloUsuarioResponse("Usuário já possui este título");
+        }
+
+        request.setIdTitulo(tituloCalculadoId);
         return tituloUsuarioService.create(idUsuario, request);
     }
 

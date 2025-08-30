@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (tab.textContent === "Ingredientes") {
           receita.ingredientes.forEach(i => {
             conteudoContainer.innerHTML += `
-              <p class="conteudo">${i.quantidade}${i.unidadeMedida} de ${i.ingrediente.nome}</p>
+              <p class="conteudo">${i.quantidade} ${i.unidadeMedida} de ${i.ingrediente.nome}</p>
             `;
           });
         }

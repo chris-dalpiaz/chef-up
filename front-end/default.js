@@ -73,4 +73,5 @@ async function carregarProgresso() {
     } catch (error) {
         console.error("Erro ao carregar progresso:", error);
     }
+
 }
